@@ -1,0 +1,39 @@
+Traceback (most recent call last):
+  File "jobListing.py", line 94, in <module>
+    app.run(host='0.0.0.0')
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 841, in run
+    run_simple(host, port, self, **options)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 736, in run_simple
+    inner()
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 696, in inner
+    fd=fd)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 590, in make_server
+    passthrough_errors, ssl_context, fd=fd)
+  File "/usr/local/lib/python2.7/dist-packages/werkzeug/serving.py", line 501, in __init__
+    HTTPServer.__init__(self, (host, int(port)), handler)
+  File "/usr/lib/python2.7/SocketServer.py", line 419, in __init__
+    self.server_bind()
+  File "/usr/lib/python2.7/BaseHTTPServer.py", line 108, in server_bind
+    SocketServer.TCPServer.server_bind(self)
+  File "/usr/lib/python2.7/SocketServer.py", line 430, in server_bind
+    self.socket.bind(self.server_address)
+  File "/usr/lib/python2.7/socket.py", line 224, in meth
+    return getattr(self._sock,name)(*args)
+socket.error: [Errno 98] Address already in use
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+112.196.155.154 - - [21/Mar/2017 16:59:24] "GET / HTTP/1.1" 200 -
+112.196.155.154 - - [21/Mar/2017 16:59:26] "GET /listJob?company_name=&start_date=&end_date= HTTP/1.1" 200 -
+112.196.155.154 - - [21/Mar/2017 16:59:33] "GET /listJob?company_name=Goldmansach&start_date=&end_date= HTTP/1.1" 200 -
+112.196.155.154 - - [21/Mar/2017 17:00:03] "GET / HTTP/1.1" 200 -
+112.196.155.154 - - [21/Mar/2017 17:00:07] "GET /listJob?company_name=&start_date=&end_date= HTTP/1.1" 200 -
+112.196.155.154 - - [21/Mar/2017 17:02:02] "GET / HTTP/1.1" 200 -
+112.196.155.154 - - [21/Mar/2017 17:18:00] "GET /listJob?company_name=Goldmansach&start_date=&end_date= HTTP/1.1" 200 -
+112.196.155.154 - - [21/Mar/2017 17:18:11] "GET /listJob?company_name=&start_date=&end_date= HTTP/1.1" 200 -
+112.196.155.154 - - [21/Mar/2017 17:18:21] "GET /listJob?company_name=&start_date=&end_date= HTTP/1.1" 200 -
+112.196.155.154 - - [21/Mar/2017 17:20:24] "GET / HTTP/1.1" 200 -
+112.196.155.154 - - [21/Mar/2017 17:20:28] "GET / HTTP/1.1" 200 -
+112.196.155.154 - - [21/Mar/2017 17:20:32] "GET / HTTP/1.1" 200 -
+112.196.155.154 - - [21/Mar/2017 17:21:14] "GET /listJob?company_name=American+Express&start_date=&end_date= HTTP/1.1" 200 -
+112.196.155.154 - - [21/Mar/2017 17:21:19] "GET /listJob?company_name=Goldmansach&start_date=&end_date= HTTP/1.1" 200 -
+43.248.237.54 - - [21/Mar/2017 17:28:12] "GET / HTTP/1.1" 200 -
+43.248.237.54 - - [21/Mar/2017 17:28:16] "GET /favicon.ico HTTP/1.1" 404 -
