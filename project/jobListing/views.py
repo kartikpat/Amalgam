@@ -17,11 +17,10 @@ def logout():
 def editProfile():
 	if request.method == 'POST':
 		collection = Dbhelper.getCollectionName("User")
-		email = Utility.getPostParameter('email')
 		oldPassword = Utility.getPostParameter('oldPassword')
 		newPassword = Utility.getPostParameter('newPassword')
-		if email and oldPassword and newPassword:
-		    collection.update({'email':email,"password":oldPassword},{"$set":{"password":newPassword}})
+		if oldPassword and newPassword:
+		    collection.update({"password":oldPassword},{"$set":{"password":newPassword}})
 
 		return redirect(url_for('jobListing.logout'))   
 
