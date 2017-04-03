@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>Select Companies</title>
+
+<link href="../static/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+
+<style type="text/css">
+   
+
+</style>
+
+</head>
+
+<body>
+<form action="/user/selectCompanies">
+<div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="position:absolute;top:50%;left:50%; transform:translate(-50%,-50%); margin:0;">
+        <div class="modal-content">
+            <div class="modal-header">
+               
+                 <h4 class="modal-title" id="memberModalLabel">No Companies Selected!!</h4>
+
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="companyDropdown">Select Companies</label>
+                    <select class="selectpicker" id="companyDropdown" name="companies" data-live-search="true" multiple data-width="100%">
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+  
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+<script>
+$(document).ready(function () {
+
+    $('#memberModal').modal('show');
+
+});
+
+ 
+      var companies = ["Goldmansach","Pepsico","Taleo","American Express","Kronos"];     
+
+      var sel = document.getElementById('companyDropdown');
+      var fragment = document.createDocumentFragment();
+
+      companies.forEach(function(company, index) {
+          var opt = document.createElement('option');
+          opt.innerHTML = company;
+          opt.value = company;
+          fragment.appendChild(opt);
+      });
+
+      sel.appendChild(fragment);
+  
+</script>
+</html>
