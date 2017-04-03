@@ -92,7 +92,7 @@ output["dates"] = output.loc[:,"dates"].apply(Tix_label)
 from pymongo import MongoClient
 client=MongoClient('localhost',27017)
 db= client.mydb
-collection=db.pepsicoJob
+collection=db.pepsico
 for i in range(output.shape[0]):
     if collection.find({"div":output['div'][i]}).count()==0:
         collection.insert_one({"div":output['div'][i],"date":output['dates'][i],"url":furl[i]})
