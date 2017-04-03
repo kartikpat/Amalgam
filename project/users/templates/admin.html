@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Register</title>
+<link href="../static/css/bootstrap.min.css" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet"> 
+<style type="text/css">
+
+   
+	   .logo, #domain{
+	     text-decoration: none;
+	     position:relative;
+	     color:#000;
+	     font-family:'Comfortaa';
+	   }
+
+	   .logo h2 {
+	   	margin-bottom:0;
+	   	line-height: 1;
+	   }
+
+	   #domain {
+	    position: absolute;
+	    right: 0;
+	    bottom:-20px;
+	    font-size:20px;
+	   }
+
+	   body {padding:0 40px 40px; margin:0;}
+
+	   .main_container h2 {
+	   	border-left:5px solid #FFCC99;
+	   	padding: 5px 10px;
+	   	font-size:22px;}
+
+	   	.main_container .content {
+	   		padding:0 15px;
+	   	}
+
+	   	header {overflow:auto; height:80px;}
+
+	   	div.clearfix {
+	   		display:block;
+	   		clear:both;
+	   	}
+
+	   	.textinput, .selectpicker {
+	   		width:500px;
+	   	}
+
+    .form{
+      box-shadow: 10px 10px 5px 0 rgba(0, 0, 0, 0.5);
+      -webkit-box-shadow: 10px 10px 5px 0 rgba(0, 0, 0, 0.5);
+      -moz-box-shadow: 10px 10px 5px 0 rgba(0, 0, 0, 0.5);
+      width: 40%;
+      height: 40%;
+      margin: 100px auto;
+      background-color: #DFFFB8;
+      padding: 2.6em;
+     }
+   
+   .table_container {
+		margin:20px 0;
+	}
+
+	table {width:100%;}
+
+	tbody {
+	  width: 100%;
+	  border: 1px solid #e8e8e8;
+	}
+	table tr {
+	  border-top: 1px solid #e8e8e8;
+	}
+	table td {
+	  border-right: 1px solid #e8e8e8;
+	  padding:5px;
+	}
+	table th {background:#CCC;  padding:5px;}
+
+	table tr:nth-child(even) {
+		background:#f5f6f7;
+	}
+
+	.main_container {
+   	margin: 5em auto;
+   	padding: 20px;
+    }
+</style>
+
+
+
+</head>
+
+<body>
+
+    <div class="container-fluid">
+           
+            <div class="logo pull-left">
+                <h2>iimjobs</h2>
+                <span id="domain">.com</span>
+            </div>
+    
+
+    <div class="main_container">
+     
+     <div class="pull-right">
+	<button class="btn btn-primary" onclick="window.location='/register';" type="submit">Register</button>
+	<button class="btn btn-danger" onclick="window.location='/logout';" type="submit">Log Out</button>
+	</div>
+
+		<div class="table_container">  
+		{% if dict %}
+				<ul style="list-style-type:decimal">
+					{% for lis,lisk in dict.iteritems(): %}
+					   <h3><li>{{lis}}</li></h3>
+				     
+				      <div class="table_container">
+				    		<table>
+				    			<tbody>
+				    			<tr><th class="col-xs-3">Name</th><th>Email</th><th>Products</th><th>Actions</th></tr>
+				    			{% for list in lisk: %}
+				    			   <tr>
+				    			   
+				    			   <td>{{ list['name'] }}</td> 
+				    			   <td>{{ list['email'] }}</td>
+				    			   <td>
+				    			   {% for listt in list['products'] %}
+				    			   {{ listt }}
+				    			   {% endfor %}
+				    			   </td>
+				    			   <td>
+				    			   <button  onclick="var emailId = this.parentNode.parentNode.childNodes[3].innerHTML;
+				    			                     window.location='admin/delete/' + emailId ;">Delete</button>
+				    			   
+				    			   </td>
+				    			   </tr>
+				    			{% endfor %}
+
+				    			</tbody>
+
+				    		</table>
+				    	</div>
+					{% endfor %}
+					</ul>
+		{% endif %}
+	</div>
+</div>
+</div>
+
+
+</body>
+</html>

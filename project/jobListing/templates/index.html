@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Job Listing</title>
+
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="../static/css/fontello.css">
+    <link href="http://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+
+    <style type="text/css">
+    .form{
+      box-shadow: 10px 10px 5px 0 rgba(0, 0, 0, 0.5);
+      -webkit-box-shadow: 10px 10px 5px 0 rgba(0, 0, 0, 0.5);
+      -moz-box-shadow: 10px 10px 5px 0 rgba(0, 0, 0, 0.5);
+      width: 50%;
+      margin: 100px auto;
+      background-color: #DFFFB8;
+      padding: 2em;
+     }
+   
+   .logo:link {
+     text-decoration: none;
+     position: relative; 
+     color: #A28444;
+   }
+
+   #domain {
+    position: absolute;
+    right: 0;
+    color: #A28444;  
+   }
+
+   .main_container {
+   	margin: 20px auto;
+   }
+
+   input#search_by_company {width:250px; display:inline-block;}
+  	.ui-autocomplete.ui-widget-content {height:auto !important;overflow-y:hidden; }
+
+  	.main_container {
+	    padding: 20px;
+	}
+
+	label {cursor:pointer; font-weight:normal;}
+
+	input[type='text'],input[type='password'] {
+		box-shadow: none;
+		border-radius: 0;
+		border:1px solid #ccc;
+		font-size: 14px;
+		margin-right:20px;
+	}
+
+	#search_by_company {margin-right:50px;}
+
+	.table_container {
+		margin:20px 0;
+	}
+
+	table {width:100%;}
+
+	tbody {
+	  width: 100%;
+	  border: 1px solid #e8e8e8;
+	}
+	table tr {
+	  border-top: 1px solid #e8e8e8;
+	}
+	table td {
+	  border-right: 1px solid #e8e8e8;
+	  padding:5px;
+	}
+	table th {background:#CCC;  padding:5px;}
+
+	table tr:nth-child(even) {
+		background:#f5f6f7;
+	}
+
+	.logo {
+		font-family: "Comfortaa";
+		line-height: 1;
+		color: rgb(33, 33, 33);
+		font-size: 40px;
+	}
+
+	#domain {
+		font-size:20px;
+		line-height:5px;
+	}
+	
+	header {
+		padding:20px;
+	}
+
+	.main_container, .logo h2 {
+		margin-top:0;
+	}
+	button.settings {margin-top:10px;}
+
+
+/*.sidebar {
+  height: 100vh;
+  position: fixed;
+  z-index: 10;
+  background: #FFF;
+  top: 0;
+  right:-100%;
+  transition:all 0.3s ease-in-out;
+  width:350px;
+}
+
+.sidebar.expanded {
+	right:0;
+}
+.body_overlay {
+  z-index: 5;
+  background: rgba(50,50,50,0.5);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display:none;
+}
+
+.sidebar .items p {
+	font-size:18px;
+	text-decoration:underline;
+	margin-left:10%;
+}
+
+.sidebar .items ul {
+	list-style:none;
+	font-size:16px;
+	padding-left:0;
+}
+.sidebar .items ul li {
+	border:1px solid #cccccc;
+	padding:20px;
+	text-align: center;
+	margin:10px 0;
+	cursor:pointer;
+	transition:all 0.3s ease-in-out;
+	width:85%;
+	margin:10px auto;
+}
+
+.sidebar .items li.selected {
+	background:#CCC;
+	color:#FFF;
+}
+
+.sidebar .profile_content,.sidebar .companies_content,.logout_content {
+	display:none;
+	width:80%;
+	margin:10px auto;
+}
+
+.dropdown-menu li {
+	padding: 0px !important;
+	margin:0px ;
+	border:0 !important;
+}*/
+
+.bootstrap-select {width:100% !important;}
+</style>
+
+</head>
+
+<body>
+
+ 	<div class="body_overlay">
+ 	</div>
+
+ 	<header>
+        <a href="/jobListing" class="logo pull-left">
+            <h2>iimjobs</h2>
+            <span id="domain">.com</span>
+        </a>
+        
+        <div class="action_buttons">
+			<button class="logout_button pull-right" onclick="window.location='/logout';"
+			style="margin:10px 0 10px 20px;">Logout</button>
+			<button class="settings pull-right" data-toggle="modal" data-target="#settingsModal"><i class='icon icon-cog'></i>Settings</button>
+        
+		</div>
+		<div class="clearfix"></div>
+    </header>
+
+
+<div class="modal fade" id="settingsModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" style="display: inline;">Settings</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+		
+		<div class="settings_tabs">
+			<ul>
+				<li><a href="#changePassword">Change Password</a></li>
+				<li><a href="#changeCompanies">Change Companies</a></li>
+			</ul>
+			
+			<div id="changePassword">
+				<h4>Change Password</h4>
+				<div class="container profile_content content">
+						<form action='/editProfile' method="POST">
+							<label for="email-address">Email Address :</label><br/><input name="email" id='email-address' type="text"><br>
+							<label for="oldPassword">Old Password:</label><br>
+							<input type="password" name="oldPassword" id="oldPassword" value=""><br/>
+							<label for="newPassword">New Password:</label><br>
+							<input type="password" name="newPassword" id="newPassword" value=""><br/>
+							<br/><input type="submit" value="Confirm">
+						</form>
+					</div>
+			</div>
+			
+			<div id="changeCompanies">
+				<h4>Change Companies List</h4>
+				<div class="companies_content content" style="margin:20px;">
+					<form action="/editCompanies">
+						<select class="selectpicker show-tick" name="permissionCompanies" multiple data-live-search="true">
+							{% for lis in list: %}
+								{% if lis in selectedList %}
+									<option selected>{{lis}}</option>
+								{% else %}
+									<option>{{lis}}</option>
+								{%endif%}
+							{% endfor%}	
+						</select>
+						<input type="submit" value="Confirm" style="margin:20px 0 0 0">
+					</form>
+				</div>
+			</div>
+		</div>	
+		
+			
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main_container">
+
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Search by Company</a></li>
+  </ul>
+  <div id="tabs-1">
+    <div class="form_container">
+		<form action= "/jobListing/listJob" method="get">
+	       <div class="pull-left">
+		       <label for="search_by_company">Company name:</label>
+		       <input type="text" id="search_by_company" name="company_name" maxlength="100" value=""/>
+
+		       <label for="start_date">Start date:</label>
+		       <input type="text" id="start_date" name="start_date"  maxlength="100" value=""/>
+		       <label for="end_date">End date:</label> <input type="text" id="end_date" name="end_date" maxlength="100" value=""/>
+		       <button class="btn btn-primary" type="submit" maxlength="100" >Get Jobs</button>
+	       </div>
+			<div class="clearfix"></div>
+		</form>
+	</div>
+	<div class="table_container">  
+		{% if dict %}
+				<ul style="list-style-type:decimal">
+					{% for lis,lisk in dict.iteritems(): %}
+					   <h3><li>{{lis}}</li></h3>
+				     
+				      <div class="table_container">
+				    		<table>
+				    			<tbody>
+				    			<tr><th class="col-xs-3">Date</th><th>Job Title</th></tr>
+				    			{% for list in lisk: %}
+				    			   <tr><td>{{list['date']}}</td> <td><a target="_blank" href="{{ list['url'] }}">{{ list['div'] }}</a></td></tr>
+				    			{% endfor %}
+				    			</tbody>
+				    		</table>
+				    	</div>
+					{% endfor %}
+				</ul>
+		{% endif %}
+	</div>
+  </div>
+  
+</div>
+</div>
+
+
+  
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ <script src="../static/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+  <script>
+
+  	$(document).ready(function() {
+
+    	var availableTags = [
+	      "American Express",
+	      "Goldmansach",
+           "Pepsico",
+	      "Taleo",
+	      "Kronos"
+	      
+    	]
+	    $( "#search_by_company" ).autocomplete({
+	      source: availableTags
+	    });
+
+	    $( "#start_date" ).datepicker({ minDate: -30, maxDate: "0D",dateFormat: "yy-mm-dd"});
+	    $( "#end_date" ).datepicker({ minDate: -30, maxDate: "0D",dateFormat: "yy-mm-dd" });
+
+	    $( "#tabs" ).tabs();
+	    $(".settings_tabs").tabs();
+
+	    jQuery(".settings").click(function() {
+	    	jQuery(".body_overlay").fadeIn();
+	    	jQuery(".sidebar").addClass('expanded');
+	    });
+		jQuery(".body_overlay").click(function() {
+			jQuery(this).fadeOut('fast');
+			jQuery(".sidebar").removeClass("expanded");
+			jQuery(".sidebar li").removeClass('selected');
+  			jQuery(".sidebar .content").slideUp();
+		});
+
+		jQuery(".sidebar .items li").click(function() {
+			var value = jQuery(this).data('name')+'_content';
+			jQuery(".sidebar li").removeClass('selected');
+			jQuery(this).addClass('selected');
+			jQuery(".sidebar .content").not("."+value).slideUp();
+			jQuery("."+value).slideDown();				
+		});
+
+  	});
+
+  	function close_overlay() {
+  		jQuery(".body_overlay").trigger('click');
+  	}
+
+  </script>
+
+</body>
+
+</html>
