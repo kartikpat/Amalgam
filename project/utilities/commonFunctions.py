@@ -16,7 +16,7 @@ class Utility:
 	def ISODateToString(date):
 		da = datetime.datetime.strptime(str(date),"%Y-%m-%d %H:%M:%S")
 		return str(da.day) + "-" + da.strftime("%b") + "-" + str(da.year)
-	
+
 	@staticmethod
 	def StringToISODate(date):
 		string = datetime.datetime.strptime(date, "%Y-%m-%d")
@@ -24,14 +24,14 @@ class Utility:
 		return ISODate
 
 	@staticmethod
-	def getList(colectn, query,lim=0):
+	def getList(colectn, query):
 		collection = Dbhelper.getCollectionName(colectn)
-		result = collection.find(query).limit(lim)
+		result = collection.find(query)
 		return result
 
 	@staticmethod
 	def getPostParameter(param):
-		result = request.form   		
+		result = request.form
 		return result[param]
 
 	@staticmethod
@@ -39,7 +39,4 @@ class Utility:
 		boolean = 0
 		if 'email' in session:
 			boolean = 1
-		return boolean    
-
-
-	
+		return boolean
