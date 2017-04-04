@@ -19,7 +19,7 @@ class Utility:
 
 	@staticmethod
 	def StringToISODate(date):
-		string = datetime.datetime.strptime(date, "%Y-%m-%d")
+		string = datetime.datetime.strptime(date, "%d-%m-%Y")
 		ISODate = datetime.datetime(string.year,string.month,string.day,0,0,0,0)
 		return ISODate
 
