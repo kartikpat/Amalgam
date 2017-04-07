@@ -6,6 +6,7 @@ from celery import Celery
 from flask import Flask
 import boto.ses
 from random import randint
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 app = Flask(__name__)
 users = Blueprint('users', __name__, template_folder='templates')
@@ -22,6 +23,21 @@ connection = boto.ses.connect_to_region(
             aws_secret_access_key=AWS_SECRET_KEY
         )
 
+def getToken(mailId):
+    s = Serializer('sdlkfdklsjfljsd')
+    return s.dumps({'email': mailId}).decode('utf-8')
+
+   
+def verifyToken(token):
+    s = Serializer('sdlkfdklsjfljsd')
+    try:
+        data = s.loads(token)
+    except:
+        return None
+    id = data.get('email')
+    if id:
+        return id
+    return None
 
 @celery.task
 def sendMail(to,subject,body):
@@ -91,14 +107,28 @@ def registerSucess():
         name=Utility.getUrlParameter('name')
         email=Utility.getUrlParameter('email')
         product=Utility.getUrlParameterList('products')
-        passwd=randint(1000,523253555)
+        #passwd=randint(1000,523253555)
         if not Dbhelper.findOne('User',{"email":email}):
-            Dbhelper.insert('User' , { "name":name,"email":email,"products":product,"password":str(passwd),"role":"user" })
-            body="User Name:  "+name+'\n'+"Password:   "+str(passwd)
-            sendMail(email,"Login Crediential",body)
+            Dbhelper.insert('User' , { "name":name,"email":email,"products":product,"password":"hii","role":"user" })
+            #body="User Name:  "+name+'\n'+"Password:   "+str(passwd)
+            token = getToken(mailId = email)
+            body="Set password using below link\n"+"127.0.0.1:5000/setPassword?token="+token
+            sendMail(email,"Set Password",body)
             return redirect(url_for('users.admin'))
         else:
             return render_template('register.html',message="Emailid is already registered")
+    return redirect(url_for('users.index'))
+
+@users.route('/setPassword')
+def setPassword():
+    return render_template('setPassword.html')
+
+@users.route('/setPasswordSucess')
+def setPasswordSucess():
+    token = request.args.get('hiddenToken')
+    password= request.args.get('newPassword')
+    email = verifyToken(token)
+    Dbhelper.update('User',{"email":email},{"password":password})
     return redirect(url_for('users.index'))
 
 @users.route('/admin/delete/<emailId>')
