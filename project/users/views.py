@@ -109,10 +109,10 @@ def registerSucess():
         product=Utility.getUrlParameterList('products')
         #passwd=randint(1000,523253555)
         if not Dbhelper.findOne('User',{"email":email}):
-            Dbhelper.insert('User' , { "name":name,"email":email,"products":product,"password":"hii","role":"user" })
+            Dbhelper.insert('User' , { "name":name,"email":email,"products":product,"password":"","role":"user" })
             #body="User Name:  "+name+'\n'+"Password:   "+str(passwd)
             token = getToken(mailId = email)
-            body="Set password using below link\n"+"127.0.0.1:5000/setPassword?token="+token
+            body="Set password using below link\n"+"http://crawler.iimjobs.com/setPassword?token="+token
             sendMail(email,"Set Password",body)
             return redirect(url_for('users.admin'))
         else:
