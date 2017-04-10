@@ -11,10 +11,11 @@ class Dbhelper():
 			  'American Express':db.americanexp,
 			  'Pepsico':db.pepsico,
 			  'Taleo':db.taleo,
-			  'Kronos': db.kronos,
-			  'User': db.userDetail,
-			  'Naukri': db.naukri
-
+			  'Kronos': db.kronos,			  
+			  'Naukri': db.naukri,
+			  'Hike':db.hike,
+			  'Nestle':db.nestle,
+			  'User':db.userDetail
 		}
 
 	@staticmethod
