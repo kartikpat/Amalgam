@@ -42,3 +42,8 @@ class Dbhelper():
 	def delete(collection,key,value):
 	    colection = Dbhelper.getCollectionName(collection)
 	    colection.remove({key : value})	
+
+	@staticmethod
+	def update(collection,query,update):
+		colection = Dbhelper.getCollectionName(collection)
+		colection.update(query,{"$set":update})    

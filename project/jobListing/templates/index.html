@@ -20,17 +20,19 @@
       background-color: #DFFFB8;
       padding: 2em;
      }
-   
+
    .logo:link {
      text-decoration: none;
-     position: relative; 
-     color: #A28444;
+     position: relative;
+     color: #000;
+     font-family:'Comfortaa';
    }
 
    #domain {
     position: absolute;
     right: 0;
-    color: #A28444;  
+    color: #000;
+    font-family:'Comfortaa';
    }
 
    .main_container {
@@ -90,7 +92,7 @@
 		font-size:20px;
 		line-height:5px;
 	}
-	
+
 	header {
 		padding:20px;
 	}
@@ -180,12 +182,12 @@
             <h2>iimjobs</h2>
             <span id="domain">.com</span>
         </a>
-        
+
         <div class="action_buttons">
 			<button class="logout_button pull-right" onclick="window.location='/logout';"
 			style="margin:10px 0 10px 20px;">Logout</button>
 			<button class="settings pull-right" data-toggle="modal" data-target="#settingsModal"><i class='icon icon-cog'></i>Settings</button>
-        
+
 		</div>
 		<div class="clearfix"></div>
     </header>
@@ -201,13 +203,13 @@
         </button>
       </div>
       <div class="modal-body">
-		
+
 		<div class="settings_tabs">
 			<ul>
 				<li><a href="#changePassword">Change Password</a></li>
 				<li><a href="#changeCompanies">Change Companies</a></li>
 			</ul>
-			
+
 			<div id="changePassword">
 				<h4>Change Password</h4>
 				<div class="container profile_content content">
@@ -223,7 +225,7 @@
 						</form>
 					</div>
 			</div>
-			
+
 			<div id="changeCompanies">
 				<h4>Change Companies List</h4>
 				<div class="companies_content content" style="margin:20px;">
@@ -235,15 +237,15 @@
 								{% else %}
 									<option>{{lis}}</option>
 								{%endif%}
-							{% endfor%}	
+							{% endfor%}
 						</select>
 						<input type="submit" value="Confirm" style="margin:20px 0 0 0">
 					</form>
 				</div>
 			</div>
-		</div>	
-		
-			
+		</div>
+
+
 
       </div>
       <div class="modal-footer">
@@ -274,12 +276,12 @@
 			<div class="clearfix"></div>
 		</form>
 	</div>
-	<div class="table_container">  
+	<div class="table_container">
 		{% if dict %}
 				<ul style="list-style-type:decimal">
 					{% for lis,lisk in dict.iteritems(): %}
 					   <h3><li>{{lis}}</li></h3>
-				     
+
 				      <div class="table_container">
 				    		<table>
 				    			<tbody>
@@ -295,12 +297,12 @@
 		{% endif %}
 	</div>
   </div>
-  
+
 </div>
 </div>
 
 
-  
+
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
  <script src="../static/js/bootstrap.min.js"></script>
@@ -315,14 +317,14 @@
            "Pepsico",
 	      "Taleo",
 	      "Kronos"
-	      
+
     	]
 	    $( "#search_by_company" ).autocomplete({
 	      source: availableTags
 	    });
 
-	    $( "#start_date" ).datepicker({ minDate: -30, maxDate: "0D",dateFormat: "yy-mm-dd"});
-	    $( "#end_date" ).datepicker({ minDate: -30, maxDate: "0D",dateFormat: "yy-mm-dd" });
+	    $( "#start_date" ).datepicker({ minDate: -30, maxDate: "0D",dateFormat: "dd-mm-yy"});
+	    $( "#end_date" ).datepicker({ minDate: -30, maxDate: "0D",dateFormat: "dd-mm-yy" });
 
 	    $( "#tabs" ).tabs();
 	    $(".settings_tabs").tabs();
@@ -343,7 +345,7 @@
 			jQuery(".sidebar li").removeClass('selected');
 			jQuery(this).addClass('selected');
 			jQuery(".sidebar .content").not("."+value).slideUp();
-			jQuery("."+value).slideDown();				
+			jQuery("."+value).slideDown();
 		});
 
   	});
