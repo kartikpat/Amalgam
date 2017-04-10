@@ -102,71 +102,6 @@
 	}
 	button.settings {margin-top:10px;}
 
-
-/*.sidebar {
-  height: 100vh;
-  position: fixed;
-  z-index: 10;
-  background: #FFF;
-  top: 0;
-  right:-100%;
-  transition:all 0.3s ease-in-out;
-  width:350px;
-}
-
-.sidebar.expanded {
-	right:0;
-}
-.body_overlay {
-  z-index: 5;
-  background: rgba(50,50,50,0.5);
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  display:none;
-}
-
-.sidebar .items p {
-	font-size:18px;
-	text-decoration:underline;
-	margin-left:10%;
-}
-
-.sidebar .items ul {
-	list-style:none;
-	font-size:16px;
-	padding-left:0;
-}
-.sidebar .items ul li {
-	border:1px solid #cccccc;
-	padding:20px;
-	text-align: center;
-	margin:10px 0;
-	cursor:pointer;
-	transition:all 0.3s ease-in-out;
-	width:85%;
-	margin:10px auto;
-}
-
-.sidebar .items li.selected {
-	background:#CCC;
-	color:#FFF;
-}
-
-.sidebar .profile_content,.sidebar .companies_content,.logout_content {
-	display:none;
-	width:80%;
-	margin:10px auto;
-}
-
-.dropdown-menu li {
-	padding: 0px !important;
-	margin:0px ;
-	border:0 !important;
-}*/
-
 .bootstrap-select {width:100% !important;}
 </style>
 
@@ -178,7 +113,7 @@
  	</div>
 
  	<header>
-        <a href="/jobListing" class="logo pull-left">
+        <a href="/jobListings" class="logo pull-left">
             <h2>iimjobs</h2>
             <span id="domain">.com</span>
         </a>
@@ -259,19 +194,20 @@
 
 <div id="tabs">
   <ul>
-    <li><a href="#tabs-1">Search by Company</a></li>
+    <li><a href="#searchByCompany">Search by Company</a></li>
+    <li><a href="#searchByLocation">Search by Location</a></li>
   </ul>
-  <div id="tabs-1">
+  <div id="searchByCompany">
     <div class="form_container">
-		<form action= "/jobListing/listJob" method="get">
+		<form action= "/jobListings/companies" method="get">
 	       <div class="pull-left">
 		       <label for="search_by_company">Company name:</label>
-		       <input type="text" id="search_by_company" name="company_name" maxlength="100"  value=""/>
+		       <input type="text" id="search_by_company" name="company_name" maxlength="100"  value="{{ request.args.get('company_name') }}"/>
 
 		       <label for="start_date">Start date:</label>
-		       <input type="text" id="start_date" name="start_date"  maxlength="100" value=""/>
+		       <input type="text" id="start_date" name="start_date"  maxlength="100" value="{{ request.args.get('start_date') }}"/>
 		       <label for="end_date">End date:</label>
-          <input type="text" id="end_date" name="end_date" maxlength="100" value=""/>
+          <input type="text" id="end_date" name="end_date" maxlength="100" value="{{ request.args.get('end_date') }}"/>
 		       <button class="btn btn-primary" type="submit" maxlength="100" >Get Jobs</button>
 	       </div>
 			<div class="clearfix"></div>
@@ -286,9 +222,12 @@
 				      <div class="table_container">
 				    		<table>
 				    			<tbody>
-				    			<tr><th class="col-xs-3">Date</th><th>Job Title</th></tr>
+				    			<tr><th class="col-xs-2">Date</th><th class="col-xs-7">Job Title</th><th class="col-xs-3">Job Location</th></tr>
 				    			{% for list in lisk: %}
-				    			   <tr><td>{{list['date']}}</td> <td><a target="_blank" href="{{ list['url'] }}">{{ list['div'] }}</a></td></tr>
+				    			   <tr><td>{{list['date']}}</td>
+                       <td>{{ list['title'] }}</td>
+                       <td>{{ list['location']}}</td>
+                     </tr>
 				    			{% endfor %}
 				    			</tbody>
 				    		</table>
@@ -297,6 +236,42 @@
 				</ul>
 		{% endif %}
 	</div>
+  </div>
+
+  <div id="searchByLocation">
+    <div class="form_container">
+    <form action= "/jobListings/location" method="get">
+         <div class="pull-left">
+           <label for="search_by_location">Company name:</label>
+           <input type="text" id="search_by_location" name="location" maxlength="100"  value="{{ request.args.get('location') }}"/>
+
+           <button class="btn btn-primary" type="submit" maxlength="100" >Get Jobs</button>
+         </div>
+      <div class="clearfix"></div>
+    </form>
+  </div>
+  <div class="table_container">
+    {% if dict1 %}
+        <ul style="list-style-type:decimal">
+          {% for lis,lisk in dict.iteritems(): %}
+             <h3><li>{{lis}}</li></h3>
+
+              <div class="table_container">
+                <table>
+                  <tbody>
+                  <tr><th class="col-xs-2">Date</th><th class="col-xs-7">Job Title</th></tr>
+                  {% for list in lisk: %}
+                     <tr><td>{{list['date']}}</td>
+                       <td>{{ list['title'] }}</td>
+                     </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+          {% endfor %}
+        </ul>
+    {% endif %}
+  </div>
   </div>
 
 </div>
@@ -311,21 +286,6 @@
   <script>
 
   	$(document).ready(function() {
-
-      var cmpnyName = '{{ request.args.get('company_name') }}';
-      var strtDate = '{{ request.args.get('start_date') }}';
-      var endDate = '{{ request.args.get('end_date') }}';
-
-      if( cmpnyName != "None" ) {
-        document.getElementById('search_by_company').value = cmpnyName;
-      }
-      if( strtDate != "None" ) {
-        document.getElementById('start_date').value = strtDate;
-      }
-      if( endDate != "None" ) {
-        document.getElementById('end_date').value = endDate;
-      }
-
 
     	var availableTags = [
 	      "American Express",
@@ -382,8 +342,6 @@
   			return false;
   			}
   	}
-
-
 
   </script>
 

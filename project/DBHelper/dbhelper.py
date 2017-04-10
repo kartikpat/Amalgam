@@ -4,7 +4,7 @@ client = MongoClient('localhost')
 db = client.mydb
 
 class Dbhelper():
-	
+
 	__listOfCollections = {
 
 			  'Goldmansach': db.goldmansach,
@@ -12,13 +12,14 @@ class Dbhelper():
 			  'Pepsico':db.pepsico,
 			  'Taleo':db.taleo,
 			  'Kronos': db.kronos,
-			  'User':db.userDetail
-		
+			  'User': db.userDetail,
+			  'Naukri': db.naukri
+
 		}
 
 	@staticmethod
 	def getCollectionName(collection):
-		return Dbhelper.__listOfCollections.get(collection,"")	
+		return Dbhelper.__listOfCollections.get(collection,"")
 
 	@staticmethod
 	def getDateQuery(start,end):
@@ -32,7 +33,7 @@ class Dbhelper():
 	def findOne(collection,query):
 		colection = Dbhelper.getCollectionName(collection)
 		return colection.find_one(query)
-		
+
 	@staticmethod
 	def insert(collection,query):
 		colection = Dbhelper.getCollectionName(collection)
@@ -41,9 +42,9 @@ class Dbhelper():
 	@staticmethod
 	def delete(collection,key,value):
 	    colection = Dbhelper.getCollectionName(collection)
-	    colection.remove({key : value})	
+	    colection.remove({key : value})
 
 	@staticmethod
 	def update(collection,query,update):
 		colection = Dbhelper.getCollectionName(collection)
-		colection.update(query,{"$set":update})    
+		colection.update(query,{"$set":update})
