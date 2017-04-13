@@ -15,7 +15,7 @@ class Dbhelper():
 			  'Naukri': db.naukri,
 			  'Hike':db.hike,
 			  'Nestle':db.nestle,
-			  'Deloitte':db.deloitte
+			  'Deloitte':db.deloitte,
 			  'User':db.userDetail
 		}
 
