@@ -1,10 +1,8 @@
-
 from flask import Blueprint, Flask,request, render_template, redirect,url_for,session
 from ..utilities.commonFunctions import Utility
 from ..DBHelper.dbhelper import Dbhelper
 from model import JobsModel
 import model
-
 
 listingJob = Blueprint('jobListing',__name__,template_folder='templates')
 

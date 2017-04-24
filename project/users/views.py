@@ -65,7 +65,7 @@ def login():
             email = Utility.getPostParameter('email')
             password = Utility.getPostParameter('password')
             user = Dbhelper.findOne('User', { "email":email, "password":password })
-            if not user:
+            if not email or not password or not user:
                 return render_template('login.html',message="Enter valid credential")
 
             session['role'] = user['role']

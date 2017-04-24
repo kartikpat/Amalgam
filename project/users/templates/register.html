@@ -74,21 +74,24 @@
     <h2>User Registration</h2>
 
 		<div class="content">
-			<form action="/registerSuccess" class="form" >
+			<form action="/registerSuccess" class="form" onsubmit="return checkBlankFields()">
 				
 				<div class="form-group">
 		            <label for="Name">Full Name</label>
 		            <input type="text" class="form-control textinput" name="name" id="Name" placeholder="Full Name">
+		            <p id="nameMessage"></p>
 		        </div>
 		        <div class="form-group">
 		            <label for="Email1">Email address</label>
 		            <input type="email" class="form-control textinput" name="email" id="Email1" placeholder="Email">
+		            <p id="emailMessage"></p>
 		        </div>
 
 				<div class="form-group">
 		            <label for="serviceDropdown">Select Services</label>
 					 	<select class="selectpicker" id="serviceDropdown" name="products" data-live-search="true" multiple data-width="100%">
 						</select>
+					<p id="pickerMessage"></p>	
 				</div>
 				<div class="form-group">
 				    <button type="submit" class="btn btn-default">Submit</button>
@@ -118,6 +121,24 @@
 			});
 
 			sel.appendChild(fragment);
+
+			function checkBlankFields(){
+			    var name=document.getElementById('Name');
+			    var email=document.getElementById('Email1');
+			    var select = document.getElementById('serviceDropdown');
+
+			    (name.value== 0)?document.getElementById("nameMessage").innerHTML="Please Enter Name":document.getElementById("nameMessage").innerHTML="";
+			   
+			    (email.value== 0)?document.getElementById("emailMessage").innerHTML="Please Enter Email":document.getElementById("emailMessage").innerHTML=""; 
+
+			    (select.value == '')?document.getElementById("pickerMessage").innerHTML="Please select Service":document.getElementById("pickerMessage").innerHTML="";	
+
+			    if (email.value && name.value && select.value.length > 1)
+			      return true;
+			    else
+			      return false;
+			  }
+			
 	 </script>
 
 </body>
