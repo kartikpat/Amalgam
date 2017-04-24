@@ -41,7 +41,7 @@ def jobListing():
 
 		return render_template("index.html",dict=output,selectedList=session['lis'],list=JobsModel.allCmnyList )
 	else:
-		return redirect(url_for('users.login'))
+		return redirect(url_for('users.index'))
 
 @listingJob.route('/jobListing/listJob')
 def listJob():

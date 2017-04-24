@@ -54,31 +54,37 @@ def getListOfUser(product):
 
 @users.route('/')
 def index():
-    return render_template('login.html')
+    if 'email' in session :
+        return redirect(url_for('users.login'))
+    else:    
+        return render_template('login.html')
 
 @users.route('/login', methods = ['POST', 'GET'])
 def login():
-    if request.method == 'POST':
-        email = Utility.getPostParameter('email')
-        password = Utility.getPostParameter('password')
-        session['email'] = email
-        user = Dbhelper.findOne('User', { "email":email, "password":password })
-        if user:
-            role = user['role']
-            if role == "admin":
-                return redirect(url_for('users.admin'))
-            elif role == "user":
-                if 'permission' in user.keys():
-                    session['lis'] = user.get('permission').get('crawler')
-                else:
-                    session['lis']=[]
+        if request.method == 'POST':
+            email = Utility.getPostParameter('email')
+            password = Utility.getPostParameter('password')
+            user = Dbhelper.findOne('User', { "email":email, "password":password })
+            if not user:
+                return render_template('login.html',message="Enter valid credential")
 
-                if session['lis']:
-                   return redirect(url_for('jobListing.jobListing'))
-                else:
-                   return render_template('companiesPopUp.html')
-        else:
-            return render_template('login.html',message="Enter valid credential")
+            session['role'] = user['role']
+            session['email'] = email
+            if 'permission' in user.keys():
+                session['lis'] = user.get('permission').get('crawler')
+            else:
+                session['lis']=[]
+
+        if 'email' in session:
+            if session['role'] == "admin":
+                return redirect(url_for('users.admin'))
+            elif session['role'] == "user" and session['lis']:
+                return redirect(url_for('jobListing.jobListing'))
+            else:  
+                return render_template('companiesPopUp.html')     
+        else:    
+            return render_template('login.html')           
+        
 
 @users.route('/admin')
 def admin():
