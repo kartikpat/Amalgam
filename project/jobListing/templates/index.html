@@ -166,7 +166,7 @@
 	margin:0px ;
 	border:0 !important;
 }*/
-
+.profile_content p{color:red;}
 .bootstrap-select {width:100% !important;}
 </style>
 
@@ -216,14 +216,18 @@
 						<form action='/editProfile' method="POST">
 							<label for="oldPassword">Old Password:</label><br>
 							<input type="password" name="oldPassword" id="oldPassword" value=""><br/>
+							<p id="oldPassMsg"></p>
 							<label for="newPassword">New Password:</label><br>
 							<input type="password" name="newPassword" id="newPassword" value=""><br/>
+							<p id="newPassMsg"></p>
 							<label for="confirmPassword">Confirm Password:</label><br>
 							<input type="password" name="confirmPassword" id="confirmPassword" value=""><br/>
+							<p id="confirmPassMsg"></p>
 							<br/><input type="submit" value="Confirm" onclick="return matchPassword()">
-							<p id="wrongPassword" style="color:red"></p>
+							<p id="wrongPassword"></p>
+							<p>{{wrongPassword}}</p>
 						</form>
-					</div>
+				</div>
 			</div>
 
 			<div id="changeCompanies">
@@ -373,7 +377,7 @@
   		jQuery(".body_overlay").trigger('click');
   	}
 
-  	function matchPassword()
+/*  	function matchPassword()
   	{
   		newPassword=document.getElementById('newPassword').value;
   		confirmPassword=document.getElementById('confirmPassword').value;
@@ -385,7 +389,32 @@
   			return false;
   			}
   	}
+*/
+	function matchPassword(){
+	    var oldPass=document.getElementById('oldPassword').value;
+	    var newPass=document.getElementById('newPassword').value;
+	    var confirmPass = document.getElementById('confirmPassword').value;
 
+	    (oldPass== 0)?document.getElementById("oldPassMsg").innerHTML="Enter Old Password":document.getElementById("oldPassMsg").innerHTML="";
+	   
+	    (newPass== 0)?document.getElementById("newPassMsg").innerHTML="Enter New Password":document.getElementById("newPassMsg").innerHTML=""; 
+
+	    (confirmPass == 0)?document.getElementById("confirmPassMsg").innerHTML="Enter Confirm Password":document.getElementById("confirmPassMsg").innerHTML="";	
+
+	    document.getElementById("wrongPassword").innerHTML="";
+
+	    if (oldPass && newPass && confirmPass){
+	    	if(newPass == confirmPass){
+	  			return true;
+	    	}
+	  		else{
+	  			document.getElementById("wrongPassword").innerHTML="New password and Confirm password does not match ";
+	  			return false;
+	  			}
+	    }
+	    else
+	      return false;
+	  }
 
 
   </script>
