@@ -26,7 +26,7 @@ class Utility:
 	@staticmethod
 	def getList(colectn, query):
 		collection = Dbhelper.getCollectionName(colectn)
-		result = collection.find(query)
+		result = collection.find(query).sort([("date",-1)])
 		return result
 
 	@staticmethod
