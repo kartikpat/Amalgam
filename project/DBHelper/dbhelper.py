@@ -16,6 +16,8 @@ class Dbhelper():
 			  'Hike':db.hike,
 			  'Nestle':db.nestle,
 			  'Deloitte':db.deloitte,
+			  'Northern Trust':db.northerntrust,
+			  "ZS Associate":db.zs,
 			  'User':db.userDetail
 		}
 
