@@ -21,7 +21,7 @@ def getRecentJobs(li):
 	allJobsLists={}
 	for cmpny in li:
 		collection = Dbhelper.getCollectionName(cmpny)
-		result = collection.find().limit(1)
+		result = collection.find().sort([("date",-1)]).limit(1)
 		for res in result:
 		    date = res['date']
 		allJobsLists[cmpny] = getListOfJobs(cmpny,{"date":date},session['lis'])

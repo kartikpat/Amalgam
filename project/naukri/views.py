@@ -29,7 +29,7 @@ def getJobsByLocation():
 
 @naukri.route('/jobListings')
 def jobListing():
-		output = getJobsByLocation()
+		output = getJobs()
 		return render_template("index1.html",dict=output )
 
 @naukri.route('/jobListings/location')
