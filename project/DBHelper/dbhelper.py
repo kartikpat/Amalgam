@@ -17,7 +17,13 @@ class Dbhelper():
 			  'Nestle':db.nestle,
 			  'Deloitte':db.deloitte,
 			  'Northern Trust':db.northerntrust,
-			  "ZS Associate":db.zs,
+			  'ZS Associate':db.zs,
+			  'Future Group':db.futuregroup,
+			  'Landmark Group':db.landmarkgroup,
+			  'Paytm':db.paytm,
+			  'Societe Generale':db.SocieteG,
+			  'Thomsan Reuters':db.thomson,
+			  'Western Unions':db.westernunion,
 			  'User':db.userDetail
 		}
 
