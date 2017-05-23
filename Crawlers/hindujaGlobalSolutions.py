@@ -20,7 +20,7 @@ floc=[]
 fdate=[]
 furl=[]
 fur=[]
-chromedriver = "/home/mohit/Downloads/chromedriver"
+chromedriver = "/usr/bin/chromedriver"
 os.environ["webdriver.chrome.driver"] = chromedriver
 browser= webdriver.Chrome(chromedriver)
 
