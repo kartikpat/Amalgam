@@ -33,7 +33,7 @@ class JobsModel:
 	__startDate = ""
 	__endDate = ""
 	__cmpnyName = ""
-	allCmnyList=['Goldmansach','Taleo','Pepsico','American Express','Kronos','Hike','Nestle','Deloitte','Northern Trust','ZS Associate','Future Group','Landmark Group','Paytm','Societe Generale','Thomsan Reuters','Western Unions']
+	allCmnyList=['Goldmansach','Taleo','Pepsico','American Express','Kronos','Hike','Nestle','Deloitte','Northern Trust','ZS Associate','Future Group','Landmark Group','Paytm','Societe Generale','Thomsan Reuters','Western Unions','Hinduja Global']
 
 	def __init__(self,startDate,endDate,cmpnyName):
 		if startDate and endDate:

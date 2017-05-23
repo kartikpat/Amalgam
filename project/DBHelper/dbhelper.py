@@ -24,6 +24,7 @@ class Dbhelper():
 			  'Societe Generale':db.SocieteG,
 			  'Thomsan Reuters':db.thomson,
 			  'Western Unions':db.westernunion,
+			  'Hinduja Global':db.hindujaglobal,
 			  'User':db.userDetail
 		}
 
