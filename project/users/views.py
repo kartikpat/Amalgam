@@ -7,23 +7,10 @@ from flask import Flask
 import boto.ses
 from random import randint
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-#from ..backgroundTasks.task import sendMail
 from project.tasks import sendMail
-#app = Flask(__name__)
+
 users = Blueprint('users', __name__, template_folder='templates')
-#app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
-#celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
-#celery.conf.update(app.config)
 
-'''AWS_ACCESS_KEY = 'AKIAIBKUBCW3L26UNWDA'  
-AWS_SECRET_KEY = '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'
-
-mailConnection = boto.ses.connect_to_region(
-            'us-west-2',
-            aws_access_key_id=AWS_ACCESS_KEY, 
-            aws_secret_access_key=AWS_SECRET_KEY
-        )
-'''
 def getToken(mailId):
     s = Serializer('sdlkfdklsjfljsd')
     return s.dumps({'email': mailId}).decode('utf-8')
@@ -40,11 +27,6 @@ def verifyToken(token):
         return id
     return None
 
-'''@celery.task
-def sendMail(to,subject,body):
-    from_addr = 'crawler@iimjobs.com'
-    return mailConnection.send_email(from_addr,subject,None,to,format='text',text_body=body,html_body =None)
-'''
 def getListOfUser(product):
     result = Utility.getList('User', {"role":"user", "products":{"$in":[product]}})
     listOfUser = []
@@ -114,13 +96,11 @@ def registerSucess():
         name=Utility.getUrlParameter('name')
         email=Utility.getUrlParameter('email')
         product=Utility.getUrlParameterList('products')
-        #passwd=randint(1000,523253555)
+        
         if not Dbhelper.findOne('User',{"email":email}):
             Dbhelper.insert('User' , { "name":name,"email":email,"products":product,"password":"","role":"user" })
-            #body="User Name:  "+name+'\n'+"Password:   "+str(passwd)
             token = getToken(mailId = email)
             body="Set password using below link\n"+"http://crawler.iimjobs.com/setPassword?token="+token
-            #sendMail(email,"Set Password",body)
             sendMail.delay(email,"Set Password",body)
             return redirect(url_for('users.admin'))
         else:
