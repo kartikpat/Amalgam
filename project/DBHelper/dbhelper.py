@@ -1,7 +1,17 @@
 from pymongo import MongoClient
+import MySQLdb
 
 client = MongoClient('localhost')
 db = client.mydb
+
+sqlDb = MySQLdb.connect("localhost","root","root","iimjobs" )
+cur = sqlDb.cursor()
+
+class sqlDbhelper():
+	@staticmethod
+	def getData(sqlQuery):
+		cur.execute(sqlQuery)
+		return cur.fetchall()
 
 class Dbhelper():
 

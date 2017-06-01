@@ -47,26 +47,34 @@ def login():
         if request.method == 'POST':
             email = Utility.getPostParameter('email')
             password = Utility.getPostParameter('password')
-            user = Dbhelper.findOne('User', { "email":email, "password":password })
-            if not email or not password or not user:
-                return render_template('login.html',message="Enter valid credential")
+            service =Utility.getPostParameter('serviceSelect')
+
+            user = Dbhelper.findOne('User', { "email":email, "password":password ,"products":service})
+            if not email or not password or not service or not user:
+                return render_template('login.html',message="Enter valid credential and choose authorised service")
 
             session['role'] = user['role']
             session['email'] = email
-            if 'permission' in user.keys():
-                session['lis'] = user.get('permission').get('crawler')
-            else:
-                session['lis']=[]
+            session['service']=service
+
+            if session['role']=='user':   
+                session['lis']=user['permission'].get(service)
+            
 
         if 'email' in session:
             if session['role'] == "admin":
                 return redirect(url_for('users.admin'))
-            elif session['role'] == "user" and session['lis']:
-                return redirect(url_for('jobListing.jobListing'))
-            else:  
-                return render_template('companiesPopUp.html')     
+            elif session['role'] == "user":    
+                if session['service']=='crawler':
+                    if session['lis']:
+                        return redirect(url_for('jobListing.jobListing'))
+                    else:
+                        return render_template('companiesPopUp.html')
+                elif session['service']=='Assessment':
+                    return redirect(url_for('assessment.listQuestions'))            
+                                        
         else:    
-            return render_template('login.html')           
+            return render_template('login.html')              
         
 
 @users.route('/admin')
@@ -96,9 +104,11 @@ def registerSucess():
         name=Utility.getUrlParameter('name')
         email=Utility.getUrlParameter('email')
         product=Utility.getUrlParameterList('products')
-        
+        permissionData={}
         if not Dbhelper.findOne('User',{"email":email}):
-            Dbhelper.insert('User' , { "name":name,"email":email,"products":product,"password":"","role":"user" })
+            for per in product:
+                permissionData[per]=[]
+            Dbhelper.insert('User' , { "name":name,"email":email,"products":product,"password":"","role":"user","permission":permissionData })
             token = getToken(mailId = email)
             body="Set password using below link\n"+"http://crawler.iimjobs.com/setPassword?token="+token
             sendMail.delay(email,"Set Password",body)
@@ -130,6 +140,6 @@ def selectCompanies():
     if Utility.isLoggedIn():
         listOfCompanies = Utility.getUrlParameterList('companies')
         collection=Dbhelper.getCollectionName('User')
-        collection.update({"email":session['email']},{"$set":{"permission":{"crawler":listOfCompanies}}})
+        collection.update({"email":session['email']},{"$set":{"permission.crawler":listOfCompanies}})
         session['lis'] = listOfCompanies;
         return redirect(url_for('jobListing.jobListing'))

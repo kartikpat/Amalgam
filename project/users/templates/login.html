@@ -126,6 +126,13 @@
                 <p id="passMessage"></p>
           </div>
           <div class="form-group">
+              <label for="serviceSelect" >Select service</label><br>
+              <select id="serviceSelect" name="serviceSelect">
+                <option value="" disabled="disabled" selected="selected">Please select service</option>
+              </select>
+              <p id="serviceMessage"></p>
+          </div>
+          <div class="form-group">
         	    <button type="submit" class="btn btn-default">Submit</button>
           </div>
           {% if message: %}
@@ -137,17 +144,34 @@
 
 <script type="text/javascript">
 
-  document.querySelector(".toast_notif").classList += ' show';
+  //document.querySelector(".toast_notif").classList += ' show';
   
+  var services = ['crawler','Assessment'];     
+
+  var ser = document.getElementById('serviceSelect');
+  var fragment = document.createDocumentFragment();
+
+  services.forEach(function(service, index) {
+      var opt = document.createElement('option');
+      opt.innerHTML = service;
+      opt.value = service;
+      fragment.appendChild(opt);
+  });
+
+  ser.appendChild(fragment);
+
   function checkBlankFields(){
     var email=document.getElementById('Email1');
     var password=document.getElementById('Password');
+    var service=document.getElementById('serviceSelect');
 
     (email.value== 0)?document.getElementById("emailMessage").innerHTML="Please Enter Email":document.getElementById("emailMessage").innerHTML="";
    
     (password.value== 0)?document.getElementById("passMessage").innerHTML="Please Enter Password":document.getElementById("passMessage").innerHTML=""; 
 
-    if (email.value && password.value)
+    (service.value== 0)?document.getElementById("serviceMessage").innerHTML="Please select service":document.getElementById("serviceMessage").innerHTML=""; 
+
+    if (email.value && password.value && service.value)
       return true;
     else
       return false;

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		
+	</title>
+	<style type="text/css">
+		table{
+			width: 100%;
+		}
+		tr{
+			 border: 1px solid #dddddd;
+		}
+		td, th {
+		   
+		    text-align: left;
+		    padding: 8px;
+		}
+	</style>
+</head>
+<body>
+	<table>
+		<tr>
+			<th>Questions Id</th>
+			<th>Question</th>
+			<th>Correct Answer</th>
+			<th>Level</th>
+			<th>Question Type</th>
+			<th>Skill type</th>
+			<th>Tags</th>
+		</tr>	
+		{% for question in questions %}
+			<tr>
+				<td>{{ question[0]}}</td>
+				<td>{{ question[2]}}</td>
+				<td>{{question[4]}}</td> 
+				<td class='questionLevel' questionLevelData={{question[5]}}></td>
+				<td>{{question[6]}}</td> 
+				<td>{{question[7]}}</td>
+				<td>{{question[8] }}</td>                
+			</tr>
+			{% for option in question[3].split(',')%}
+				<tr>
+					<td></td>
+					<td>{{option.strip('[]" ')}}</td>
+				</tr>
+			{% endfor %}
+
+		{% endfor %}
+		
+	</table>
+	<script type="text/javascript">
+		function getLevel(level){
+			dict={1:"Easy",2:"Medium",3:"Hard"};
+			return dict[level];
+		}
+
+		window.onload = function() {
+			document.querySelectorAll(".questionLevel").forEach( function(el) {
+				var difficulty = el.getAttribute('questionLevelData')
+				el.innerHTML = getLevel(difficulty);
+			});
+		}
+
+		
+	</script>
+</body>
+</html>

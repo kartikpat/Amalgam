@@ -9,7 +9,9 @@ app.secret_key ='sdlkfdklsjfljsd'
 from users.views import users
 from jobListing.views import listingJob
 from naukri.views import naukri
+from assessment.views import listingQues
 
 app.register_blueprint(users)
 app.register_blueprint(listingJob)
 app.register_blueprint(naukri)
+app.register_blueprint(listingQues)
