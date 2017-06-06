@@ -17,52 +17,179 @@
 		    padding: 8px;
 		}
 	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">></script>
 </head>
 <body>
-	<table>
-		<tr>
-			<th>Questions Id</th>
-			<th>Question</th>
-			<th>Correct Answer</th>
-			<th>Level</th>
-			<th>Question Type</th>
-			<th>Skill type</th>
-			<th>Tags</th>
-		</tr>	
-		{% for question in questions %}
-			<tr>
-				<td>{{ question[0]}}</td>
-				<td>{{ question[2]}}</td>
-				<td>{{question[4]}}</td> 
-				<td class='questionLevel' questionLevelData={{question[5]}}></td>
-				<td>{{question[6]}}</td> 
-				<td>{{question[7]}}</td>
-				<td>{{question[8] }}</td>                
-			</tr>
-			{% for option in question[3].split(',')%}
-				<tr>
-					<td></td>
-					<td>{{option.strip('[]" ')}}</td>
-				</tr>
-			{% endfor %}
+	<div class="tableContainer">
+				<table>
+					<tbody>
+						<tr>
+							<th>Ques Id</th>
+							<th>Question</th>
+							<th>Correct Answer</th>
+							<th>Level</th>
+							<th>Question Type</th>
+							<th>Skill type</th>
+							<th>Tags</th>
+							<th>Action</th>
+						</tr>
+					</tbody>
+				</table>		
+				{% for question in questions: %}
+				<div class="tableContent">
+					<table>
+						<div class="question">
+							<tr>
+								<td contenteditable="false" showData="{{question[0]}}" >{{ question[0]}}</td>
+								<td contenteditable="false" showData="{{question[2]}}">{{ question[2]}}</td>
+								<td contenteditable="false" showData="{{question[4]}}">{{question[4]}}</td> 
+								<td contenteditable="false" backData="{{question[5]}}" showData="" class='questionLevel'></td>
+								<td contenteditable="false" backData="{{question[6]}}" showData="" class='quesType'></td> 
+								<td contenteditable="false" backData="{{question[7]}}" showData="" class='skillType'></td>
+								<td contenteditable="false" showData="{{question[8]}}" >{{ question[8] }}</td>
+								<td>
+									<button class="editButton">Edit</button>
+								</td>               
+							</tr>
+							{% for option in question[3].split(','):%}
+								<tr>
+									<td></td>
+									<td showData="{{option.strip('[] ')}}" >{{option.strip('[] ')}}</td>
+								</tr>	
+							{% endfor %}
+						</div>	
+					</table>	
+				</div>
+				{% endfor %}
+	</div>
 
-		{% endfor %}
-		
-	</table>
 	<script type="text/javascript">
 		function getLevel(level){
 			dict={1:"Easy",2:"Medium",3:"Hard"};
 			return dict[level];
 		}
 
+		function getQuesType(type){
+				dict={1:'Single Choice', 2:'Multiple Choice', 3:'Essay',4:'Short Answer'};
+				return dict[type];
+			}
+
+		function getSkillType(skill){
+			dict={1:'Logical', 2:'GK', 3:'Reasoning', 4:'Theory',5:'Numerical'};
+			return dict[skill];
+		}
+
+		function getIndex(index){
+			dict={0:"quesId",1:"question",2:"correctAnswer",3:"level",4:"questionType",5:"skillType",6:"tags"};
+			return dict[index];
+		}
+
+		function getData(index,temp){
+
+			temp1=temp.toLowerCase()
+
+			if(index==0){
+				return parseInt(temp);
+			}
+			else if(index==3){
+				dict={"easy":1,"medium":2,"hard":3};
+				return dict[temp1];
+			}
+			else if(index==4){
+				dict={'single choice':1, 'multiple choice':2,'essay':3,'short answer':4};
+				return dict[temp1];
+			}
+			else if(index==5){
+				dict={'logical':1,'gk':2,'reasoning':3,'theory':4,'numerical':5};
+				return dict[temp1];
+			}
+			else{
+				return temp;
+			}
+
+		}
+
 		window.onload = function() {
 			document.querySelectorAll(".questionLevel").forEach( function(el) {
-				var difficulty = el.getAttribute('questionLevelData')
-				el.innerHTML = getLevel(difficulty);
+				var difficulty = el.getAttribute('backData');
+				var temp =getLevel(difficulty);
+				el.setAttribute("showData",temp);
+				el.innerHTML = temp;
+			});
+
+			document.querySelectorAll(".skillType").forEach( function(el) {
+				var skill = el.getAttribute('backData');
+				var temp=getSkillType(skill);
+				el.setAttribute('showData',temp);
+				el.innerHTML = temp;
+			});
+
+			document.querySelectorAll(".quesType").forEach( function(el) {
+				var type = el.getAttribute('backData')
+				var temp=getQuesType(type);
+				el.setAttribute('showData',temp);
+				el.innerHTML = temp;
 			});
 		}
 
-		
+		//$(document).ready(function(){
+			$('.editButton').click(function(){
+				if($(this).html() =='Save'){
+					var ob={};
+					var question =$(this).parents('tr').find('td');
+					//var options =$(this).parents('tr').next().children('td');
+					
+					$.each(question,function(index,currentTd){	
+						if(index!=7 /*&& currentTd.getAttribute('showData')!=currentTd.innerHTML*/){
+							ob[getIndex(index)]=getData(index,$(this).html());
+						}
+					});
+					/*
+					var li=[];
+					$.each(options,function(index,currentTd){
+						if(index%2==0){
+							console.log(currentTd.innerHTML)
+							li.push(currentTd.innerHTML)
+						}
+					});
+					console.log(li);
+					*/
+
+					$.ajax({
+					    url: '/ajaxReceive',
+					    type: 'POST',
+					    data: JSON.stringify(ob),
+					    contentType: 'application/json; charset=utf-8',
+					    dataType: 'json',
+					    async: false,
+					    success: function(msg) {
+					        console.log(msg['status']);;
+					    }
+					});
+				console.log(ob);
+				}
+			});
+		//});
+
+		//$(document).ready(function () {
+		      $('.editButton').click(function () {
+		          var currentTD = $(this).parents('.tableContent').find('td');
+		          if ($(this).html() == 'Edit') {                  
+		              $.each(currentTD, function () {
+		                  $(this).prop('contenteditable', true)
+		              });
+		          } else {
+		             $.each(currentTD, function () {
+		                  $(this).prop('contenteditable', false)
+		              });
+		          }
+
+		          $(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit')
+
+		      });
+
+		 //});
+						
 	</script>
 </body>
 </html>

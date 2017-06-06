@@ -13,6 +13,11 @@ class sqlDbhelper():
 		cur.execute(sqlQuery)
 		return cur.fetchall()
 
+	@staticmethod	
+	def updateQuery(quesId, ques,correctAns,lev,quesType,skillType,tag):
+		cur.execute("update quesBank SET question=%s ,correct_answer=%s,level=%s,question_type=%s,skill_type=%s ,tags=%s WHERE ques_id=%s;",(ques,correctAns,lev,quesType,skillType,tag,quesId))	
+		sqlDb.commit()
+
 class Dbhelper():
 
 	__listOfCollections = {
