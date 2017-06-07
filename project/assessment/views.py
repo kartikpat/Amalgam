@@ -25,8 +25,9 @@ def ajaxRecieve():
     quesType=request.json['questionType']
     skill=request.json['skillType']
     tag=request.json['tags']
+    options =request.json['options']
 
-    sqlDbhelper.updateQuery(quesId,ques,ans,lev,quesType,skill,tag)
+    sqlDbhelper.updateQuery(quesId,ques,ans,lev,quesType,skill,tag,options)
     return redirect(url_for('assessment.listQuestions'))
     #print (quesId,ques,ans,lev,quesType,skill,tag)
     #return json.dumps({'status':'OK'})

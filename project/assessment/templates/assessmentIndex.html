@@ -35,32 +35,32 @@
 						</tr>
 					</tbody>
 				</table>		
-				{% for question in questions: %}
+				
 				<div class="tableContent">
-					<table>
-						<div class="question">
-							<tr>
-								<td contenteditable="false" showData="{{question[0]}}" >{{ question[0]}}</td>
-								<td contenteditable="false" showData="{{question[2]}}">{{ question[2]}}</td>
-								<td contenteditable="false" showData="{{question[4]}}">{{question[4]}}</td> 
-								<td contenteditable="false" backData="{{question[5]}}" showData="" class='questionLevel'></td>
-								<td contenteditable="false" backData="{{question[6]}}" showData="" class='quesType'></td> 
-								<td contenteditable="false" backData="{{question[7]}}" showData="" class='skillType'></td>
-								<td contenteditable="false" showData="{{question[8]}}" >{{ question[8] }}</td>
-								<td>
-									<button class="editButton">Edit</button>
-								</td>               
-							</tr>
-							{% for option in question[3].split(','):%}
-								<tr>
-									<td></td>
-									<td showData="{{option.strip('[] ')}}" >{{option.strip('[] ')}}</td>
-								</tr>	
-							{% endfor %}
-						</div>	
-					</table>	
-				</div>
+				<table>
+				{% for question in questions: %}
+					<tr class="question">
+						<td contenteditable="false" showData="{{question[0]}}" >{{ question[0]}}</td>
+						<td contenteditable="false" showData="{{question[2]}}">{{ question[2]}}</td>
+						<td contenteditable="false" showData="{{question[4]}}">{{question[4]}}</td> 
+						<td contenteditable="false" backData="{{question[5]}}" showData="" class='questionLevel'></td>
+						<td contenteditable="false" backData="{{question[6]}}" showData="" class='quesType'></td> 
+						<td contenteditable="false" backData="{{question[7]}}" showData="" class='skillType'></td>
+						<td contenteditable="false" showData="{{question[8]}}" >{{ question[8] }}</td>
+						<td>
+							<button class="editButton" data-state="edit">edit</button>
+						</td>               
+					</tr>
+							
+					{% for option in question[3].split(','): %}
+						<tr class='option'>
+							<td></td>
+							<td showData="{{option.strip('[] ')}}" >{{option.strip('[]" ')}}</td>
+						</tr>	
+					{% endfor %}			
 				{% endfor %}
+				</table>	
+				</div>
 	</div>
 
 	<script type="text/javascript">
@@ -86,21 +86,21 @@
 
 		function getData(index,temp){
 
-			temp1=temp.toLowerCase()
+			var temp1=temp.toLowerCase()
 
 			if(index==0){
 				return parseInt(temp);
 			}
 			else if(index==3){
-				dict={"easy":1,"medium":2,"hard":3};
+				var dict={"easy":1,"medium":2,"hard":3};
 				return dict[temp1];
 			}
 			else if(index==4){
-				dict={'single choice':1, 'multiple choice':2,'essay':3,'short answer':4};
+				var dict={'single choice':1, 'multiple choice':2,'essay':3,'short answer':4};
 				return dict[temp1];
 			}
 			else if(index==5){
-				dict={'logical':1,'gk':2,'reasoning':3,'theory':4,'numerical':5};
+				var dict={'logical':1,'gk':2,'reasoning':3,'theory':4,'numerical':5};
 				return dict[temp1];
 			}
 			else{
@@ -132,29 +132,33 @@
 			});
 		}
 
-		//$(document).ready(function(){
+		//$(document).ready(function(){ 
 			$('.editButton').click(function(){
-				if($(this).html() =='Save'){
+				//var _this = $(this);
+				// console.log($(this).attr('data-state'));
+				if( $(this).attr('data-state') == 'save'){
+
 					var ob={};
-					var question =$(this).parents('tr').find('td');
+					var question =$(this).parent().siblings();
 					//var options =$(this).parents('tr').next().children('td');
-					
+					//console.log(question);
 					$.each(question,function(index,currentTd){	
 						if(index!=7 /*&& currentTd.getAttribute('showData')!=currentTd.innerHTML*/){
-							ob[getIndex(index)]=getData(index,$(this).html());
+							ob[getIndex(index)]=getData(index,currentTd.innerHTML);
 						}
 					});
-					/*
-					var li=[];
-					$.each(options,function(index,currentTd){
-						if(index%2==0){
-							console.log(currentTd.innerHTML)
-							li.push(currentTd.innerHTML)
-						}
+					
+					var li="[";
+					$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
+					  var ele = $(elem).find('td[showdata]')
+					  
+					  li=li+'"'+ele[0].innerHTML+'",'		
 					});
-					console.log(li);
-					*/
+					li=li.substring(0,li.length-1)+']'
 
+					console.log(li);
+					ob['options']=li;
+					
 					$.ajax({
 					    url: '/ajaxReceive',
 					    type: 'POST',
@@ -162,34 +166,67 @@
 					    contentType: 'application/json; charset=utf-8',
 					    dataType: 'json',
 					    async: false,
+					    beforeSend:function() {
+					    	console.log("Did the ajax even initialize?");
+					    },
 					    success: function(msg) {
 					        console.log(msg['status']);;
+					    },
+					    error:function() {
+					    	console.log('fail');
+					    },
+					    complete:function() {
+					    	console.log("completed");
 					    }
 					});
+					
+					var currentTD = $(this).parent().siblings();
+					$.each(currentTD, function () {
+					      $(this).prop('contenteditable', false)
+					  });
+
+					$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
+					  $(elem).find('td[showdata]').prop('contenteditable','false');
+					});
+
+					$(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
+			        $(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
 				console.log(ob);
 				}
+				else {
+	          	    var currentTD = $(this).parent().siblings();
+	          	    //console.log(currentTD);
+	          	    $.each(currentTD, function () {
+					      $(this).prop('contenteditable', true)
+					  });
+
+					// if ($(this).data('state') == 'edit') {   
+					//   $.each(currentTD, function () {
+					//       $(this).prop('contenteditable', true)
+					//   });
+					// } else {
+					//  $.each(currentTD, function () {
+					//       $(this).prop('contenteditable', false)
+					//   });
+					// }
+
+					//Set ContentEditable on Option TRs
+					$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
+					  $(elem).find('td[showdata]').prop('contenteditable','true');
+					});
+
+		          $(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
+		          $(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
+
+				}
 			});
-		//});
-
-		//$(document).ready(function () {
-		      $('.editButton').click(function () {
-		          var currentTD = $(this).parents('.tableContent').find('td');
-		          if ($(this).html() == 'Edit') {                  
-		              $.each(currentTD, function () {
-		                  $(this).prop('contenteditable', true)
-		              });
-		          } else {
-		             $.each(currentTD, function () {
-		                  $(this).prop('contenteditable', false)
-		              });
-		          }
-
-		          $(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit')
-
-		      });
-
-		 //});
-						
+		//});		
 	</script>
+
+	<style>
+		td[contenteditable='true'] {
+			border:1px solid #bababa;
+		}
+	</style>
 </body>
 </html>
