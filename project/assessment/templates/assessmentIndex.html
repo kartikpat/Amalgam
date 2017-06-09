@@ -16,6 +16,9 @@
 		    text-align: left;
 		    padding: 8px;
 		}
+		td[contenteditable='true'] {
+			border:1px solid #bababa;
+		}
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">></script>
 </head>
@@ -40,13 +43,19 @@
 				<table>
 				{% for question in questions: %}
 					<tr class="question">
-						<td contenteditable="false" showData="{{question[0]}}" >{{ question[0]}}</td>
-						<td contenteditable="false" showData="{{question[2]}}">{{ question[2]}}</td>
-						<td contenteditable="false" showData="{{question[4]}}">{{question[4]}}</td> 
-						<td contenteditable="false" backData="{{question[5]}}" showData="" class='questionLevel'></td>
-						<td contenteditable="false" backData="{{question[6]}}" showData="" class='quesType'></td> 
-						<td contenteditable="false" backData="{{question[7]}}" showData="" class='skillType'></td>
-						<td contenteditable="false" showData="{{question[8]}}" >{{ question[8] }}</td>
+						<td >{{ question[0]}}</td>
+						<td contenteditable="false" >{{ question[2]}}</td>
+						<td contenteditable="false" >{{question[4]}}</td> 
+						<td contenteditable="false" class='questionLevel'>
+							<select backData="{{question[5]}}" class="level"></select>
+						</td>
+						<td contenteditable="false" class='quesType'>
+							<select backData="{{question[6]}}" class="quesType"></select>
+						</td> 
+						<td contenteditable="false" class='skillType'>
+							<select backData="{{question[7]}}" class="skillType"></select>
+						</td>
+						<td contenteditable="false" >{{ question[8] }}</td>
 						<td>
 							<button class="editButton" data-state="edit">edit</button>
 						</td>               
@@ -64,15 +73,16 @@
 	</div>
 
 	<script type="text/javascript">
+
 		function getLevel(level){
 			dict={1:"Easy",2:"Medium",3:"Hard"};
 			return dict[level];
 		}
 
 		function getQuesType(type){
-				dict={1:'Single Choice', 2:'Multiple Choice', 3:'Essay',4:'Short Answer'};
-				return dict[type];
-			}
+			dict={1:'Single Choice', 2:'Multiple Choice', 3:'Essay',4:'Short Answer'};
+			return dict[type];
+		}
 
 		function getSkillType(skill){
 			dict={1:'Logical', 2:'GK', 3:'Reasoning', 4:'Theory',5:'Numerical'};
@@ -84,67 +94,108 @@
 			return dict[index];
 		}
 
-		function getData(index,temp){
 
-			var temp1=temp.toLowerCase()
+		// function getData(index,temp){
 
-			if(index==0){
-				return parseInt(temp);
-			}
-			else if(index==3){
-				var dict={"easy":1,"medium":2,"hard":3};
-				return dict[temp1];
-			}
-			else if(index==4){
-				var dict={'single choice':1, 'multiple choice':2,'essay':3,'short answer':4};
-				return dict[temp1];
-			}
-			else if(index==5){
-				var dict={'logical':1,'gk':2,'reasoning':3,'theory':4,'numerical':5};
-				return dict[temp1];
-			}
-			else{
-				return temp;
-			}
+		// 	var temp1=temp.toLowerCase()
 
-		}
+		// 	if(index==0){
+		// 		return parseInt(temp);
+		// 	}
+		// 	else if(index==3){
+		// 		var dict={"easy":1,"medium":2,"hard":3};
+		// 		return dict[temp1];
+		// 	}
+		// 	else if(index==4){
+		// 		var dict={'single choice':1, 'multiple choice':2,'essay':3,'short answer':4};
+		// 		return dict[temp1];
+		// 	}
+		// 	else if(index==5){
+		// 		var dict={'logical':1,'gk':2,'reasoning':3,'theory':4,'numerical':5};
+		// 		return dict[temp1];
+		// 	}
+		// 	else{
+		// 		return temp;
+		// 	}
+
+		// }
+
+		var selectElem = $("select.level");
+		$.each(selectElem, function(index,sel) {
+
+		  var levelArr = ['easy','medium','hard'];
+		  levelArr.forEach(function(elem,index) {
+		    $(sel).append("<option value="+(index+1)+">"+elem+"</option>");
+		  });
+		});
+
+		var selectElem = $("select.quesType");
+		$.each(selectElem, function(index,sel) {
+
+		  var typeArr = ['single Choice','multiple choice','essay','short answer'];
+		  typeArr.forEach(function(elem,index) {
+		    $(sel).append("<option value="+(index+1)+">"+elem+"</option>");
+		  });
+		});
+
+		var selectElem = $("select.skillType");
+		$.each(selectElem, function(index,sel) {
+
+		  var skillArr = ['logical','gk','reasoning','theory','numerical'];
+		  skillArr.forEach(function(elem,index) {
+		    $(sel).append("<option value="+(index+1)+">"+elem+"</option>");
+		  });
+		});
 
 		window.onload = function() {
-			document.querySelectorAll(".questionLevel").forEach( function(el) {
-				var difficulty = el.getAttribute('backData');
-				var temp =getLevel(difficulty);
-				el.setAttribute("showData",temp);
-				el.innerHTML = temp;
+			var selLevel=$('select.level')
+			$.each(selLevel,function(index,elem){
+				$.each(elem,function(index,ele){
+					if(ele.getAttribute('value')==elem.getAttribute('backData')){
+						ele.setAttribute('selected',"selected");
+					}
+				
+				});
 			});
 
-			document.querySelectorAll(".skillType").forEach( function(el) {
-				var skill = el.getAttribute('backData');
-				var temp=getSkillType(skill);
-				el.setAttribute('showData',temp);
-				el.innerHTML = temp;
+			var selType=$('select.quesType')
+			$.each(selType,function(index,elem){
+				$.each(elem,function(index,ele){
+					if(ele.getAttribute('value')==elem.getAttribute('backData')){
+						ele.setAttribute('selected',"selected");
+					}
+				
+				});
 			});
 
-			document.querySelectorAll(".quesType").forEach( function(el) {
-				var type = el.getAttribute('backData')
-				var temp=getQuesType(type);
-				el.setAttribute('showData',temp);
-				el.innerHTML = temp;
+			var selSkill=$('select.skillType')
+			$.each(selSkill,function(index,elem){
+				$.each(elem,function(index,ele){
+					if(ele.getAttribute('value')==elem.getAttribute('backData')){
+						ele.setAttribute('selected',"selected");
+					}
+				
+				});
 			});
 		}
 
+		
 		//$(document).ready(function(){ 
 			$('.editButton').click(function(){
-				//var _this = $(this);
-				// console.log($(this).attr('data-state'));
+				
 				if( $(this).attr('data-state') == 'save'){
 
 					var ob={};
 					var question =$(this).parent().siblings();
-					//var options =$(this).parents('tr').next().children('td');
-					//console.log(question);
+					
 					$.each(question,function(index,currentTd){	
-						if(index!=7 /*&& currentTd.getAttribute('showData')!=currentTd.innerHTML*/){
-							ob[getIndex(index)]=getData(index,currentTd.innerHTML);
+						if(index==3 || index==4 || index==5){
+							ob[getIndex(index)] = $(currentTd).find('option:selected').attr('value');
+							
+						}
+						else if(index!=7 ){
+							//ob[getIndex(index)]=getData(index,currentTd.innerHTML);
+							ob[getIndex(index)]=currentTd.innerHTML;
 						}
 					});
 					
@@ -156,7 +207,6 @@
 					});
 					li=li.substring(0,li.length-1)+']'
 
-					console.log(li);
 					ob['options']=li;
 					
 					$.ajax({
@@ -195,7 +245,7 @@
 				}
 				else {
 	          	    var currentTD = $(this).parent().siblings();
-	          	    //console.log(currentTD);
+	          	    
 	          	    $.each(currentTD, function () {
 					      $(this).prop('contenteditable', true)
 					  });
@@ -215,18 +265,12 @@
 					  $(elem).find('td[showdata]').prop('contenteditable','true');
 					});
 
-		          $(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
-		          $(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
-
+			        $(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
+			        $(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
 				}
 			});
 		//});		
 	</script>
 
-	<style>
-		td[contenteditable='true'] {
-			border:1px solid #bababa;
-		}
-	</style>
 </body>
 </html>
