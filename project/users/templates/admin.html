@@ -103,51 +103,51 @@
             </div>
     
 
-    <div class="main_container">
-     
-     <div class="pull-right">
-	<button class="btn btn-primary" onclick="window.location='/register';" type="submit">Register</button>
-	<button class="btn btn-danger" onclick="window.location='/logout';" type="submit">Log Out</button>
+	    <div class="main_container">
+	     
+		     <div class="pull-right">
+				<button class="btn btn-primary" onclick="window.location='/register';" type="submit">Register</button>
+				<button class="btn btn-danger" onclick="window.location='/logout';" type="submit">Log Out</button>
+			</div>
+
+			<div class="table_container">  
+			{% if dict %}
+					<ul style="list-style-type:decimal">
+						{% for lis,lisk in dict.iteritems(): %}
+						   <h3><li>{{lis}}</li></h3>
+					     
+					      <div class="table_container">
+					    		<table>
+					    			<tbody>
+					    			<tr><th class="col-xs-3">Name</th><th>Email</th><th>Products</th><th>Actions</th></tr>
+					    			{% for list in lisk: %}
+					    			   <tr>
+					    			   
+					    			   <td>{{ list['name'] }}</td> 
+					    			   <td>{{ list['email'] }}</td>
+					    			   <td>
+					    			   {% for listt in list['products'] %}
+					    			   {{ listt }}
+					    			   {% endfor %}
+					    			   </td>
+					    			   <td>
+					    			   <button  onclick="var emailId = this.parentNode.parentNode.childNodes[3].innerHTML;
+					    			                     window.location='admin/delete/' + emailId ;">Delete</button>
+					    			   
+					    			   </td>
+					    			   </tr>
+					    			{% endfor %}
+
+					    			</tbody>
+
+					    		</table>
+					    	</div>
+						{% endfor %}
+						</ul>
+			{% endif %}
+			</div>
+		</div>
 	</div>
-
-		<div class="table_container">  
-		{% if dict %}
-				<ul style="list-style-type:decimal">
-					{% for lis,lisk in dict.iteritems(): %}
-					   <h3><li>{{lis}}</li></h3>
-				     
-				      <div class="table_container">
-				    		<table>
-				    			<tbody>
-				    			<tr><th class="col-xs-3">Name</th><th>Email</th><th>Products</th><th>Actions</th></tr>
-				    			{% for list in lisk: %}
-				    			   <tr>
-				    			   
-				    			   <td>{{ list['name'] }}</td> 
-				    			   <td>{{ list['email'] }}</td>
-				    			   <td>
-				    			   {% for listt in list['products'] %}
-				    			   {{ listt }}
-				    			   {% endfor %}
-				    			   </td>
-				    			   <td>
-				    			   <button  onclick="var emailId = this.parentNode.parentNode.childNodes[3].innerHTML;
-				    			                     window.location='admin/delete/' + emailId ;">Delete</button>
-				    			   
-				    			   </td>
-				    			   </tr>
-				    			{% endfor %}
-
-				    			</tbody>
-
-				    		</table>
-				    	</div>
-					{% endfor %}
-					</ul>
-		{% endif %}
-	</div>
-</div>
-</div>
 
 
 </body>

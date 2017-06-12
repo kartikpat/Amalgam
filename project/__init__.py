@@ -2,7 +2,7 @@ from flask import Flask
 
 app = Flask(__name__)
 app.secret_key ='sdlkfdklsjfljsd'
-
+app.config['UPLOAD_FOLDER'] = 'project/assessment/uploadedCSV/'
 #app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
 #app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
 

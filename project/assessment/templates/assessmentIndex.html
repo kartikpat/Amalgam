@@ -13,7 +13,7 @@
 			border:1px solid #bababa;
 		}
 
-		tbody:nth-child(odd){
+		/*tbody:nth-child(odd){
 			
 			background-color: yellow;
 		}
@@ -21,14 +21,52 @@
 		tbody:nth-child(even){
 			background-color: grey;
 			background-repeat: no-repeat;
-		}
-		
+		}*/
+
 
 	</style>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">></script>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 </head>
 <body>
+	
+	<div class="pull-right">
+		<button data-toggle="modal" data-target="#modalUpload" class="btn btn-primary upload">Upload New File</button>
+		<button class="btn btn-danger" onclick="window.location='/logout';" type="submit">Log Out</button>
+	</div>
+		 <div id="modalUpload" class="modal fade" tabindex = "-1" role="dialog">
+		  	<div class="modal-dialog" role="document">
+			 	<div class="modal-content" >
+			      <div class="modal-header">
+			        <h4 class="modal-title">Upload a CSV file</h4>
+			        <h4>{{message}}</h4>
+			      </div>
+			      	<div class="modal-body">
+
+						<form action = "http://localhost:5000/upload" method = "POST"
+									enctype = "multipart/form-data" class="right">
+								<div class="form-group">
+								   <input id="fileUpload" type = "file" name = "file"/>
+							    </div>
+								
+								<div class="form-group">
+								   <button class="btn btn-default"> Submit </button>
+							   	</div>
+		     
+						</form>
+					      <div class="modal-footer">
+					        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					      </div>
+			    	</div>
+		  		</div>
+		  	</div>
+		  </div>
+
+
 	<div class="tableContainer">
 				<table>
 					<thead>
@@ -85,80 +123,40 @@
 
 	<script type="text/javascript">
 
-		function getLevel(level){
-			dict={1:"Easy",2:"Medium",3:"Hard"};
-			return dict[level];
-		}
-
-		function getQuesType(type){
-			dict={1:'Single Choice', 2:'Multiple Choice', 3:'Essay',4:'Short Answer'};
-			return dict[type];
-		}
-
-		function getSkillType(skill){
-			dict={1:'Logical', 2:'GK', 3:'Reasoning', 4:'Theory',5:'Numerical'};
-			return dict[skill];
-		}
-
 		function getIndex(index){
 			dict={0:"quesId",1:"question",2:"correctAnswer",3:"level",4:"questionType",5:"skillType",6:"tags"};
 			return dict[index];
 		}
 
-
-		// function getData(index,temp){
-
-		// 	var temp1=temp.toLowerCase()
-
-		// 	if(index==0){
-		// 		return parseInt(temp);
-		// 	}
-		// 	else if(index==3){
-		// 		var dict={"easy":1,"medium":2,"hard":3};
-		// 		return dict[temp1];
-		// 	}
-		// 	else if(index==4){
-		// 		var dict={'single choice':1, 'multiple choice':2,'essay':3,'short answer':4};
-		// 		return dict[temp1];
-		// 	}
-		// 	else if(index==5){
-		// 		var dict={'logical':1,'gk':2,'reasoning':3,'theory':4,'numerical':5};
-		// 		return dict[temp1];
-		// 	}
-		// 	else{
-		// 		return temp;
-		// 	}
-
-		// }
-
-		var selectElem = $("select.level");
-		$.each(selectElem, function(index,sel) {
-
-		  var levelArr = ['easy','medium','hard'];
-		  levelArr.forEach(function(elem,index) {
-		    $(sel).append("<option value="+(index+1)+">"+elem+"</option>");
-		  });
-		});
-
-		var selectElem = $("select.quesType");
-		$.each(selectElem, function(index,sel) {
-
-		  var typeArr = ['single Choice','multiple choice','essay','short answer'];
-		  typeArr.forEach(function(elem,index) {
-		    $(sel).append("<option value="+(index+1)+">"+elem+"</option>");
-		  });
-		});
-
-		var selectElem = $("select.skillType");
-		$.each(selectElem, function(index,sel) {
-
-		  var skillArr = ['logical','gk','reasoning','theory','numerical'];
-		  skillArr.forEach(function(elem,index) {
-		    $(sel).append("<option value="+(index+1)+">"+elem+"</option>");
-		  });
-		});
-
 		window.onload = function() {
+
+			var selectElem = $("select.level");
+			$.each(selectElem, function(index,sel) {
+
+			  var levelArr = ['easy','medium','hard'];
+			  levelArr.forEach(function(elem,index) {
+			    $(sel).append("<option value="+(index+1)+">"+elem+"</option>");
+			  });
+			});
+
+			var selectElem = $("select.quesType");
+			$.each(selectElem, function(index,sel) {
+
+			  var typeArr = ['single Choice','multiple choice','essay','short answer'];
+			  typeArr.forEach(function(elem,index) {
+			    $(sel).append("<option value="+(index+1)+">"+elem+"</option>");
+			  });
+			});
+
+			var selectElem = $("select.skillType");
+			$.each(selectElem, function(index,sel) {
+
+			  var skillArr = ['logical','gk','reasoning','theory','numerical'];
+			  skillArr.forEach(function(elem,index) {
+			    $(sel).append("<option value="+(index+1)+">"+elem+"</option>");
+			  });
+			});
+
 			var selLevel=$('select.level')
 			$.each(selLevel,function(index,elem){
 				$.each(elem,function(index,ele){
@@ -227,18 +225,9 @@
 					    contentType: 'application/json; charset=utf-8',
 					    dataType: 'json',
 					    async: false,
-					    // beforeSend:function() {
-					    // 	console.log("Did the ajax even initialize?");
-					    // },
 					    success: function(msg) {
 					        console.log(msg['status']);;
 					    }
-					    // error:function() {
-					    // 	console.log('fail');
-					    // },
-					    // complete:function() {
-					    // 	console.log("completed");
-					    // }
 					});
 					
 					var currentTD = $(this).parent().siblings();
@@ -261,27 +250,16 @@
 					      $(this).prop('contenteditable', true)
 					  });
 
-					// if ($(this).data('state') == 'edit') {   
-					//   $.each(currentTD, function () {
-					//       $(this).prop('contenteditable', true)
-					//   });
-					// } else {
-					//  $.each(currentTD, function () {
-					//       $(this).prop('contenteditable', false)
-					//   });
-					// }
-
-					//Set ContentEditable on Option TRs
 					$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
 					  $(elem).find('td[showdata]').prop('contenteditable','true');
 					});
 
 			        $(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
-			        $(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
+			        $(this).text( $(this).attr('data-state'));
 				}
 			});
 		//});		
 	</script>
-
+	
 </body>
 </html>
