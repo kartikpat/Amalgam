@@ -8,24 +8,30 @@
 		table{
 			width: 100%;
 		}
-		tr{
-			 border: 1px solid #dddddd;
-		}
-		td, th {
-		   
-		    text-align: left;
-		    padding: 8px;
-		}
+		
 		td[contenteditable='true'] {
 			border:1px solid #bababa;
 		}
+
+		tbody:nth-child(odd){
+			
+			background-color: yellow;
+		}
+
+		tbody:nth-child(even){
+			background-color: grey;
+			background-repeat: no-repeat;
+		}
+		
+
 	</style>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">></script>
 </head>
 <body>
 	<div class="tableContainer">
 				<table>
-					<tbody>
+					<thead>
 						<tr>
 							<th>Ques Id</th>
 							<th>Question</th>
@@ -36,12 +42,13 @@
 							<th>Tags</th>
 							<th>Action</th>
 						</tr>
-					</tbody>
-				</table>		
+					</thead>
 				
-				<div class="tableContent">
-				<table>
+				<!-- <div class="tableContent">
+				<table class="table table-striped"> -->
+				
 				{% for question in questions: %}
+				<tbody >
 					<tr class="question">
 						<td >{{ question[0]}}</td>
 						<td contenteditable="false" >{{ question[2]}}</td>
@@ -67,9 +74,13 @@
 							<td showData="{{option.strip('[] ')}}" >{{option.strip('[]" ')}}</td>
 						</tr>	
 					{% endfor %}			
+				</tbody>
 				{% endfor %}
-				</table>	
-				</div>
+				<!-- </table>	
+				</div> -->
+				
+			</table>		
+					
 	</div>
 
 	<script type="text/javascript">
@@ -208,7 +219,7 @@
 					li=li.substring(0,li.length-1)+']'
 
 					ob['options']=li;
-					
+					console.log(ob)
 					$.ajax({
 					    url: '/ajaxReceive',
 					    type: 'POST',
@@ -216,18 +227,18 @@
 					    contentType: 'application/json; charset=utf-8',
 					    dataType: 'json',
 					    async: false,
-					    beforeSend:function() {
-					    	console.log("Did the ajax even initialize?");
-					    },
+					    // beforeSend:function() {
+					    // 	console.log("Did the ajax even initialize?");
+					    // },
 					    success: function(msg) {
 					        console.log(msg['status']);;
-					    },
-					    error:function() {
-					    	console.log('fail');
-					    },
-					    complete:function() {
-					    	console.log("completed");
 					    }
+					    // error:function() {
+					    // 	console.log('fail');
+					    // },
+					    // complete:function() {
+					    // 	console.log("completed");
+					    // }
 					});
 					
 					var currentTD = $(this).parent().siblings();
@@ -241,7 +252,7 @@
 
 					$(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
 			        $(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
-				console.log(ob);
+				//console.log(ob);
 				}
 				else {
 	          	    var currentTD = $(this).parent().siblings();
