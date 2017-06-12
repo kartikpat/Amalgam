@@ -20,7 +20,7 @@ def editProfile():
         if Dbhelper.findOne('User',{"email":session['email'],"password":oldPassword}):
             collection.update({"email":session['email'],"password":oldPassword},{"$set":{"password":newPassword}})
             return redirect(url_for('jobListing.logout'))
-        else:   
+        else:
             output = model.getRecentJobs(session['lis'])
             return render_template('index.html',wrongPassword="Enter correct old password",dict=output,selectedList=session['lis'],list=JobsModel.allCmnyList)
 
@@ -60,3 +60,34 @@ def listJob():
         return listOfJobs.cmnywiseJob()
     else:
         return redirect(url_for('jobListing.jobListing'))
+
+
+def getJobs():
+	allJobsLists = {}
+	result = Dbhelper.getCollectionName("Naukri").aggregate([{ "$group" : { "_id" : "$organization","jobs": { "$push" : "$$ROOT"}}}])
+	for res in result:
+		output = []
+		for job in res['jobs']:
+			output.append({"title":job['title'],"location":job['location'],"date":Utility.ISODateToString(job['date'])})
+		allJobsLists[res['_id']] = output
+	return allJobsLists
+
+def getJobsByLocation():
+	allJobsLists = {}
+	result = Dbhelper.getCollectionName("Naukri").aggregate([{ "$group" : { "_id" : "$location[1]","jobs": { "$push" : "$$ROOT"}}}])
+	for res in result:
+		output = []
+		for job in res['jobs']:
+			output.append({"title":job['title'],"date":Utility.ISODateToString(job['date'])})
+		allJobsLists[res['_id']] = output
+	return allJobsLists
+
+@listingJob.route('/naukri')
+def jobListing1():
+		output = getJobs()
+		return render_template("naukri.html",dict=output )
+
+@listingJob.route('/naukri/location')
+def listJob1():
+	output = getJobsByLocation()
+	return render_template("index1.html",dict1=output,dict={} )

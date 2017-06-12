@@ -8,10 +8,9 @@ app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
 
 from users.views import users
 from jobListing.views import listingJob
-from naukri.views import naukri
+
 
 
 
 app.register_blueprint(users)
 app.register_blueprint(listingJob)
-app.register_blueprint(naukri)
