@@ -1,7 +1,22 @@
 from pymongo import MongoClient
+import MySQLdb
 
 client = MongoClient('localhost')
 db = client.mydb
+
+sqlDb = MySQLdb.connect("localhost","root","root","iimjobs" )
+cur = sqlDb.cursor()
+
+class sqlDbhelper():
+	@staticmethod
+	def getData(sqlQuery):
+		cur.execute(sqlQuery)
+		return cur.fetchall()
+
+	@staticmethod	
+	def updateQuery(quesId, ques,correctAns,lev,quesType,skillType,tag,options):
+		cur.execute("update quesBank SET question=%s ,correct_answer=%s,level=%s,question_type=%s,skill_type=%s ,tags=%s,options=%s WHERE ques_id=%s;",(ques,correctAns,lev,quesType,skillType,tag,options,quesId))	
+		sqlDb.commit()
 
 class Dbhelper():
 
@@ -17,7 +32,14 @@ class Dbhelper():
 			  'Nestle':db.nestle,
 			  'Deloitte':db.deloitte,
 			  'Northern Trust':db.northerntrust,
-			  "ZS Associate":db.zs,
+			  'ZS Associate':db.zs,
+			  'Future Group':db.futuregroup,
+			  'Landmark Group':db.landmarkgroup,
+			  'Paytm':db.paytm,
+			  'Societe Generale':db.SocieteG,
+			  'Thomsan Reuters':db.thomson,
+			  'Western Unions':db.westernunion,
+			  'Hinduja Global':db.hindujaglobal,
 			  'User':db.userDetail
 		}
 
