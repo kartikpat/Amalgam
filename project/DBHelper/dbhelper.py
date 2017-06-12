@@ -4,7 +4,7 @@ import MySQLdb
 client = MongoClient('localhost')
 db = client.mydb
 
-sqlDb = MySQLdb.connect("localhost","root","root","iimjobs" )
+sqlDb = MySQLdb.connect("localhost","root","Godrej#123","iimjobs")
 cur = sqlDb.cursor()
 
 class sqlDbhelper():
@@ -13,9 +13,9 @@ class sqlDbhelper():
 		cur.execute(sqlQuery)
 		return cur.fetchall()
 
-	@staticmethod	
+	@staticmethod
 	def updateQuery(quesId, ques,correctAns,lev,quesType,skillType,tag,options):
-		cur.execute("update quesBank SET question=%s ,correct_answer=%s,level=%s,question_type=%s,skill_type=%s ,tags=%s,options=%s WHERE ques_id=%s;",(ques,correctAns,lev,quesType,skillType,tag,options,quesId))	
+		cur.execute("update quesBank SET question=%s ,correct_answer=%s,level=%s,question_type=%s,skill_type=%s ,tags=%s,options=%s WHERE ques_id=%s;",(ques,correctAns,lev,quesType,skillType,tag,options,quesId))
 		sqlDb.commit()
 
 class Dbhelper():
@@ -26,7 +26,7 @@ class Dbhelper():
 			  'American Express':db.americanexp,
 			  'Pepsico':db.pepsico,
 			  'Taleo':db.taleo,
-			  'Kronos': db.kronos,			  
+			  'Kronos': db.kronos,
 			  'Naukri': db.naukri,
 			  'Hike':db.hike,
 			  'Nestle':db.nestle,

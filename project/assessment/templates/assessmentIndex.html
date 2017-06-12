@@ -2,286 +2,259 @@
 <html>
 <head>
 	<title>
-		
+
 	</title>
 	<style type="text/css">
-		table{
-			width: 100%;
-		}
-		
-		td[contenteditable='true'] {
-			border:1px solid #bababa;
-		}
 
-		tbody:nth-child(odd){
-			
-			background-color: yellow;
-		}
+	td[contenteditable='true'] {
+		border:1px solid #bababa;
+	}
 
-		tbody:nth-child(even){
-			background-color: grey;
-			background-repeat: no-repeat;
-		}
-		
+	td{
+		font-family: cursive;
+		text-align: center;
+		vertical-align: middle;
+	}
 
-	</style>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">></script>
+	tbody:nth-child(even){
+		background-color: #EAEAEA;
+	}
+
+
+</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+
 </head>
 <body>
-	<div class="tableContainer">
-				<table>
-					<thead>
-						<tr>
-							<th>Ques Id</th>
-							<th>Question</th>
-							<th>Correct Answer</th>
-							<th>Level</th>
-							<th>Question Type</th>
-							<th>Skill type</th>
-							<th>Tags</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-				
-				<!-- <div class="tableContent">
-				<table class="table table-striped"> -->
-				
-				{% for question in questions: %}
-				<tbody >
-					<tr class="question">
-						<td >{{ question[0]}}</td>
-						<td contenteditable="false" >{{ question[2]}}</td>
-						<td contenteditable="false" >{{question[4]}}</td> 
-						<td contenteditable="false" class='questionLevel'>
-							<select backData="{{question[5]}}" class="level"></select>
-						</td>
-						<td contenteditable="false" class='quesType'>
-							<select backData="{{question[6]}}" class="quesType"></select>
-						</td> 
-						<td contenteditable="false" class='skillType'>
-							<select backData="{{question[7]}}" class="skillType"></select>
-						</td>
-						<td contenteditable="false" >{{ question[8] }}</td>
-						<td>
-							<button class="editButton" data-state="edit">edit</button>
-						</td>               
+
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Ques Id</th>
+						<th class="col-xs-4">Question</th>
+						<th>Answer</th>
+						<th>Level</th>
+						<th>Question Type</th>
+						<th>Skill type</th>
+						<th>Tags</th>
+						<th>Action</th>
 					</tr>
-							
-					{% for option in question[3].split(','): %}
-						<tr class='option'>
-							<td></td>
-							<td showData="{{option.strip('[] ')}}" >{{option.strip('[]" ')}}</td>
-						</tr>	
-					{% endfor %}			
-				</tbody>
+				</thead>
+
+			<!-- <div class="tableContent">
+			<table class="table table-striped"> -->
+
+			{% for question in questions: %}
+			<tbody >
+				<tr class="question">
+					<td >{{ question[0]}}</td>
+					<td contenteditable="false" >{{ question[2]}}</td>
+					<td contenteditable="false" >{{question[4]}}</td>
+					<td contenteditable="false" >
+						<select backData="{{question[5]}}" class="level selectpicker show-tick" data-width="auto"></select>
+					</td>
+					<td contenteditable="false" >
+						<select backData="{{question[6]}}" class="quesType selectpicker show-tick" data-width="auto"></select>
+					</td>
+					<td contenteditable="false" >
+						<select backData="{{question[7]}}" class="skillType selectpicker show-tick" data-width="auto"></select>
+					</td>
+					<td contenteditable="false">
+						<select backData="{{question[8]}}" class="tags selectpicker " multiple data-width="auto"></select>
+					<td>
+						<button class="editButton btn btn-default" data-state="edit">edit</button>
+					</td>
+				</tr>
+
+				{% for option in question[3].split(','): %}
+					<tr class='option'>
+						<td style="visibility: hidden"></td>
+						<td  showData="{{option.strip('[] ')}}" >{{option.strip('[]" ')}}</td>
+
+					</tr>
 				{% endfor %}
-				<!-- </table>	
-				</div> -->
-				
-			</table>		
-					
-	</div>
+			</tbody>
+			{% endfor %}
+			<!-- </table>
+			</div> -->
 
-	<script type="text/javascript">
-
-		function getLevel(level){
-			dict={1:"Easy",2:"Medium",3:"Hard"};
-			return dict[level];
-		}
-
-		function getQuesType(type){
-			dict={1:'Single Choice', 2:'Multiple Choice', 3:'Essay',4:'Short Answer'};
-			return dict[type];
-		}
-
-		function getSkillType(skill){
-			dict={1:'Logical', 2:'GK', 3:'Reasoning', 4:'Theory',5:'Numerical'};
-			return dict[skill];
-		}
-
-		function getIndex(index){
-			dict={0:"quesId",1:"question",2:"correctAnswer",3:"level",4:"questionType",5:"skillType",6:"tags"};
-			return dict[index];
-		}
+		</table>
 
 
-		// function getData(index,temp){
 
-		// 	var temp1=temp.toLowerCase()
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">></script>
 
-		// 	if(index==0){
-		// 		return parseInt(temp);
-		// 	}
-		// 	else if(index==3){
-		// 		var dict={"easy":1,"medium":2,"hard":3};
-		// 		return dict[temp1];
-		// 	}
-		// 	else if(index==4){
-		// 		var dict={'single choice':1, 'multiple choice':2,'essay':3,'short answer':4};
-		// 		return dict[temp1];
-		// 	}
-		// 	else if(index==5){
-		// 		var dict={'logical':1,'gk':2,'reasoning':3,'theory':4,'numerical':5};
-		// 		return dict[temp1];
-		// 	}
-		// 	else{
-		// 		return temp;
-		// 	}
 
-		// }
 
-		var selectElem = $("select.level");
-		$.each(selectElem, function(index,sel) {
 
-		  var levelArr = ['easy','medium','hard'];
-		  levelArr.forEach(function(elem,index) {
-		    $(sel).append("<option value="+(index+1)+">"+elem+"</option>");
-		  });
+<script type="text/javascript">
+
+
+	function getIndex(index){
+		dict={0:"quesId",1:"question",2:"correctAnswer",3:"level",4:"questionType",5:"skillType",6:"tags"};
+		return dict[index];
+	}
+
+
+	window.onload = function() {
+
+		var tags = $("select.tags.selectpicker");
+		$.each(tags, function(index,sel) {
+
+			var levelArr = ['Marketing','Advertising','Sales'];
+			levelArr.forEach(function(elem,index) {
+				$(sel).append("<option value="+(index+1)+">"+elem+"</option>");
+			});
 		});
 
-		var selectElem = $("select.quesType");
+		var selectElem = $("select.level.selectpicker");
 		$.each(selectElem, function(index,sel) {
 
-		  var typeArr = ['single Choice','multiple choice','essay','short answer'];
-		  typeArr.forEach(function(elem,index) {
-		    $(sel).append("<option value="+(index+1)+">"+elem+"</option>");
-		  });
+			var levelArr = ['easy','medium','hard'];
+			levelArr.forEach(function(elem,index) {
+				$(sel).append("<option value="+(index+1)+">"+elem+"</option>");
+			});
 		});
 
-		var selectElem = $("select.skillType");
+		var selectElem = $("select.quesType.selectpicker");
 		$.each(selectElem, function(index,sel) {
 
-		  var skillArr = ['logical','gk','reasoning','theory','numerical'];
-		  skillArr.forEach(function(elem,index) {
-		    $(sel).append("<option value="+(index+1)+">"+elem+"</option>");
-		  });
+			var typeArr = ['single Choice','multiple choice','essay','short answer'];
+			typeArr.forEach(function(elem,index) {
+				$(sel).append("<option value="+(index+1)+">"+elem+"</option>");
+			});
 		});
 
-		window.onload = function() {
-			var selLevel=$('select.level')
-			$.each(selLevel,function(index,elem){
-				$.each(elem,function(index,ele){
-					if(ele.getAttribute('value')==elem.getAttribute('backData')){
-						ele.setAttribute('selected',"selected");
-					}
-				
-				});
+		var selectElem = $("select.skillType.selectpicker");
+		$.each(selectElem, function(index,sel) {
+
+			var skillArr = ['logical','gk','reasoning','theory','numerical'];
+			skillArr.forEach(function(elem,index) {
+				$(sel).append("<option value="+(index+1)+">"+elem+"</option>");
 			});
+		});
 
-			var selType=$('select.quesType')
-			$.each(selType,function(index,elem){
-				$.each(elem,function(index,ele){
-					if(ele.getAttribute('value')==elem.getAttribute('backData')){
-						ele.setAttribute('selected',"selected");
-					}
-				
-				});
-			});
-
-			var selSkill=$('select.skillType')
-			$.each(selSkill,function(index,elem){
-				$.each(elem,function(index,ele){
-					if(ele.getAttribute('value')==elem.getAttribute('backData')){
-						ele.setAttribute('selected',"selected");
-					}
-				
-				});
-			});
-		}
-
-		
-		//$(document).ready(function(){ 
-			$('.editButton').click(function(){
-				
-				if( $(this).attr('data-state') == 'save'){
-
-					var ob={};
-					var question =$(this).parent().siblings();
-					
-					$.each(question,function(index,currentTd){	
-						if(index==3 || index==4 || index==5){
-							ob[getIndex(index)] = $(currentTd).find('option:selected').attr('value');
-							
-						}
-						else if(index!=7 ){
-							//ob[getIndex(index)]=getData(index,currentTd.innerHTML);
-							ob[getIndex(index)]=currentTd.innerHTML;
-						}
-					});
-					
-					var li="[";
-					$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
-					  var ele = $(elem).find('td[showdata]')
-					  
-					  li=li+'"'+ele[0].innerHTML+'",'		
-					});
-					li=li.substring(0,li.length-1)+']'
-
-					ob['options']=li;
-					console.log(ob)
-					$.ajax({
-					    url: '/ajaxReceive',
-					    type: 'POST',
-					    data: JSON.stringify(ob),
-					    contentType: 'application/json; charset=utf-8',
-					    dataType: 'json',
-					    async: false,
-					    // beforeSend:function() {
-					    // 	console.log("Did the ajax even initialize?");
-					    // },
-					    success: function(msg) {
-					        console.log(msg['status']);;
-					    }
-					    // error:function() {
-					    // 	console.log('fail');
-					    // },
-					    // complete:function() {
-					    // 	console.log("completed");
-					    // }
-					});
-					
-					var currentTD = $(this).parent().siblings();
-					$.each(currentTD, function () {
-					      $(this).prop('contenteditable', false)
-					  });
-
-					$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
-					  $(elem).find('td[showdata]').prop('contenteditable','false');
-					});
-
-					$(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
-			        $(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
-				//console.log(ob);
-				}
-				else {
-	          	    var currentTD = $(this).parent().siblings();
-	          	    
-	          	    $.each(currentTD, function () {
-					      $(this).prop('contenteditable', true)
-					  });
-
-					// if ($(this).data('state') == 'edit') {   
-					//   $.each(currentTD, function () {
-					//       $(this).prop('contenteditable', true)
-					//   });
-					// } else {
-					//  $.each(currentTD, function () {
-					//       $(this).prop('contenteditable', false)
-					//   });
-					// }
-
-					//Set ContentEditable on Option TRs
-					$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
-					  $(elem).find('td[showdata]').prop('contenteditable','true');
-					});
-
-			        $(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
-			        $(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
+		var tags = $('select.tags.selectpicker')
+		$.each(tags,function(index,elem){
+			var array = elem.getAttribute('backData').split(',');
+			$.each(elem,function(index,ele){
+				if($.inArray(ele.innerHTML,array) != -1){
+					ele.setAttribute('selected',"selected");
 				}
 			});
-		//});		
-	</script>
+		});
+
+		var selLevel=$('select.level.selectpicker')
+		$.each(selLevel,function(index,elem){
+			$.each(elem,function(index,ele){
+				if(ele.getAttribute('value')==elem.getAttribute('backData')){
+					ele.setAttribute('selected',"selected");
+				}
+
+			});
+		});
+
+		var selType=$('select.quesType.selectpicker')
+		$.each(selType,function(index,elem){
+			$.each(elem,function(index,ele){
+				if(ele.getAttribute('value')==elem.getAttribute('backData')){
+					ele.setAttribute('selected',"selected");
+				}
+
+			});
+		});
+
+		var selSkill=$('select.skillType.selectpicker')
+		$.each(selSkill,function(index,elem){
+			$.each(elem,function(index,ele){
+				if(ele.getAttribute('value')==elem.getAttribute('backData')){
+					ele.setAttribute('selected',"selected");
+				}
+
+			});
+		});
+	}
+
+
+
+		$('.editButton').click(function(){
+
+			if( $(this).attr('data-state') == 'save'){
+
+				var ob={};
+				var question =$(this).parent().siblings();
+
+				$.each(question,function(index,currentTd){
+					if(index==3 || index==4 || index==5){
+						ob[getIndex(index)] = $(currentTd).find('option:selected').attr('value');
+
+					}
+					else if(index!=7 ){
+						//ob[getIndex(index)]=getData(index,currentTd.innerHTML);
+						ob[getIndex(index)]=currentTd.innerHTML;
+					}
+				});
+
+				var li="[";
+				$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
+					var ele = $(elem).find('td[showdata]')
+
+					li=li+'"'+ele[0].innerHTML+'",'
+				});
+				li=li.substring(0,li.length-1)+']'
+
+				ob['options']=li;
+				console.log(ob)
+				$.ajax({
+						url: '/ajaxReceive',
+						type: 'POST',
+						data: JSON.stringify(ob),
+						contentType: 'application/json; charset=utf-8',
+						dataType: 'json',
+						async: false,
+
+						success: function(msg) {
+								console.log(msg['status']);;
+						}
+
+				});
+
+				var currentTD = $(this).parent().siblings();
+				$.each(currentTD, function () {
+							$(this).prop('contenteditable', false)
+					});
+
+				$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
+					$(elem).find('td[showdata]').prop('contenteditable','false');
+				});
+
+				$(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
+						$(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
+			//console.log(ob);
+			}
+			else {
+								var currentTD = $(this).parent().siblings();
+
+								$.each(currentTD, function () {
+							$(this).prop('contenteditable', true)
+					});
+
+				$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
+					$(elem).find('td[showdata]').prop('contenteditable','true');
+				});
+
+						$(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
+						$(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
+			}
+		});
+
+</script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
 
 </body>
 </html>
