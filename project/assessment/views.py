@@ -1,6 +1,7 @@
 from flask import Blueprint, Flask,request, render_template, redirect,url_for,session,current_app as app
 from ..DBHelper.dbhelper import sqlDbhelper
 from werkzeug import secure_filename
+from project.tasks import parseCsvFile
 import model
 import json
 import time
@@ -50,10 +51,8 @@ def upload():
         filename = secure_filename(f.filename)
         if '.' in filename and filename.split('.')[1]=='csv':
           fileId=filename.split('.')[0]+str(int(time.time()*1000))+'.'+filename.split('.')[1]
-          #app.config['UPLOAD_FOLDER'] = 'uploadedCSV/'
-          #f.save(filename)
-          f.save(os.path.join(app.config['UPLOAD_FOLDER'],filename)) 
-          #parseCsvFile.delay(fileId,filename,session['email'])
+          f.save(os.path.join(app.config['UPLOAD_FOLDER'],fileId)) 
+          parseCsvFile.delay(fileId,filename)
           return render_template("assessmentIndex.html",questions=results,message="File parsing is on process")
         else:
           return render_template("assessmentIndex.html",questions=results,message="File should have extension(.csv)")

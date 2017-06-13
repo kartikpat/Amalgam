@@ -1,7 +1,9 @@
 from celery import Celery
 import boto.ses
 import MySQLdb
+import time
 import csv
+import os
 
 cl = Celery('tasks',backend='rpc://', broker='pyamqp://guest@localhost//')
 CELERY_IMPORTS=("tasks")
@@ -62,7 +64,7 @@ def sendMail(to,subject,body):
     return mailConnection.send_email(from_addr,subject,None,to,format='text',text_body=body,html_body =None)
 
 @cl.task(name="project.tasks.parseCsvFile")
-def parseCsvFile(fileId,filename,email):
+def parseCsvFile(fileId,filename):
   
       try:
          db=MySQLdb.connect("localhost","root","root","test")
@@ -70,12 +72,12 @@ def parseCsvFile(fileId,filename,email):
         return "Can not connect to database"
       else:
         cursor=db.cursor()
-        try:     
-            f = open(os.path.join('assessment/uploadedCSV',fileId),'rb')
+        try:    
+            f = open(os.path.join('assessment/uploadedCSV/',fileId),'rb')
             reader = csv.reader(f)
         except IOError:
-            return "file does not open"
-        else: 
+          return "file does not open"
+        else:
            #  for row in reader:
            #    break
            #  li = validateCsv(reader) 
@@ -104,9 +106,10 @@ def parseCsvFile(fileId,filename,email):
                 else:
                   option=option+'"'+rowOpt[1].strip()+'"'+','
 
-              db.commit()    
+              db.commit()
+            return 'success'    
             #else:
              #   Dbhelper.update({"email":email},"$push",{"fileInfo":{"fileId":fileId,"filename":filename,"status":li,"date":datetime.datetime.now()}})  
               #  db.close() 
                # f.close()
-      return 'success'    
+            

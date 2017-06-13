@@ -82,7 +82,7 @@ def admin():
     if Utility.isLoggedIn():
         result = Dbhelper.findOne('User' , {"email":session['email']})
         listOfProducts = result['products']
-        dic = {}
+        dic = {}    
         for product in listOfProducts:
             dic[product] = getListOfUser(product)
         return render_template('admin.html',dict=dic)
