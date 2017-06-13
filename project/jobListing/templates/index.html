@@ -11,6 +11,71 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
 
     <style type="text/css">
+
+    nav ul {
+			list-style: none;
+			padding: 0 0 0 10px;
+			min-width: 460px;
+		}
+
+		nav li {
+			float: left;
+			position: relative;
+			height: 30px;
+			border-radius: 10px 30px 0 0;
+			margin-left: -10px;
+			text-shadow: 1px 1px 0 #bbb;
+			box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+			transition: .2s;
+		}
+
+		nav a {
+			display: block;
+			position: relative;
+			width: 90px;
+			height: 20px;
+			padding: 6px 10px 20px 0;
+			border-radius: 10px 30px 0 0;
+			background: #999;
+			color: #444;
+			text-align: center;
+			text-decoration: none;
+			transition: .2s;
+		}
+
+		nav li:hover {
+			z-index: 1;
+		}
+
+		nav li:hover a {
+			background: #ccc;
+			color: #000;
+		}
+
+		#selected {
+			z-index: 2;
+		}
+
+		#selected a {
+			z-index: 3;
+			background: #fff;
+			color: #000;
+			text-shadow: none;
+			font-weight: 500;
+		}
+
+		#content {
+			position: relative;
+			z-index: 1;
+			clear: both;
+			min-width: 420px;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+			background: #fff;
+		}
+
+
     .form{
       box-shadow: 10px 10px 5px 0 rgba(0, 0, 0, 0.5);
       -webkit-box-shadow: 10px 10px 5px 0 rgba(0, 0, 0, 0.5);
@@ -103,69 +168,6 @@
 	button.settings {margin-top:10px;}
 
 
-/*.sidebar {
-  height: 100vh;
-  position: fixed;
-  z-index: 10;
-  background: #FFF;
-  top: 0;
-  right:-100%;
-  transition:all 0.3s ease-in-out;
-  width:350px;
-}
-
-.sidebar.expanded {
-	right:0;
-}
-.body_overlay {
-  z-index: 5;
-  background: rgba(50,50,50,0.5);
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  display:none;
-}
-
-.sidebar .items p {
-	font-size:18px;
-	text-decoration:underline;
-	margin-left:10%;
-}
-
-.sidebar .items ul {
-	list-style:none;
-	font-size:16px;
-	padding-left:0;
-}
-.sidebar .items ul li {
-	border:1px solid #cccccc;
-	padding:20px;
-	text-align: center;
-	margin:10px 0;
-	cursor:pointer;
-	transition:all 0.3s ease-in-out;
-	width:85%;
-	margin:10px auto;
-}
-
-.sidebar .items li.selected {
-	background:#CCC;
-	color:#FFF;
-}
-
-.sidebar .profile_content,.sidebar .companies_content,.logout_content {
-	display:none;
-	width:80%;
-	margin:10px auto;
-}
-
-.dropdown-menu li {
-	padding: 0px !important;
-	margin:0px ;
-	border:0 !important;
-}*/
 .profile_content p{color:red;}
 .bootstrap-select {width:100% !important;}
 </style>
@@ -261,11 +263,14 @@
 
 <div class="main_container">
 
-<div id="tabs">
+<nav>
   <ul>
-    <li><a href="#tabs-1">Search by Company</a></li>
+    <li id="selected"><a href="/jobListing">Services</a></li>
+    <li><a href="/naukri">Naukri</a></li>
   </ul>
-  <div id="tabs-1">
+</nav>
+
+    <div id = "content">
     <div class="form_container">
 		<form action= "/jobListing/listJob" method="get">
 	       <div class="pull-left">
@@ -281,6 +286,7 @@
 			<div class="clearfix"></div>
 		</form>
 	</div>
+
 	<div class="table_container">
 		{% if dict %}
 				<ul style="list-style-type:decimal">
@@ -302,9 +308,11 @@
 		{% endif %}
 	</div>
   </div>
+</div>
+
 
 </div>
-</div>
+
 
 
 
@@ -359,7 +367,7 @@
 	    $( "#start_date" ).datepicker({ minDate: -30, maxDate: "0D",dateFormat: "dd-mm-yy"});
 	    $( "#end_date" ).datepicker({ minDate: -30, maxDate: "0D",dateFormat: "dd-mm-yy" });
 
-	    $( "#tabs" ).tabs();
+
 	    $(".settings_tabs").tabs();
 
 	    jQuery(".settings").click(function() {
@@ -406,10 +414,10 @@
 	    var confirmPass = document.getElementById('confirmPassword').value;
 
 	    (oldPass== 0)?document.getElementById("oldPassMsg").innerHTML="Enter Old Password":document.getElementById("oldPassMsg").innerHTML="";
-	   
-	    (newPass== 0)?document.getElementById("newPassMsg").innerHTML="Enter New Password":document.getElementById("newPassMsg").innerHTML=""; 
 
-	    (confirmPass == 0)?document.getElementById("confirmPassMsg").innerHTML="Enter Confirm Password":document.getElementById("confirmPassMsg").innerHTML="";	
+	    (newPass== 0)?document.getElementById("newPassMsg").innerHTML="Enter New Password":document.getElementById("newPassMsg").innerHTML="";
+
+	    (confirmPass == 0)?document.getElementById("confirmPassMsg").innerHTML="Enter Confirm Password":document.getElementById("confirmPassMsg").innerHTML="";
 
 	    document.getElementById("wrongPassword").innerHTML="";
 

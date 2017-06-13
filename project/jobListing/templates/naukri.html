@@ -11,6 +11,72 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
 
     <style type="text/css">
+
+    nav ul {
+  			list-style: none;
+  			padding: 0 0 0 10px;
+  			min-width: 460px;
+  		}
+
+  		nav li {
+  			float: left;
+  			position: relative;
+  			height: 30px;
+  			border-radius: 10px 30px 0 0;
+  			margin-left: -10px;
+  			text-shadow: 1px 1px 0 #bbb;
+  			box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+  			transition: .2s;
+  		}
+
+  		nav a {
+  			display: block;
+  			position: relative;
+  			width: 90px;
+  			height: 20px;
+  			padding: 6px 10px 20px 0;
+  			border-radius: 10px 30px 0 0;
+  			background: #999;
+  			color: #444;
+  			text-align: center;
+  			text-decoration: none;
+  			transition: .2s;
+  		}
+
+  		nav li:hover {
+  			z-index: 1;
+  		}
+
+  		nav li:hover a {
+  			background: #ccc;
+  			color: #000;
+  		}
+
+  		#selected {
+  			z-index: 2;
+  		}
+
+  		#selected a {
+  			z-index: 3;
+  			background: #fff;
+  			color: #000;
+  			text-shadow: none;
+  			font-weight: 500;
+  		}
+
+  		#content {
+  			position: relative;
+  			z-index: 1;
+  			clear: both;
+  			min-width: 420px;
+  			padding: 20px;
+  			border-radius: 10px;
+  			box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+  			background: #fff;
+  		}
+
+
+
     .form{
       box-shadow: 10px 10px 5px 0 rgba(0, 0, 0, 0.5);
       -webkit-box-shadow: 10px 10px 5px 0 rgba(0, 0, 0, 0.5);
@@ -192,13 +258,14 @@
 
 <div class="main_container">
 
-<div id="tabs">
+<nav>
   <ul>
-    <li><a href="#searchByCompany">Search by Company</a></li>
-    <li><a href="#searchByLocation">Search by Location</a></li>
+    <li><a href="/jobListing">Services</a></li>
+    <li id="selected"><a href="/naukri">Naukri</a></li>
   </ul>
-  <div id="searchByCompany">
-    <div class="form_container">
+</nav>
+
+  <!--  <div class="form_container">
 		<form action= "/jobListings/companies" method="get">
 	       <div class="pull-left">
 		       <label for="search_by_company">Company name:</label>
@@ -212,7 +279,9 @@
 	       </div>
 			<div class="clearfix"></div>
 		</form>
-	</div>
+	</div> -->
+
+  <div id="content">
 	<div class="table_container">
 		{% if dict %}
 				<ul style="list-style-type:decimal">
@@ -236,47 +305,8 @@
 				</ul>
 		{% endif %}
 	</div>
-  </div>
-
-  <div id="searchByLocation">
-    <div class="form_container">
-    <form action= "/jobListings/location" method="get">
-         <div class="pull-left">
-           <label for="search_by_location">Company name:</label>
-           <input type="text" id="search_by_location" name="location" maxlength="100"  value="{{ request.args.get('location') }}"/>
-
-           <button class="btn btn-primary" type="submit" maxlength="100" >Get Jobs</button>
-         </div>
-      <div class="clearfix"></div>
-    </form>
-  </div>
-  <div class="table_container">
-    {% if dict1 %}
-        <ul style="list-style-type:decimal">
-          {% for lis,lisk in dict.iteritems(): %}
-             <h3><li>{{lis}}</li></h3>
-
-              <div class="table_container">
-                <table>
-                  <tbody>
-                  <tr><th class="col-xs-2">Date</th><th class="col-xs-7">Job Title</th></tr>
-                  {% for list in lisk: %}
-                     <tr><td>{{list['date']}}</td>
-                       <td>{{ list['title'] }}</td>
-                     </tr>
-                  {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-          {% endfor %}
-        </ul>
-    {% endif %}
-  </div>
-  </div>
-
 </div>
-</div>
-
+  </div>
 
 
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
