@@ -13,7 +13,10 @@
 	td{
 		font-family: cursive;
 		text-align: center;
-		vertical-align: middle;
+	}
+
+	td.text {
+	   vertical-align: middle !important;
 	}
 
 	tbody:nth-child(even){
@@ -28,56 +31,85 @@
 </head>
 <body>
 
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>Ques Id</th>
-						<th class="col-xs-4">Question</th>
-						<th>Answer</th>
-						<th>Level</th>
-						<th>Question Type</th>
-						<th>Skill type</th>
-						<th>Tags</th>
-						<th>Action</th>
-					</tr>
-				</thead>
 
-			<!-- <div class="tableContent">
-			<table class="table table-striped"> -->
+	<div class="pull-right">
+		<button data-toggle="modal" data-target="#modalUpload" class="btn btn-primary upload">Upload New File</button>
+		<button class="btn btn-danger" onclick="window.location='/logout';" type="submit">Log Out</button>
+	</div>
+		 <div id="modalUpload" class="modal fade" tabindex = "-1" role="dialog">
+		  	<div class="modal-dialog" role="document">
+			 	<div class="modal-content" >
+			      <div class="modal-header">
+			        <h4 class="modal-title">Upload a CSV file</h4>
+			        <h4>{{message}}</h4>
+			      </div>
+			      	<div class="modal-body">
 
-			{% for question in questions: %}
-			<tbody >
-				<tr class="question">
-					<td >{{ question[0]}}</td>
-					<td contenteditable="false" >{{ question[2]}}</td>
-					<td contenteditable="false" >{{question[4]}}</td>
-					<td contenteditable="false" >
-						<select backData="{{question[5]}}" class="level selectpicker show-tick" data-width="auto"></select>
-					</td>
-					<td contenteditable="false" >
-						<select backData="{{question[6]}}" class="quesType selectpicker show-tick" data-width="auto"></select>
-					</td>
-					<td contenteditable="false" >
-						<select backData="{{question[7]}}" class="skillType selectpicker show-tick" data-width="auto"></select>
-					</td>
-					<td contenteditable="false">
-						<select backData="{{question[8]}}" class="tags selectpicker " multiple data-width="auto"></select>
-					<td>
-						<button class="editButton btn btn-default" data-state="edit">edit</button>
-					</td>
-				</tr>
+						<form action = "http://localhost:5000/upload" method = "POST"
+									enctype = "multipart/form-data" class="right">
+								<div class="form-group">
+								   <input id="fileUpload" type = "file" name = "file"/>
+							    </div>
 
-				{% for option in question[3].split(','): %}
-					<tr class='option'>
-						<td style="visibility: hidden"></td>
-						<td  showData="{{option.strip('[] ')}}" >{{option.strip('[]" ')}}</td>
+								<div class="form-group">
+								   <button class="btn btn-default"> Submit </button>
+							   	</div>
 
-					</tr>
+						</form>
+					      <div class="modal-footer">
+					        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					      </div>
+			    	</div>
+		  		</div>
+		  	</div>
+		  </div>
+
+
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th>Ques Id</th>
+								<th class="col-xs-4">Question</th>
+								<th>Answer</th>
+								<th>Level</th>
+								<th>Question Type</th>
+								<th>Skill type</th>
+								<th>Tags</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+
+					{% for question in questions: %}
+					<tbody>
+						<tr class="question">
+							<td class="text" >{{ question[0]}}</td>
+							<td contenteditable="false" class="text">{{ question[2]}}</td>
+							<td contenteditable="false" class="text">{{question[4]}}</td>
+							<td contenteditable="false" >
+								<select backData="{{question[5]}}" class="level selectpicker show-tick " data-width="auto"></select>
+							</td>
+							<td contenteditable="false" >
+								<select backData="{{question[6]}}" class="quesType selectpicker show-tick" data-width="auto"></select>
+							</td>
+							<td contenteditable="false" >
+								<select backData="{{question[7]}}" class="skillType selectpicker show-tick" data-width="auto"></select>
+							</td>
+							<td contenteditable="false">
+								<select id="tags" backData="{{question[8]}}" class="tags selectpicker show-tick" multiple data-width="auto"></select>
+							<td>
+								<button class="editButton btn btn-default" data-state="edit">edit</button>
+							</td>
+						</tr>
+
+						{% for option in question[3].split(','): %}
+							<tr class='option'>
+								<td style="visibility: hidden"></td>
+								<td  showData="{{option.strip('[] ')}}" >{{option.strip('[]" ')}}</td>
+							</tr>
 				{% endfor %}
+
 			</tbody>
 			{% endfor %}
-			<!-- </table>
-			</div> -->
 
 		</table>
 
@@ -89,6 +121,7 @@
 
 
 <script type="text/javascript">
+
 
 
 	function getIndex(index){
@@ -174,6 +207,8 @@
 
 			});
 		});
+
+
 	}
 
 
@@ -190,10 +225,22 @@
 						ob[getIndex(index)] = $(currentTd).find('option:selected').attr('value');
 
 					}
-					else if(index!=7 ){
+
+					else if(index == 6) {
+
+						var tags=[];
+						 $('#tags :selected').each(function(){
+						     tags.push($(this).text());
+						    });
+								ob[getIndex(index)] = tags.toString();
+
+					}
+
+					else if(index != 7) {
 						//ob[getIndex(index)]=getData(index,currentTd.innerHTML);
 						ob[getIndex(index)]=currentTd.innerHTML;
 					}
+
 				});
 
 				var li="[";
@@ -234,27 +281,31 @@
 			//console.log(ob);
 			}
 			else {
-								var currentTD = $(this).parent().siblings();
+	          	    var currentTD = $(this).parent().siblings();
 
-								$.each(currentTD, function () {
-							$(this).prop('contenteditable', true)
+	          	    $.each(currentTD, function (index,currentTD) {
+                 if(index!=0){
+					      $(this).prop('contenteditable', true)
+							}
+					  });
+
+					$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
+					  $(elem).find('td[showdata]').prop('contenteditable','true');
 					});
 
-				$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
-					$(elem).find('td[showdata]').prop('contenteditable','true');
-				});
-
-						$(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
-						$(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
-			}
-		});
+			        $(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
+			        $(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
+				}
+			});
 
 </script>
+
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+
 
 </body>
 </html>
