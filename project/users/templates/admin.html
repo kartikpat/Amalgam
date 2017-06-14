@@ -4,10 +4,10 @@
 <head>
 <title>Register</title>
 <link href="../static/css/bootstrap.min.css" rel="stylesheet">
- <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet"> 
+ <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
 <style type="text/css">
 
-   
+
 	   .logo, #domain{
 	     text-decoration: none;
 	     position:relative;
@@ -59,7 +59,7 @@
       background-color: #DFFFB8;
       padding: 2.6em;
      }
-   
+
    .table_container {
 		margin:20px 0;
 	}
@@ -96,44 +96,46 @@
 <body>
 
     <div class="container-fluid">
-           
+
             <div class="logo pull-left">
                 <h2>iimjobs</h2>
                 <span id="domain">.com</span>
             </div>
-    
+
 
 	    <div class="main_container">
-	     
+
 		     <div class="pull-right">
 				<button class="btn btn-primary" onclick="window.location='/register';" type="submit">Register</button>
 				<button class="btn btn-danger" onclick="window.location='/logout';" type="submit">Log Out</button>
 			</div>
 
-			<div class="table_container">  
+			<div class="table_container">
 			{% if dict %}
 					<ul style="list-style-type:decimal">
 						{% for lis,lisk in dict.iteritems(): %}
 						   <h3><li>{{lis}}</li></h3>
-					     
+
 					      <div class="table_container">
 					    		<table>
 					    			<tbody>
 					    			<tr><th class="col-xs-3">Name</th><th>Email</th><th>Products</th><th>Actions</th></tr>
 					    			{% for list in lisk: %}
 					    			   <tr>
-					    			   
-					    			   <td>{{ list['name'] }}</td> 
+
+					    			   <td>{{ list['name'] }}</td>
 					    			   <td>{{ list['email'] }}</td>
 					    			   <td>
+                         <select class="selectpicker show-tick" multiple>
 					    			   {% for listt in list['products'] %}
-					    			   {{ listt }}
-					    			   {% endfor %}
+					    			   <option value="{{listt}}">{{listt}}</option>
+                       {% endfor %}
+                     </select>
 					    			   </td>
 					    			   <td>
 					    			   <button  onclick="var emailId = this.parentNode.parentNode.childNodes[3].innerHTML;
 					    			                     window.location='admin/delete/' + emailId ;">Delete</button>
-					    			   
+
 					    			   </td>
 					    			   </tr>
 					    			{% endfor %}

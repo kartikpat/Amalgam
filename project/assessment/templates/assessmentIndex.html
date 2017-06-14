@@ -32,10 +32,13 @@
 <body>
 
 
-	<div class="pull-right">
-		<button data-toggle="modal" data-target="#modalUpload" class="btn btn-primary upload">Upload New File</button>
-		<button class="btn btn-danger" onclick="window.location='/logout';" type="submit">Log Out</button>
+<div class="container">
+	 <div class="top_buttons">
+		<button data-toggle="modal" data-target="#modalUpload" class="btn btn-default upload">Upload New File</button>
+		<button class="btn btn-default" onclick="window.location='/logout';" type="submit">Log Out</button>
 	</div>
+
+
 		 <div id="modalUpload" class="modal fade" tabindex = "-1" role="dialog">
 		  	<div class="modal-dialog" role="document">
 			 	<div class="modal-content" >
@@ -65,7 +68,10 @@
 		  </div>
 
 
-					<table class="table table-bordered">
+
+
+
+					<!-- <table class="table table-bordered">
 						<thead>
 							<tr>
 								<th>Ques Id</th>
@@ -112,12 +118,150 @@
 			{% endfor %}
 
 		</table>
+	-->
 
 
 
+		<div class="page_content">
+     {% for question in questions: %}
+			<div class="question_container">
+
+		  <div class="question_header">
+		    <p class="question_title" contenteditable="false"><span class="question_id">{{ question[0]}}</span>{{ question[2] }}</p>
+
+				{% for option in question[3].split(','): %}
+						<p class="question_options" contenteditable="false" showData="{{option.strip('[]')}}">{{option.strip('[]" ')}}</p>
+		    {% endfor %}
+			</div>
+
+
+
+		  <div class="bottom_buttons">
+		    <select backData="{{question[5]}}" class="level selectpicker show-tick" ></select>
+		    <select backData="{{question[6]}}" class="quesType selectpicker show-tick"></select>
+		    <select backData="{{question[7]}}" class="skillType selectpicker show-tick"></select>
+		    <select id="tags" backData="{{question[8]}}" class="tags selectpicker show-tick" multiple></select>
+		  </div>
+
+
+		</div>
+
+	{% endfor %}
+
+
+	</div>
+
+</div>
+<style>
+
+
+
+.top_buttons {
+	text-align: right;
+	margin: 20px 0 20px 0;
+}
+
+.page_content {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.question_container {
+    margin: 15px 0;
+    border: 1px solid #efeef3;
+    padding: 20px 20px 40px 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+		position:relative;
+
+
+}
+
+.btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-default:active.focus, .btn-default:active:focus, .btn-default:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover
+{
+	outline: none;
+	border-color: #FFAF2D;
+	background-color: #ffffff;
+}
+span.question_id {
+    margin-right: 10px;
+}
+
+span.question_id:after {content: '.';}
+
+.bottom_buttons {
+    visibility: hidden;
+		position: absolute;
+		bottom: 10;
+		opacity: 0;
+		transition:opacity 0.8s, visibility 0.8s;
+}
+
+.bottom_buttons.visible {
+	visibility: visible;
+	opacity: 1;
+}
+
+
+.btn-default:hover,.btn-default:focus {
+background-color: #ffffff;
+border-color: #FFAF2D;
+outline: none;
+}
+
+.dropdown-menu>li>a:hover {
+	outline: none;
+	background-color: #FFC25F;
+}
+
+.dropdown-menu>li>a:focus {
+	outline: none;
+	background-color: #ffffff;
+}
+
+.dropdown-toggle.btn-default:focus,.dropdown-toggle.btn-default:active {
+	background-color: #ffffff;
+	outline: none;
+	border-color: #FFAF2D;
+}
+
+.open>.dropdown-toggle.btn-default:hover,.open>.dropdown-toggle.btn-default,.open>.dropdown-toggle.btn-default:active {
+	background-color:  #ffffff;
+	outline: none;
+}
+
+.question_container:hover {
+	border: 3px solid #FFAF2D;
+}
+
+.question_title.editable:focus {
+	border: 1px solid #FFAF2D;
+	outline: none;
+}
+
+.question_options.editable:focus {
+	border: 1px solid #FFAF2D;
+	outline: none;
+}
+
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">></script>
 
+<script>
+	$(document).ready( function() {
+		$(".question_container").on('mouseenter', function() {
+			jQuery(this).find('.bottom_buttons').addClass('visible');
+		});
 
+		$(".question_container").on('mouseleave', function() {
+		  jQuery(this).find('.bottom_buttons').removeClass('visible');
+		});
+		$(".question_header p").dblclick(function(){
+      $(this).prop('contenteditable', true);
+			$(this).addClass('editable');
+   });
+	});
+
+</script>
 
 
 <script type="text/javascript">
@@ -299,6 +443,8 @@
 			});
 
 </script>
+
+
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

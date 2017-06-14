@@ -1,7 +1,7 @@
 from flask import Blueprint, Flask,request, render_template, redirect,url_for,session,current_app as app
 from ..DBHelper.dbhelper import sqlDbhelper
 from werkzeug import secure_filename
-import model
+
 import json
 import time
 import os
@@ -31,10 +31,10 @@ def ajaxRecieve():
     options =request.json['options']
 
     sqlDbhelper.updateQuery(quesId,ques,ans,lev,quesType,skill,tag,options)
-    return redirect(url_for('assessment.listQuestions'))
+    #return redirect(url_for('assessment.listQuestions'))
     #print (quesId,ques,ans,lev,quesType,skill,tag)
-    #return json.dumps({'status':'OK'})
-    
+    return json.dumps({'status':'OK'})
+
 @listingQues.route('/upload', methods = ['GET', 'POST'])
 def upload():
    # user=Dbhelper.findOne({"email":session['email']})
@@ -52,7 +52,7 @@ def upload():
           fileId=filename.split('.')[0]+str(int(time.time()*1000))+'.'+filename.split('.')[1]
           #app.config['UPLOAD_FOLDER'] = 'uploadedCSV/'
           #f.save(filename)
-          f.save(os.path.join(app.config['UPLOAD_FOLDER'],filename)) 
+          f.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
           #parseCsvFile.delay(fileId,filename,session['email'])
           return render_template("assessmentIndex.html",questions=results,message="File parsing is on process")
         else:
@@ -60,4 +60,4 @@ def upload():
       else:
         return render_template("assessmentIndex.html",questions=results,message="Choose file to upload")
    else:
-      return render_template("assessmentIndex.html",questions=results)    
+      return render_template("assessmentIndex.html",questions=results)
