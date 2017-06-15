@@ -19,7 +19,7 @@ def listQuestions():
     return render_template("assessmentIndex.html",questions=results)
 
 
-@listingQues.route('/ajaxReceive',methods=['POST'])
+@listingQues.route('/ajaxUpdate',methods=['POST'])
 def ajaxRecieve():
     quesId=request.json['quesId']
     ques=request.json['question']
@@ -31,9 +31,15 @@ def ajaxRecieve():
     options =request.json['options']
 
     sqlDbhelper.updateQuery(quesId,ques,ans,lev,quesType,skill,tag,options)
-    #return redirect(url_for('assessment.listQuestions'))
-    #print (quesId,ques,ans,lev,quesType,skill,tag)
     return json.dumps({'status':'OK'})
+
+@listingQues.route('/ajaxDelete',methods=['POST'])
+def ajaxDelete():
+    quesId=request.json['quesId']
+    #print(quesId)
+
+    sqlDbhelper.deleteQuery(quesId)
+    return redirect(url_for('assessment.listQuestions'))
 
 @listingQues.route('/upload', methods = ['GET', 'POST'])
 def upload():

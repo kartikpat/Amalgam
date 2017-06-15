@@ -8,6 +8,13 @@ sqlDb = MySQLdb.connect("localhost","root","Godrej#123","iimjobs")
 cur = sqlDb.cursor()
 
 class sqlDbhelper():
+
+	@staticmethod
+	def deleteQuery(quesId):
+		#print(quesId)
+		cur.execute("DELETE FROM quesBank WHERE ques_id = %s;",(quesId))
+		sqlDb.commit()
+
 	@staticmethod
 	def getData(sqlQuery):
 		cur.execute(sqlQuery)
