@@ -1,41 +1,275 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>
+	<title>Assessment admin panel</title>
 
-	</title>
-	<style type="text/css">
+<link href="../static/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
 
-	td[contenteditable='true'] {
-		border:1px solid #bababa;
-	}
+<style>
 
-	td{
-		font-family: cursive;
-		text-align: center;
-	}
+.dropbtn {
+    background-color: #ffffff;
+    color: #FFAF2D;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
 
-	td.text {
-	   vertical-align: middle !important;
-	}
+.dropdown {
+    position: absolute;
+	visibility: hidden;
+	opacity: 0;
+	transition:opacity 0.1s ease-in-out;
+    -webkit-transition:opacity 0.1s ease-in-out;
+    -moz-transition:opacity 0.1s ease-in-out;
+    -o-transition:opacity 0.1s ease-in-out;
+    right: 10px;
+	top: 10px;
+}
 
-	tbody:nth-child(even){
-		background-color: #EAEAEA;
-	}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right:-2px;
+    top:45px;
+    box-shadow:0 0px 3px rgba(0,0,0,0.1);
+    background-color: #ffffff;
+    min-width: 50px;
+    /*border:2px solid #FFCD7A;*/
+    z-index: 1;
+}
 
+.dropdown-content a {
+    color: black;
+    padding: 6px 10px;
+    text-decoration: none;
+    display: block;
+    width:100px;
+}
+
+.dropdown-content a:hover {background-color: #FFCD7A }
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #ffffff;
+}
+
+.top_buttons {
+	text-align: right;
+	margin: 20px 0 20px 0;
+}
+
+.page_content {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.question_container {
+    margin: 15px 0;
+    border: 3px solid #FFFFFF;
+    padding: 20px 20px 60px 20px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.1);
+	position:relative;
+    width: 100%;
+    height: 100%;
+    transition:all 0.1s ease-in-out;
+}
+
+span.question_id {
+	font-size: 16px;
+	position:absolute;
+}
+
+span.question_title {
+	margin-left: 0;
+    font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	padding: 0 35px;
+    display: inline-block;
+    margin-bottom:10px;
+}
+
+p.question_options {
+	margin-left: 35px;
+	margin: 0 50px;
+	font-family: 'Open Sans', sans-serif;
+    padding:5px 0;
+	border:1px solid #FFFFFF;
+}
+
+.question_header {
+    margin-bottom: 15px;
+}
+
+.btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-default:active.focus, .btn-default:active:focus, .btn-default:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover
+{
+	outline: none;
+	border-color: #FFAF2D;
+	background-color: #ffffff;
+}
+span.question_id {
+    margin-right: 10px;
+}
+
+span.question_id:after {content: '.';}
+
+.bottom_buttons {
+	position: absolute;
+}
+
+.bottom_buttons select {
+	margin: 0 50px;
+}
+
+.dropdown.actions {
+	border:2px solid #FFFFFF;
+	z-index:3;
+}
+
+.dropdown.visible {
+	visibility: visible;
+	opacity: 1;
+}
+
+.btn-default:hover,.btn-default:focus {
+background-color: #ffffff;
+border-color: #FFAF2D;
+outline: none;
+}
+
+.dropdown-menu>li>a:hover {
+	outline: none;
+	background-color: #FFCD7A  ;
+}
+
+.dropdown-menu>li>a:focus {
+	outline: none;
+	background-color: #ffffff;
+}
+
+.dropdown-toggle.btn-default:focus,.dropdown-toggle.btn-default:active {
+	background-color: #ffffff;
+	outline: none;
+	border-color: #FFAF2D;
+}
+
+.open>.dropdown-toggle.btn-default:hover,.open>.dropdown-toggle.btn-default,.open>.dropdown-toggle.btn-default:active {
+	background-color:  #ffffff;
+	outline: none;
+}
+
+.question_container:hover {
+	border: 3px solid #FFAF2D;
+}
+
+.question_title.editable:focus {
+	border: 1px solid #FFAF2D;
+	outline: none;
+
+}
+
+.question_options.editable, .question_title.editable {
+	border: 1px solid #FFAF2D;
+	outline: none;
+}
+
+.question_title.editable {
+     padding : 0px 35px 0 0;
+     margin-left:35px;
+     display:inline-block;
+}
+
+.bootstrap-select.btn-group:not(.input-group-btn) {
+	margin-left: 1.8em;
+}
+
+.dropdow {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdow-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    min-width: 100%;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdow-content a {
+    color: black;
+    padding: 6px 10px;
+    text-decoration: none;
+    display: block;
+    text-align:left;
+    width:153px;
+    margin-top:5px;
+}
+
+/* Change color of dropdown links on hover */
+.dropdow-content a:hover {background-color: #FFCD7A}
+
+/* Show the dropdown menu on hover */
+.dropdow:hover .dropdow-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdow:hover .dropbt {
+    background-color: #ffffff;
+}
+
+button.dropdown-toggle {
+    outline: 0;
+}
+
+button.dropdown-toggle:focus {
+    outline:0;
+    border:0
+}
 
 </style>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
 
 </head>
 <body>
 
 
-	<div class="pull-right">
-		<button data-toggle="modal" data-target="#modalUpload" class="btn btn-primary upload">Upload New File</button>
-		<button class="btn btn-danger" onclick="window.location='/logout';" type="submit">Log Out</button>
+<div class="container">
+	<header>
+		<div class="logo pull-left">
+		<h2>iimjobs</h2>
+		<span id="domain">.com</span>
+		</div>
+
+		<form action="/search" method="POST" class="navbar-form navbar-left" role="search">
+		 <div class="form-group">
+		   <input type="text" class="form-control" placeholder="Search..." name="phrase">
+		 </div>
+		 <button type="submit" class="btn btn-default">Submit</button>
+		</form>
+	</header>
+
+	 <div class="top_buttons">
+		
+		<div class="dropdow">
+					  <button class="btn btn-default dropbt">Actions</button>
+					  <div class="dropdow-content">
+					    <a data-toggle="modal" data-target="#modalUpload" class="upload" role="button"><i class="fa fa-upload fa-1x" aria-hidden="true"></i>&nbsp;Upload</a>
+					    <a href="/listQuestions" id="delete_multiple" role="button"><i class="fa fa-trash-o fa-1x" aria-hidden="true"></i>&nbsp;Multiple Delete</a>
+					  </div>
+		</div>
+		<button class="btn btn-default" onclick="window.location='/logout';" type="submit">Log Out</button>
 	</div>
+
+
 		 <div id="modalUpload" class="modal fade" tabindex = "-1" role="dialog">
 		  	<div class="modal-dialog" role="document">
 			 	<div class="modal-content" >
@@ -65,74 +299,199 @@
 		  </div>
 
 
-					<table class="table table-bordered">
-						<thead>
-							<tr>
-								<th>Ques Id</th>
-								<th class="col-xs-4">Question</th>
-								<th>Answer</th>
-								<th>Level</th>
-								<th>Question Type</th>
-								<th>Skill type</th>
-								<th>Tags</th>
-								<th>Action</th>
-							</tr>
-						</thead>
+		<div class="page_content">
+		
+          {% for question in questions: %}
+        		 
 
-					{% for question in questions: %}
-					<tbody>
-						<tr class="question">
-							<td class="text" >{{ question[0]}}</td>
-							<td contenteditable="false" class="text">{{ question[2]}}</td>
-							<td contenteditable="false" class="text">{{question[4]}}</td>
-							<td contenteditable="false" >
-								<select backData="{{question[5]}}" class="level selectpicker show-tick " data-width="auto"></select>
-							</td>
-							<td contenteditable="false" >
-								<select backData="{{question[6]}}" class="quesType selectpicker show-tick" data-width="auto"></select>
-							</td>
-							<td contenteditable="false" >
-								<select backData="{{question[7]}}" class="skillType selectpicker show-tick" data-width="auto"></select>
-							</td>
-							<td contenteditable="false">
-								<select id="tags" backData="{{question[8]}}" class="tags selectpicker show-tick" multiple data-width="auto"></select>
-							<td>
-								<button class="editButton btn btn-default" data-state="edit">edit</button>
-							</td>
-						</tr>
+			<div class="question_container">
+				 
+
+				  <div class="question_header">
+				  	<span class="multipleCheckbox">
+				  		<input class="checkbox" name="ids[]" type="checkbox" value="{{ question[0] }}" />
+				  	</span>
+
+				   <span class="question_id">{{ question[0]}}</span>
+					 <span class="question_title" contenteditable="false">{{ question[2] }}</span>
 
 						{% for option in question[3].split(','): %}
-							<tr class='option'>
-								<td style="visibility: hidden"></td>
-								<td  showData="{{option.strip('[] ')}}" >{{option.strip('[]" ')}}</td>
-							</tr>
-				{% endfor %}
+								<p class="question_options" contenteditable="false" showData="{{option.strip('[]')}}">{{option.strip('[]" ')}}</p>
+				    {% endfor %}
+					</div>
 
-			</tbody>
-			{% endfor %}
+					<div class="dropdown actions">
+					  <i class="fa fa-cog dropbtn fa-2x" aria-hidden="true"></i>
+					  <div class="dropdown-content">
+					    <a id="save_changes" role="button"><i class="fa fa-pencil fa-1x" aria-hidden="true"></i>&nbsp;Edit</a>
+					    <a href="" id="delete" role="button"><i class="fa fa-trash-o fa-1x" aria-hidden="true"></i>&nbsp;Delete</a>
+					  </div>
+					</div>
 
-		</table>
+				  <div class="bottom_buttons">
+				    <select backData="{{question[5]}}" class="level selectpicker show-tick" ></select>
+				    <select backData="{{question[6]}}" class="quesType selectpicker show-tick" ></select>
+				    <select backData="{{question[7]}}" class="skillType selectpicker show-tick" ></select>
+				    <select id="tags" backData="{{question[8]}}" class="tags selectpicker show-tick" multiple ></select>
+						<select id="correctAns" backData="{{question[4]}}" class="correctAns selectpicker show-tick" multiple ></select>
+				  </div>
+
+		</div>
+
+	{% endfor %}
 
 
+	</div>
 
+</div>
+
+<script src="https://use.fontawesome.com/c36499ffe5.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">></script>
 
+<script>
+	$(document).ready( function() {
+		$(".question_container").on('mouseenter', function() {
+			// jQuery(this).find('.bottom_buttons').addClass('visible');
+			jQuery(this).find('.dropdown').addClass('visible');
+		});
 
+		$(".question_container").on('mouseleave', function() {
+		  // jQuery(this).find('.bottom_buttons').removeClass('visible');
+			jQuery(this).find('.dropdown').removeClass('visible');
+		});
+		$(".question_options,.question_title").dblclick(function(){
+	      $(this).prop('contenteditable', true);
+				$(this).addClass('editable');
+	   });
+		$(".question_options,.question_title").on('mouseleave',function(){
+	      $(this).prop('contenteditable', false);
+		  $(this).removeClass('editable');
+	   });
+	});
+
+</script>
 
 
 <script type="text/javascript">
 
+$('#save_changes').click(function(){
 
+		var ob={};
+		var question =$(this).parent().parent().parent().children();
+
+		$.each(question,function(index,elem){
+
+		if(index == 0){
+				 ob[getIndex(0)] = $(elem).children('span.question_id')[0].innerHTML;
+				 ob[getIndex(1)] = $(elem).children('span.question_title')[0].innerHTML;
+				 var li="[";
+				 var options = $(elem).children('p.question_options');
+				 $.each(options,function(index,elem){
+	                li = li + '"'+ $(elem)[0].innerHTML +'",'
+				 });
+				 li = li.substring(0,li.length-1)+']';
+         		ob['options']=li;
+		}
+
+		else if(index == 2) {
+        		var select = $(elem).children();
+				var i = 0;
+				$.each(select,function(index,elem){
+         			if (index == 3  ) {
+						var tags=[];
+	 					 $('#tags :selected').each(function(){
+	 							 tags.push($(this).text());
+	 							});
+	 							ob[getIndex(3 + i)] = tags.toString();
+
+	 				}
+					else if(index==4) {
+						var answer=[];
+	 					 $('#correctAns :selected').each(function(){
+	 							 answer.push($(this).text());
+	 							});
+	 							ob[getIndex(2 )] = answer.toString();
+	 				}
+          			else {
+						ob[getIndex(3 + i)] = $(elem).find('option:selected').attr('value');
+						}
+						i++;
+					});
+				}
+		});
+		console.log(ob)
+		$.ajax({
+				url: '/ajaxUpdate',
+				type: 'POST',
+				data: JSON.stringify(ob),
+				contentType: 'application/json; charset=utf-8',
+				dataType: 'json',
+				async: false,
+
+				success: function(msg) {
+						console.log("success");
+						window.alert('Question updated');
+				}
+
+		});
+
+	});
 
 	function getIndex(index){
 		dict={0:"quesId",1:"question",2:"correctAnswer",3:"level",4:"questionType",5:"skillType",6:"tags"};
 		return dict[index];
 	}
 
+	$('#delete').click(function() {
+		
+		 var ob = {};
+     ob[getIndex(0)] = $(this).parent().parent().prev().children('span.question_id')[0].innerHTML;
+     console.log(ob);
+
+		 $.ajax({
+ 				url: '/ajaxDelete',
+ 				type: 'POST',
+ 				data: JSON.stringify(ob),
+ 				contentType: 'application/json; charset=utf-8',
+ 				dataType: 'json',
+ 				async: false,
+
+ 				success: function(msg) {
+ 						console.log(msg['status']);
+ 				}
+
+ 		}); 
+
+  });
+
+	$('#delete_multiple').click(function() {
+		 var selected = [];
+		 console.log($("input[name='ids[]']:checked"));
+		$("input[name='ids[]']:checked").each(function(){
+             selected.push($(this).attr('value'));
+		 }); 
+         console.log(selected)
+
+		 $.ajax({
+ 				url: '/ajaxDeleteMultiple',
+ 				type: 'POST',
+ 				data: JSON.stringify({"id":selected}),
+ 				contentType: 'application/json; charset=utf-8',
+ 				dataType: 'json',
+ 				async: false,
+
+ 				success: function(msg) {
+ 						console.log(msg['status']);
+ 				}
+
+ 		}); 
+
+  });
+
 
 	window.onload = function() {
 
-		var tags = $("select.tags.selectpicker");
+		var tags = $("select.tags");
 		$.each(tags, function(index,sel) {
 
 			var levelArr = ['Marketing','Advertising','Sales'];
@@ -141,7 +500,16 @@
 			});
 		});
 
-		var selectElem = $("select.level.selectpicker");
+		var answer = $("select.correctAns");
+		$.each(answer, function(index,sel) {
+
+			var levelArr = ['A','B','C','D'];
+			levelArr.forEach(function(elem,index) {
+				$(sel).append("<option value="+(index+1)+">"+elem+"</option>");
+			});
+		});
+
+		var selectElem = $("select.level");
 		$.each(selectElem, function(index,sel) {
 
 			var levelArr = ['easy','medium','hard'];
@@ -150,7 +518,7 @@
 			});
 		});
 
-		var selectElem = $("select.quesType.selectpicker");
+		var selectElem = $("select.quesType");
 		$.each(selectElem, function(index,sel) {
 
 			var typeArr = ['single Choice','multiple choice','essay','short answer'];
@@ -159,7 +527,7 @@
 			});
 		});
 
-		var selectElem = $("select.skillType.selectpicker");
+		var selectElem = $("select.skillType");
 		$.each(selectElem, function(index,sel) {
 
 			var skillArr = ['logical','gk','reasoning','theory','numerical'];
@@ -168,7 +536,7 @@
 			});
 		});
 
-		var tags = $('select.tags.selectpicker')
+		var tags = $('select.tags')
 		$.each(tags,function(index,elem){
 			var array = elem.getAttribute('backData').split(',');
 			$.each(elem,function(index,ele){
@@ -178,7 +546,17 @@
 			});
 		});
 
-		var selLevel=$('select.level.selectpicker')
+		var answer = $('select.correctAns')
+		$.each(answer,function(index,elem){
+			var array = elem.getAttribute('backData').split(',');
+			$.each(elem,function(index,ele){
+				if($.inArray(ele.innerHTML,array) != -1){
+					ele.setAttribute('selected',"selected");
+				}
+			});
+		});
+
+		var selLevel=$('select.level')
 		$.each(selLevel,function(index,elem){
 			$.each(elem,function(index,ele){
 				if(ele.getAttribute('value')==elem.getAttribute('backData')){
@@ -188,7 +566,7 @@
 			});
 		});
 
-		var selType=$('select.quesType.selectpicker')
+		var selType=$('select.quesType')
 		$.each(selType,function(index,elem){
 			$.each(elem,function(index,ele){
 				if(ele.getAttribute('value')==elem.getAttribute('backData')){
@@ -198,107 +576,19 @@
 			});
 		});
 
-		var selSkill=$('select.skillType.selectpicker')
+		var selSkill=$('select.skillType')
 		$.each(selSkill,function(index,elem){
 			$.each(elem,function(index,ele){
 				if(ele.getAttribute('value')==elem.getAttribute('backData')){
 					ele.setAttribute('selected',"selected");
 				}
-
 			});
 		});
-
-
 	}
 
-
-
-		$('.editButton').click(function(){
-
-			if( $(this).attr('data-state') == 'save'){
-
-				var ob={};
-				var question =$(this).parent().siblings();
-
-				$.each(question,function(index,currentTd){
-					if(index==3 || index==4 || index==5){
-						ob[getIndex(index)] = $(currentTd).find('option:selected').attr('value');
-
-					}
-
-					else if(index == 6) {
-
-						var tags=[];
-						 $('#tags :selected').each(function(){
-						     tags.push($(this).text());
-						    });
-								ob[getIndex(index)] = tags.toString();
-
-					}
-
-					else if(index != 7) {
-						//ob[getIndex(index)]=getData(index,currentTd.innerHTML);
-						ob[getIndex(index)]=currentTd.innerHTML;
-					}
-
-				});
-
-				var li="[";
-				$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
-					var ele = $(elem).find('td[showdata]')
-
-					li=li+'"'+ele[0].innerHTML+'",'
-				});
-				li=li.substring(0,li.length-1)+']'
-
-				ob['options']=li;
-				console.log(ob)
-				$.ajax({
-						url: '/ajaxReceive',
-						type: 'POST',
-						data: JSON.stringify(ob),
-						contentType: 'application/json; charset=utf-8',
-						dataType: 'json',
-						async: false,
-
-						success: function(msg) {
-								console.log(msg['status']);;
-						}
-
-				});
-
-				var currentTD = $(this).parent().siblings();
-				$.each(currentTD, function () {
-							$(this).prop('contenteditable', false)
-					});
-
-				$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
-					$(elem).find('td[showdata]').prop('contenteditable','false');
-				});
-
-				$(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
-						$(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
-			//console.log(ob);
-			}
-			else {
-	          	    var currentTD = $(this).parent().siblings();
-
-	          	    $.each(currentTD, function (index,currentTD) {
-                 if(index!=0){
-					      $(this).prop('contenteditable', true)
-							}
-					  });
-
-					$(this).closest('.question').nextUntil('.question').each(function(index,elem) {
-					  $(elem).find('td[showdata]').prop('contenteditable','true');
-					});
-
-			        $(this).attr('data-state', $(this).attr('data-state') == 'edit' ? 'save' : 'edit');
-			        $(this).text( $(this).attr('data-state') /*== 'edit' ? 'save' : 'edit'*/);
-				}
-			});
-
 </script>
+
+
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
