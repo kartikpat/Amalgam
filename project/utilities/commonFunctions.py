@@ -32,7 +32,7 @@ class Utility:
     @staticmethod
     def getPostParameter(param):
         result = request.form
-        return result[param]
+        return result.get(param,None)
 
     @staticmethod
     def isLoggedIn():

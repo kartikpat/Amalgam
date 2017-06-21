@@ -70,29 +70,33 @@ def elasticSearch(uri, term):
   results = json.loads(response.text)
   return results
 
-@listingQues.route('/search',methods=['POST'])
-def search():
+@listingQues.route('/searchKeyword',methods=['GET','POST'])
+def searchKeyword():
    phrase = Utility.getPostParameter('phrase')
-   li=[]
-   temp=[]
-   results = elasticSearch('http://localhost:9200/assessment/questions/_search', phrase)
-   data =  results['hits']['hits']
-   for doc in data:
-      temp.insert(0,doc['_source']['quesId'])
-      temp.insert(1,"hello")
-      temp.insert(2,doc['_source']['question'])
-      temp.insert(3,doc['_source']['options'])
-      temp.insert(4,doc['_source']['correctAnswer'])
-      temp.insert(5,doc['_source']['level'])
-      temp.insert(6,doc['_source']['questionType'])
-      temp.insert(7,doc['_source']['skillType'])
-      temp.insert(8,doc['_source']['tags'])
-      # temp=doc['_source']['question'])
-      li.append(temp)
-      while len(temp) > 0 : temp.pop()
-      temp=[]
-   print(li)
-   return render_template("assessmentIndex.html",questions=li)   
+   # phrase=request.form.get('phrase', "None")
+   if phrase != None:
+       li=[]
+       
+       results = elasticSearch('http://localhost:9200/assessment/questions/_search', phrase)
+       data =  results['hits']['hits']
+       i = 0
+       for doc in data:
+          li.append([])
+          li[i].append(doc['_source']['quesId'])
+          li[i].append("hello")
+          li[i].append(doc['_source']['question'])
+          li[i].append(doc['_source']['options'])
+          li[i].append(doc['_source']['correctAnswer'])
+          li[i].append(doc['_source']['level'])
+          li[i].append(doc['_source']['questionType'])
+          li[i].append(doc['_source']['skillType'])
+          li[i].append(doc['_source']['tags'])
+
+          i=i+1
+          
+       return render_template("assessmentIndex.html",questions=li)
+   else:
+       return redirect(url_for('assessment.listQuestions'))     
    # return json.dumps({"hello":"hii"})   
 
 @listingQues.route('/upload', methods = ['GET', 'POST'])
