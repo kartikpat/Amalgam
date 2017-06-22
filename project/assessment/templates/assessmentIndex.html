@@ -331,11 +331,15 @@ button.dropdown-toggle:focus {
 		  	</div>
 		  </div>	  
 
-		<div class="page_content">
-		
-          {% for question in questions: %}
-        		 
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#AllQuestions" aria-controls="home" role="tab" data-toggle="tab">AllQuestions</a></li>
+    <li role="presentation"><a href="#uploadedCsv" aria-controls="profile" role="tab" data-toggle="tab">uploaded CSV</a></li>
 
+</ul>
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="AllQuestions">
+    	<div class="page_content">
+          {% for question in questions: %}
 			<div class="question_container">
 				 
 
@@ -349,7 +353,7 @@ button.dropdown-toggle:focus {
 
 						{% for option in question[3].split(','): %}
 								<p class="question_options" contenteditable="false" showData="{{option.strip('[]')}}">{{option.strip('[]" ')}}</p>
-				    {% endfor %}
+				   	 	{% endfor %}
 					</div>
 
 					<div class="dropdown actions">
@@ -368,13 +372,25 @@ button.dropdown-toggle:focus {
 						<select id="correctAns" backData="{{question[4]}}" class="correctAns selectpicker show-tick" multiple ></select>
 				  </div>
 
+			</div>
+
+			{% endfor %}
 		</div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="uploadedCsv">
+    	<div class="fileContainer">
+	    	{% for res in files: %}
+	    		<div class="file">
+	    			<span>{{ res["fileId"] }}</span>
+	    			<span>{{ res["fileName"] }}</span>
+	    			<span>{{ res["date"] }}</span>
+	    		</div>
+	    	{% endfor %}
+    	</div>
+    </div>
+</div>                                       
 
-	{% endfor %}
-
-
-	</div>
-
+		
 </div>
 
 <script src="https://use.fontawesome.com/c36499ffe5.js"></script>

@@ -82,3 +82,8 @@ class Dbhelper():
 	def update(collection,query,update):
 		colection = Dbhelper.getCollectionName(collection)
 		colection.update(query,{"$set":update})
+
+	@staticmethod
+	def arrUpdate(collection,query,update,updateModifier):
+		colection = Dbhelper.getCollectionName(collection)
+		colection.update(query,{updateModifier:update})

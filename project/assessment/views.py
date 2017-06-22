@@ -3,6 +3,8 @@ from ..DBHelper.dbhelper import sqlDbhelper
 from werkzeug import secure_filename
 from project.tasks import parseCsvFile
 from ..utilities.commonFunctions import Utility
+from ..DBHelper.dbhelper import Dbhelper
+import datetime
 import model
 import json
 import time
@@ -19,7 +21,9 @@ def logout():
 @listingQues.route('/listQuestions')
 def listQuestions():
     results=sqlDbhelper.getData("select * from quesBank limit 44")
-    return render_template("assessmentIndex.html",questions=results)
+    user=Dbhelper.findOne('User',{"email":session['email']})
+    uploadedFiles=user.get('permission').get('Assessment').get('uploadedCSV',None)
+    return render_template("assessmentIndex.html",questions=results,files=uploadedFiles)
 
 
 @listingQues.route('/ajaxUpdate',methods=['POST'])
@@ -116,6 +120,7 @@ def upload():
           fileId=filename.split('.')[0]+str(int(time.time()*1000))+'.'+filename.split('.')[1]
           f.save(os.path.join(app.config['UPLOAD_FOLDER'],fileId)) 
           parseCsvFile.delay(fileId,filename)
+          Dbhelper.arrUpdate('User',{'email':session['email']},{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now()}},"$push")
           #app.config['UPLOAD_FOLDER'] = 'uploadedCSV/'
           #f.save(filename)
           #f.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))

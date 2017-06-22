@@ -107,7 +107,10 @@ def registerSucess():
         permissionData={}
         if not Dbhelper.findOne('User',{"email":email}):
             for per in product:
-                permissionData[per]=[]
+                if per=='Assessment':
+                    permissionData[per]={}
+                else:
+                    permissionData[per]=[]
             Dbhelper.insert('User' , { "name":name,"email":email,"products":product,"password":"","role":"user","permission":permissionData })
             token = getToken(mailId = email)
             body="Set password using below link\n"+"http://crawler.iimjobs.com/setPassword?token="+token
