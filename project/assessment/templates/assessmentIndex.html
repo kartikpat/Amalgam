@@ -64,6 +64,11 @@
 	margin: 20px 0 20px 0;
 }
 
+.search{
+	padding: 10px;
+	margin: 50px;
+}
+
 .page_content {
     width: 90%;
     margin: 0 auto;
@@ -78,6 +83,19 @@
     width: 100%;
     height: 100%;
     transition:all 0.1s ease-in-out;
+}
+
+.question_container input.checkbox {
+	visibility: hidden;
+	position:absolute;
+	top:5px;
+	left:5px;
+	margin-top:0;
+	cursor:pointer;
+}
+
+.question_container input.checkbox.visible {
+	visibility: visible;
 }
 
 span.question_id {
@@ -120,6 +138,20 @@ span.question_id:after {content: '.';}
 
 .bottom_buttons {
 	position: absolute;
+    font-size: 0;
+    left: 20px;
+    right: 20px;
+    margin: 0 -10px;
+}
+
+button.btn.dropdown-toggle.btn-default {
+	border-radius:0;
+}
+
+.bottom_buttons .bootstrap-select {
+	width:20% !important;
+	padding:0 10px;
+	border-radius:0;
 }
 
 .bottom_buttons select {
@@ -185,7 +217,7 @@ outline: none;
 }
 
 .bootstrap-select.btn-group:not(.input-group-btn) {
-	margin-left: 1.8em;
+	margin-left:0;
 }
 
 .dropdow {
@@ -248,13 +280,6 @@ button.dropdown-toggle:focus {
 		<h2>iimjobs</h2>
 		<span id="domain">.com</span>
 		</div>
-
-		<form action="/searchKeyword" method="POST" class="navbar-form navbar-left" role="search">
-		 <div class="form-group">
-		   <input type="text" class="form-control" placeholder="Search..." name="phrase">
-		 </div>
-		 <button type="submit" class="btn btn-default">Submit</button>
-		</form>
 	</header>
 
 	 <div class="top_buttons">
@@ -269,6 +294,14 @@ button.dropdown-toggle:focus {
 		<button class="btn btn-default" onclick="window.location='/logout';" type="submit">Log Out</button>
 	</div>
 
+	<div class="search">
+		<form action="/searchKeyword" method="POST" class="navbar-form navbar-left" role="search">
+		 <div class="form-group">
+		   <input type="text" class="form-control" placeholder="Search..." name="phrase">
+		 </div>
+		 <button type="submit" class="btn btn-default">Submit</button>
+		</form>
+	</div>
 
 		 <div id="modalUpload" class="modal fade" tabindex = "-1" role="dialog">
 		  	<div class="modal-dialog" role="document">
@@ -296,8 +329,7 @@ button.dropdown-toggle:focus {
 			    	</div>
 		  		</div>
 		  	</div>
-		  </div>
-
+		  </div>	  
 
 		<div class="page_content">
 		
@@ -309,7 +341,7 @@ button.dropdown-toggle:focus {
 
 				  <div class="question_header">
 				  	<span class="multipleCheckbox">
-				  		<input class="checkbox" name="ids[]" type="checkbox" value="{{ question[0] }}" />
+				  		<input class="checkbox" name="ids[]" type="checkbox" data-id="{{ question[0] }}"/>
 				  	</span>
 
 				   <span class="question_id">{{ question[0]}}</span>
@@ -351,13 +383,13 @@ button.dropdown-toggle:focus {
 <script>
 	$(document).ready( function() {
 		$(".question_container").on('mouseenter', function() {
-			// jQuery(this).find('.bottom_buttons').addClass('visible');
 			jQuery(this).find('.dropdown').addClass('visible');
+			jQuery(this).find('input.checkbox').addClass('visible');
 		});
 
 		$(".question_container").on('mouseleave', function() {
-		  // jQuery(this).find('.bottom_buttons').removeClass('visible');
 			jQuery(this).find('.dropdown').removeClass('visible');
+			jQuery(this).find('input.checkbox').removeClass('visible');
 		});
 		$(".question_options,.question_title").dblclick(function(){
 	      $(this).prop('contenteditable', true);
