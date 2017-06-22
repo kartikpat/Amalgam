@@ -4,12 +4,12 @@ import MySQLdb
 client = MongoClient('localhost')
 db = client.mydb
 
-sqlDb = MySQLdb.connect("localhost","root","root","iimjobs")
+sqlDb = MySQLdb.connect("localhost","root","Godrej#123","iimjobs")
 cur = sqlDb.cursor()
 
 class sqlDbhelper():
 
-	
+
 
 	@staticmethod
 	def deleteQuery(quesId):
