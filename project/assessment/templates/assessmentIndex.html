@@ -268,6 +268,56 @@ button.dropdown-toggle:focus {
     border:0
 }
 
+
+
+/* The container <div> - needed to position the dropdown content */
+.dropdo {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdo-content {
+    display: none;
+    position: absolute;
+		top:0;
+		right:100%;
+    background-color: #f9f9f9;
+    min-width: 150px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.second-level {
+	position: relative;
+}
+
+.second-level:hover .dropdo-content {
+	display:block;
+}
+
+/* Links inside the dropdown */
+.dropdo-content a {
+    color: black;
+    padding: 5px 20px;
+    text-decoration: none;
+    display: block;
+		width:100%;
+}
+
+/* Change color of dropdown links on hover */
+.dropdo-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdo:hover .dropdo-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdo:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
 </style>
 
 </head>
@@ -283,12 +333,39 @@ button.dropdown-toggle:focus {
 	</header>
 
 	 <div class="top_buttons">
-		
+
 		<div class="dropdow">
 					  <button class="btn btn-default dropbt">Actions</button>
 					  <div class="dropdow-content">
 					    <a data-toggle="modal" data-target="#modalUpload" class="upload" role="button"><i class="fa fa-upload fa-1x" aria-hidden="true"></i>&nbsp;Upload</a>
 					    <a href="/listQuestions" id="delete_multiple" role="button"><i class="fa fa-trash-o fa-1x" aria-hidden="true"></i>&nbsp;Multiple Delete</a>
+						<div class="second-level">
+							<a href="" id="mark_difficulty" role="button" class="dropdo">Mark Level</a>
+						  <div class="dropdo-content">
+						    <a href="#" class='levelType' data=1 >Easy</a>
+						    <a href="#" class='levelType' data=2 >Medium</a>
+						    <a href="#" class='levelType' data=3 >Hard</a>
+						  </div>
+						</div>
+						<div class="second-level">
+							<a href="" id="mark_type" role="button" class="dropdo">Mark Type</a>
+						  <div class="dropdo-content">
+						    <a href="#" class='markQuesType' data=1 >Single Choice</a>
+						    <a href="#" class='markQuesType' data=2 >Multiple Choice</a>
+						    <a href="#" class='markQuesType' data=3 >Essay</a>
+						    <a href="#" class='markQuesType' data=4 >Short Answer</a>
+						  </div>
+						</div>
+						<div class="second-level">
+							<a href="" id="mark_skill" role="button" class="dropdo">Mark Skill Type</a>
+						  <div class="dropdo-content">
+						    <a href="#" class='markSkillType' data=1 >Logical</a>
+						    <a href="#" class='markSkillType' data=2 >Gk</a>
+						    <a href="#" class='markSkillType' data=3 >Reasoning</a>
+						    <a href="#" class='markSkillType' data=4 >Theory</a>
+						    <a href="#" class='markSkillType' data=5 >Numerical</a>
+						  </div>
+						</div>
 					  </div>
 		</div>
 		<button class="btn btn-default" onclick="window.location='/logout';" type="submit">Log Out</button>
@@ -329,7 +406,7 @@ button.dropdown-toggle:focus {
 			    	</div>
 		  		</div>
 		  	</div>
-		  </div>	  
+		  </div>
 
 <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#AllQuestions" aria-controls="home" role="tab" data-toggle="tab">AllQuestions</a></li>
@@ -340,12 +417,13 @@ button.dropdown-toggle:focus {
     <div role="tabpanel" class="tab-pane active" id="AllQuestions">
     	<div class="page_content">
           {% for question in questions: %}
+
 			<div class="question_container">
-				 
+
 
 				  <div class="question_header">
 				  	<span class="multipleCheckbox">
-				  		<input class="checkbox" name="ids[]" type="checkbox" data-id="{{ question[0] }}"/>
+				  		<input class="checkbox" name="ids[]" type="checkbox" value="{{ question[0] }}"/>
 				  	</span>
 
 				   <span class="question_id">{{ question[0]}}</span>
@@ -405,12 +483,15 @@ button.dropdown-toggle:focus {
 
 		$(".question_container").on('mouseleave', function() {
 			jQuery(this).find('.dropdown').removeClass('visible');
-			jQuery(this).find('input.checkbox').removeClass('visible');
+			jQuery(this).find('input:checkbox:not(:checked)').removeClass('visible');
+			
 		});
+
 		$(".question_options,.question_title").dblclick(function(){
 	      $(this).prop('contenteditable', true);
 				$(this).addClass('editable');
-	   });
+	    });
+
 		$(".question_options,.question_title").on('mouseleave',function(){
 	      $(this).prop('contenteditable', false);
 		  $(this).removeClass('editable');
@@ -491,10 +572,10 @@ $('#save_changes').click(function(){
 	}
 
 	$('#delete').click(function() {
-		
+
 		 var ob = {};
      ob[getIndex(0)] = $(this).parent().parent().prev().children('span.question_id')[0].innerHTML;
-     console.log(ob);
+     // console.log(ob);
 
 		 $.ajax({
  				url: '/ajaxDelete',
@@ -508,17 +589,17 @@ $('#save_changes').click(function(){
  						console.log(msg['status']);
  				}
 
- 		}); 
+ 		});
 
   });
 
 	$('#delete_multiple').click(function() {
 		 var selected = [];
-		 console.log($("input[name='ids[]']:checked"));
+		 // console.log($("input[name='ids[]']:checked"));
 		$("input[name='ids[]']:checked").each(function(){
              selected.push($(this).attr('value'));
-		 }); 
-         console.log(selected)
+		 });
+         // console.log(selected)
 
 		 $.ajax({
  				url: '/ajaxDeleteMultiple',
@@ -532,10 +613,78 @@ $('#save_changes').click(function(){
  						console.log(msg['status']);
  				}
 
- 		}); 
+ 		});
 
   });
 
+	$('.levelType').click(function() {
+		
+		var selected = [];
+		$("input[name='ids[]']:checked").each(function(){
+             selected.push($(this).attr('value'));
+		 });
+         // console.log({"level":$(this).attr('data'),"ids":selected})
+
+         $.ajax({
+ 				url: '/ajaxSetLevelMultiple',
+ 				type: 'POST',
+ 				data: JSON.stringify({"level":$(this).attr('data'),"ids":selected}),
+ 				contentType: 'application/json; charset=utf-8',
+ 				dataType: 'json',
+ 				async: false,
+
+ 				success: function(msg) {
+ 						console.log(msg['status']);
+ 				}
+
+ 		});
+	});
+
+	$('.markQuesType').click(function() {
+		
+		var selected = [];
+		$("input[name='ids[]']:checked").each(function(){
+             selected.push($(this).attr('value'));
+		 });
+         // console.log({"quesType":$(this).attr('data'),"ids":selected})
+
+         $.ajax({
+ 				url: '/ajaxSetQuesTypeMultiple',
+ 				type: 'POST',
+ 				data: JSON.stringify({"quesType":$(this).attr('data'),"ids":selected}),
+ 				contentType: 'application/json; charset=utf-8',
+ 				dataType: 'json',
+ 				async: false,
+
+ 				success: function(msg) {
+ 						console.log(msg['status']);
+ 				}
+
+ 		});
+	});
+
+	$('.markSkillType').click(function() {
+		
+		var selected = [];
+		$("input[name='ids[]']:checked").each(function(){
+             selected.push($(this).attr('value'));
+		 });
+         console.log({"skillType":$(this).attr('data'),"ids":selected})
+
+         $.ajax({
+ 				url: '/ajaxSetSkillTypeMultiple',
+ 				type: 'POST',
+ 				data: JSON.stringify({"skillType":$(this).attr('data'),"ids":selected}),
+ 				contentType: 'application/json; charset=utf-8',
+ 				dataType: 'json',
+ 				async: false,
+
+ 				success: function(msg) {
+ 						console.log(msg['status']);
+ 				}
+
+ 		});
+	});
 
 	window.onload = function() {
 

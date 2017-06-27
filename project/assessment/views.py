@@ -55,11 +55,42 @@ def ajaxDelete():
 @listingQues.route('/ajaxDeleteMultiple',methods=['POST'])
 def ajaxDeleteMultiple():
     quesIdArr=request.json['id']
-    print(quesIdArr)
+    # print(quesIdArr)
     
     for id in quesIdArr:
          sqlDbhelper.deleteQuery(id)
     return json.dumps({'status':'OK'})   
+
+@listingQues.route('/ajaxSetLevelMultiple',methods=['POST'])
+def ajaxSetLevelMultiple():
+  quesIds=request.json['ids']
+  lev=request.json['level']
+
+  for id in quesIds:
+    sqlDbhelper.updateLevel(id,lev)
+
+  return json.dumps({'status':'OK'})
+
+@listingQues.route('/ajaxSetQuesTypeMultiple',methods=['POST'])
+def ajaxSetQuesTypeMultiple():
+  quesIds=request.json['ids']
+  quesType=request.json['quesType']
+  
+  for id in quesIds:
+    sqlDbhelper.updateQuestionType(id,quesType)
+
+  return json.dumps({'status':'OK'})
+
+@listingQues.route('/ajaxSetSkillTypeMultiple',methods=['POST'])
+def ajaxSetSkillTypeMultiple():
+  quesIds=request.json['ids']
+  skillType=request.json['skillType']
+  
+  for id in quesIds:
+    sqlDbhelper.updateskillType(id,skillType)
+
+  return json.dumps({'status':'OK'})  
+
 
 def elasticSearch(uri, term):
   """Simple Elasticsearch Query"""
@@ -111,6 +142,8 @@ def upload():
    # for res in result:
    #    output.append({"File ID":res["fileId"],"File name":res["filename"],"File status":res["status"],"Date":(res['date']).strftime("%Y-%m-%d %H:%M:%S")})
    results=sqlDbhelper.getData("select * from quesBank limit 44")
+   user=Dbhelper.findOne('User',{"email":session['email']})
+   uploadedFiles=user.get('permission').get('Assessment').get('uploadedCSV',None)
 
    if request.method == 'POST':
       f = request.files['file']
@@ -125,10 +158,10 @@ def upload():
           #f.save(filename)
           #f.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
           #parseCsvFile.delay(fileId,filename,session['email'])
-          return render_template("assessmentIndex.html",questions=results,message="File parsing is on process")
+          return render_template("assessmentIndex.html",questions=results,files=uploadedFiles,message="File parsing is on process")
         else:
-          return render_template("assessmentIndex.html",questions=results,message="File should have extension(.csv)")
+          return render_template("assessmentIndex.html",questions=results,files=uploadedFiles,message="File should have extension(.csv)")
       else:
-        return render_template("assessmentIndex.html",questions=results,message="Choose file to upload")
+        return render_template("assessmentIndex.html",questions=results,files=uploadedFiles,message="Choose file to upload")
    else:
-      return render_template("assessmentIndex.html",questions=results)
+      return render_template("assessmentIndex.html",questions=results,files=uploadedFiles)
