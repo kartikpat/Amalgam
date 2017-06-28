@@ -4,6 +4,11 @@ import MySQLdb
 import time
 import csv
 import os
+from pymongo import MongoClient
+import datetime
+from DBHelper.dbhelper import Dbhelper,sqlDbhelper
+
+
 
 cl = Celery('tasks',backend='rpc://', broker='pyamqp://guest@localhost//')
 CELERY_IMPORTS=("tasks")
@@ -20,6 +25,31 @@ def getMailConnection():
     return mailConnection
 
 mailConnection=getMailConnection()
+
+def validateCSV(reader):
+    li=[]
+    i=1
+    for row in reader:
+        break
+
+    for row in reader:
+      i=i+1
+      # question=row[1]
+      #answer=checkCorrectAns(row[2],":")
+      answer=row[2].strip()
+      level=getLevel(row[3].lower())
+      skillType=getSkillType(row[4].lower())
+      questionType=getQuesType(row[5].lower())
+      # tag=strToLi(row[6],":")          
+      if level==None or skillType==None or questionType==None or not isAnsEnter(answer,":"):
+        li.append(i)
+      
+      for rowOpt in reader:
+        i=i+1
+        if checkBlank(rowOpt):
+             break    
+
+    return li    
 
 def checkBlank(lis):
     for col in lis:
@@ -49,13 +79,13 @@ def isAnsEnter(inp,delimiter):
    return False      
 
 def getLevel(level):
-  return{'e':1,'m':2,'h':3}[level.strip()];
+  return{'e':1,'m':2,'h':3}.get(level.strip(),None);
 
 def getQuesType(quesType):
-  return {'single choice':1,'multiple choice':2, 'essay':3,'short answer':4}.get(quesType,0)
+  return {'single choice':1,'multiple choice':2, 'essay':3,'short answer':4}.get(quesType,None)
 
 def getSkillType(skillType):
-  return {'logical':1,'gk':2,'reasoning':3,'theory':4,'numerical':5}.get(skillType,0)
+  return {'logical':1,'gk':2,'reasoning':3,'theory':4,'numerical':5}.get(skillType,None)
 
 
 @cl.task(name="project.tasks.sendMail")
@@ -64,14 +94,9 @@ def sendMail(to,subject,body):
     return mailConnection.send_email(from_addr,subject,None,to,format='text',text_body=body,html_body =None)
 
 @cl.task(name="project.tasks.parseCsvFile")
-def parseCsvFile(fileId,filename):
+def parseCsvFile(fileId,filename,email):
   
-      try:
-         db=MySQLdb.connect("localhost","root","root","test")
-      except Exception:
-        return "Can not connect to database"
-      else:
-        cursor=db.cursor()
+        dbObj=sqlDbhelper()
         try:    
             f = open(os.path.join('assessment/uploadedCSV/',fileId),'rb')
             reader = csv.reader(f)
@@ -80,36 +105,46 @@ def parseCsvFile(fileId,filename):
         else:
            #  for row in reader:
            #    break
-           #  li = validateCsv(reader) 
-           #  f.seek(0)
+            li = validateCSV(reader) 
+            # print(li)
+            f.seek(0)
             for row in reader:
               break
 
-            #if len(li)==0:      
-            for row in reader:
-              question=row[1]
-              #answer=checkCorrectAns(row[2],":")
-              answer=row[2].strip()
-              level=getLevel(row[3].lower())
-              skillType=getSkillType(row[4].lower())
-              questionType=getQuesType(row[5].lower())
-              tag=strToLi(row[6],":")
-              answerDescription=row[7]                  
-              option='['
-              for rowOpt in reader:
-                if checkBlank(rowOpt):
-                  if isAnsEnter(answer,":"):
-                    option=option[:len(option)-1]+']'
-                    cursor.execute("INSERT INTO quesBank(created_on,question,options,correct_answer,level,question_type,skill_type,tags,created_by,created_by_id,active,answer_description,flag) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                      (str(time.strftime("%Y-%m-%d %H:%M:%S")),question,option,str(answer),level,questionType,skillType,str(tag),0,0,1,answerDescription,0))
-                  break    
-                else:
-                  option=option+'"'+rowOpt[1].strip()+'"'+','
+            if len(li)==0:      
+              for row in reader:
+                question=row[1]
+                #answer=checkCorrectAns(row[2],":")
+                answer=row[2].strip()
+                level=getLevel(row[3].lower())
+                skillType=getSkillType(row[4].lower())
+                questionType=getQuesType(row[5].lower())
+                tag=strToLi(row[6],":")
+                answerDescription=row[7]                  
+                option='['
+                for rowOpt in reader:
+                  if checkBlank(rowOpt):
+                    if isAnsEnter(answer,":"):
+                      option=option[:len(option)-1]+']'
+                      dbObj.insertData("INSERT INTO quesBank(created_on,question,options,correct_answer,level,question_type,skill_type,tags,created_by,created_by_id,active,answer_description,flag) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        (str(time.strftime("%Y-%m-%d %H:%M:%S")),question,option,str(answer),level,questionType,skillType,str(tag),0,0,1,answerDescription,0))
+                    break    
+                  else:
+                    option=option+'"'+rowOpt[1].strip()+'"'+','
 
-              db.commit()
-            return 'success'    
-            #else:
-             #   Dbhelper.update({"email":email},"$push",{"fileInfo":{"fileId":fileId,"filename":filename,"status":li,"date":datetime.datetime.now()}})  
-              #  db.close() 
-               # f.close()
+              # db.commit()
+              # db.close()
+
+              # mongoDb.userDetail.update({'email':email},{"$push":{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now(),"status":"No error in file"}}})
+              Dbhelper.arrUpdate('User',{'email':email},{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now(),"status":"success"}},"$push")
+              return 'success'    
+            else:
+               # db.close()
+               Dbhelper.arrUpdate('User',{'email':email},{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now(),"status":li}},"$push")
+
+               # mongoDb.userDetail.update({'email':email},{"$push":{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now(),"status":li}}})
+               f.close()
+               return "error in file" 
+
+
             

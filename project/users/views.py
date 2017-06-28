@@ -59,8 +59,7 @@ def login():
 
             if session['role']=='user':   
                 session['lis']=user['permission'].get(service)
-            
-
+                   
         if 'email' in session:
             if session['role'] == "admin":
                 return redirect(url_for('users.admin'))

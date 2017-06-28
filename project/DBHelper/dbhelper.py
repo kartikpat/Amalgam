@@ -4,40 +4,46 @@ import MySQLdb
 client = MongoClient('localhost')
 db = client.mydb
 
-sqlDb = MySQLdb.connect("localhost","root","root","iimjobs")
-cur = sqlDb.cursor()
+# sqlDb = MySQLdb.connect("localhost","root","root","iimjobs")
+
+# cur = sqlDb.cursor()
 
 class sqlDbhelper():
 
-	@staticmethod
-	def deleteQuery(quesId):
-		cur.execute("DELETE FROM quesBank WHERE ques_id = %s;",(quesId))
-		sqlDb.commit()
+	def __init__(self):
+		self.sqlDb = MySQLdb.connect("localhost","root","root","iimjobs")
+		self.cur = self.sqlDb.cursor()
 
-	@staticmethod
-	def getData(sqlQuery):
-		cur.execute(sqlQuery)
-		return cur.fetchall()
+	def deleteQuery(self,quesId):
+		self.cur.execute("DELETE FROM quesBank WHERE ques_id = %s;",(quesId))
+		self.sqlDb.commit()
 
-	@staticmethod
-	def updateQuery(quesId, ques,correctAns,lev,quesType,skillType,tag,options):
-		cur.execute("update quesBank SET question=%s ,correct_answer=%s,level=%s,question_type=%s,skill_type=%s ,tags=%s,options=%s WHERE ques_id=%s;",(ques,correctAns,lev,quesType,skillType,tag,options,quesId))
-		sqlDb.commit()
+	def getData(self,sqlQuery):
+		self.cur.execute(sqlQuery)
+		return self.cur.fetchall()
 
-	@staticmethod
-	def updateLevel(quesId,lev):
-		cur.execute("update quesBank SET level=%s where ques_id=%s;",(lev,quesId))	
-		sqlDb.commit()
+	def insertData(self,sqlQuery,data):
+		self.cur.execute(sqlQuery,data)
+		self.sqlDb.commit()
+		
+	def updateQuery(self,quesId, ques,correctAns,lev,quesType,skillType,tag,options):
+		self.cur.execute("update quesBank SET question=%s ,correct_answer=%s,level=%s,question_type=%s,skill_type=%s ,tags=%s,options=%s WHERE ques_id=%s;",(ques,correctAns,lev,quesType,skillType,tag,options,quesId))
+		self.sqlDb.commit()
 
-	@staticmethod
-	def updateQuestionType(quesId,quesType):
-		cur.execute("update quesBank SET question_type=%s where ques_id=%s;",(quesType,quesId))	
-		sqlDb.commit()
+	def updateLevel(self,quesId,lev):
+		self.cur.execute("update quesBank SET level=%s where ques_id=%s;",(lev,quesId))	
+		self.sqlDb.commit()
 
-	@staticmethod
-	def updateskillType(quesId,skillType):
-		cur.execute("update quesBank SET skill_type=%s where ques_id=%s;",(skillType,quesId))	
-		sqlDb.commit()
+	def updateQuestionType(self,quesId,quesType):
+		self.cur.execute("update quesBank SET question_type=%s where ques_id=%s;",(quesType,quesId))	
+		self.sqlDb.commit()
+
+	def updateskillType(self,quesId,skillType):
+		self.cur.execute("update quesBank SET skill_type=%s where ques_id=%s;",(skillType,quesId))	
+		self.sqlDb.commit()
+
+	def __del__(self):
+		self.sqlDb.close()	
 
 
 

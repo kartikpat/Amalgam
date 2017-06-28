@@ -318,6 +318,38 @@ button.dropdown-toggle:focus {
     background-color: #3e8e41;
 }
 
+.fileContainer{
+	border: 1px solid;
+    border-radius: 5px;
+    margin: 20px 0 20px 0; 
+    box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+}
+
+.fileHeader span{
+	display: inline-block;
+	width: 23%;
+    padding: 5px;
+    margin: 5px;
+    overflow: auto;
+    font-size: 20px;
+}
+.file-content {
+    margin:5px;
+    padding: 2px;
+}
+.file-content span {
+	display: inline-block;
+	width: 23%;
+    padding: 5px;
+    margin: 5px;
+    overflow: hidden;
+}
+
+
+div.fileContainer >div.file-content:nth-of-type(even){
+	background:#f5f6f7;
+}
+
 </style>
 
 </head>
@@ -342,28 +374,28 @@ button.dropdown-toggle:focus {
 						<div class="second-level">
 							<a href="" id="mark_difficulty" role="button" class="dropdo">Mark Level</a>
 						  <div class="dropdo-content">
-						    <a href="#" class='levelType' data=1 >Easy</a>
-						    <a href="#" class='levelType' data=2 >Medium</a>
-						    <a href="#" class='levelType' data=3 >Hard</a>
+						    <a href="/listQuestions" class='levelType' data=1 >Easy</a>
+						    <a href="/listQuestions" class='levelType' data=2 >Medium</a>
+						    <a href="/listQuestions" class='levelType' data=3 >Hard</a>
 						  </div>
 						</div>
 						<div class="second-level">
 							<a href="" id="mark_type" role="button" class="dropdo">Mark Type</a>
 						  <div class="dropdo-content">
-						    <a href="#" class='markQuesType' data=1 >Single Choice</a>
-						    <a href="#" class='markQuesType' data=2 >Multiple Choice</a>
-						    <a href="#" class='markQuesType' data=3 >Essay</a>
-						    <a href="#" class='markQuesType' data=4 >Short Answer</a>
+						    <a href="/listQuestions" class='markQuesType' data=1 >Single Choice</a>
+						    <a href="/listQuestions" class='markQuesType' data=2 >Multiple Choice</a>
+						    <a href="/listQuestions" class='markQuesType' data=3 >Essay</a>
+						    <a href="/listQuestions" class='markQuesType' data=4 >Short Answer</a>
 						  </div>
 						</div>
 						<div class="second-level">
 							<a href="" id="mark_skill" role="button" class="dropdo">Mark Skill Type</a>
 						  <div class="dropdo-content">
-						    <a href="#" class='markSkillType' data=1 >Logical</a>
-						    <a href="#" class='markSkillType' data=2 >Gk</a>
-						    <a href="#" class='markSkillType' data=3 >Reasoning</a>
-						    <a href="#" class='markSkillType' data=4 >Theory</a>
-						    <a href="#" class='markSkillType' data=5 >Numerical</a>
+						    <a href="/listQuestions" class='markSkillType' data=1 >Logical</a>
+						    <a href="/listQuestions" class='markSkillType' data=2 >Gk</a>
+						    <a href="/listQuestions" class='markSkillType' data=3 >Reasoning</a>
+						    <a href="/listQuestions" class='markSkillType' data=4 >Theory</a>
+						    <a href="/listQuestions" class='markSkillType' data=5 >Numerical</a>
 						  </div>
 						</div>
 					  </div>
@@ -457,13 +489,22 @@ button.dropdown-toggle:focus {
     </div>
     <div role="tabpanel" class="tab-pane" id="uploadedCsv">
     	<div class="fileContainer">
-	    	{% for res in files: %}
-	    		<div class="file">
-	    			<span>{{ res["fileId"] }}</span>
-	    			<span>{{ res["fileName"] }}</span>
-	    			<span>{{ res["date"] }}</span>
-	    		</div>
-	    	{% endfor %}
+    			<div class="fileHeader">
+    				<span >File Id</span>
+    				<span >File Name</span>
+    				<span >Uploaded Date</span>
+    				<span>File Status</span>
+    			</div>
+    		{%if files != None:%}	
+		    	{% for res in files: %}
+		    		<div class="file-content">
+		    			<span class="file_id">{{ res["fileId"] }}</span>
+		    			<span class="file_name">{{ res["fileName"] }}</span>
+		    			<span class="uploaded_date">{{ res["date"] }}</span>
+		    			<span class="status">{{res["status"]}}</span>
+		    		</div>
+		    	{% endfor %}
+		    {% endif %}	
     	</div>
     </div>
 </div>                                       

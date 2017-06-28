@@ -20,9 +20,14 @@ def logout():
 
 @listingQues.route('/listQuestions')
 def listQuestions():
-    results=sqlDbhelper.getData("select * from quesBank limit 44")
+    dbObj=sqlDbhelper()
+    results=dbObj.getData("select * from quesBank;")
+    # print('..............')
+    # print(results)
+    # print('..............')
     user=Dbhelper.findOne('User',{"email":session['email']})
     uploadedFiles=user.get('permission').get('Assessment').get('uploadedCSV',None)
+    # print(uploadedFiles)
     return render_template("assessmentIndex.html",questions=results,files=uploadedFiles)
 
 
@@ -38,7 +43,8 @@ def ajaxUpdate():
     options =request.json['options']
 
     # print(request.json)
-    sqlDbhelper.updateQuery(quesId,ques,ans,lev,quesType,skill,tag,options)
+    dbObj=sqlDbhelper()
+    dbObj.updateQuery(quesId,ques,ans,lev,quesType,skill,tag,options)
     # es.update(index='assessment',doc_type='questions',id=quesId,
     #             body={"doc":temp} )
     updateElastic(quesId,request.json)
@@ -48,17 +54,17 @@ def ajaxUpdate():
 def ajaxDelete():
     quesId=request.json['quesId']
     #print(quesId)
-
-    sqlDbhelper.deleteQuery(quesId)
+    dbObj=sqlDbhelper()
+    dbObj.deleteQuery(quesId)
     return json.dumps({'status':'OK'})
 
 @listingQues.route('/ajaxDeleteMultiple',methods=['POST'])
 def ajaxDeleteMultiple():
     quesIdArr=request.json['id']
     # print(quesIdArr)
-    
+    dbObj=sqlDbhelper()
     for id in quesIdArr:
-         sqlDbhelper.deleteQuery(id)
+         dbObj.deleteQuery(id)
     return json.dumps({'status':'OK'})   
 
 @listingQues.route('/ajaxSetLevelMultiple',methods=['POST'])
@@ -66,9 +72,10 @@ def ajaxSetLevelMultiple():
   quesIds=request.json['ids']
   lev=request.json['level']
 
+  dbObj=sqlDbhelper()
   for id in quesIds:
-    sqlDbhelper.updateLevel(id,lev)
-
+    dbObj.updateLevel(id,lev)
+    
   return json.dumps({'status':'OK'})
 
 @listingQues.route('/ajaxSetQuesTypeMultiple',methods=['POST'])
@@ -76,8 +83,9 @@ def ajaxSetQuesTypeMultiple():
   quesIds=request.json['ids']
   quesType=request.json['quesType']
   
+  dbObj=sqlDbhelper()
   for id in quesIds:
-    sqlDbhelper.updateQuestionType(id,quesType)
+    dbObj.updateQuestionType(id,quesType)
 
   return json.dumps({'status':'OK'})
 
@@ -86,8 +94,9 @@ def ajaxSetSkillTypeMultiple():
   quesIds=request.json['ids']
   skillType=request.json['skillType']
   
+  dbObj=sqlDbhelper()
   for id in quesIds:
-    sqlDbhelper.updateskillType(id,skillType)
+    dbObj.updateskillType(id,skillType)
 
   return json.dumps({'status':'OK'})  
 
@@ -136,12 +145,10 @@ def searchKeyword():
 
 @listingQues.route('/upload', methods = ['GET', 'POST'])
 def upload():
-   # user=Dbhelper.findOne({"email":session['email']})
-   # result=user['fileInfo']
-   # output=[]
-   # for res in result:
-   #    output.append({"File ID":res["fileId"],"File name":res["filename"],"File status":res["status"],"Date":(res['date']).strftime("%Y-%m-%d %H:%M:%S")})
-   results=sqlDbhelper.getData("select * from quesBank limit 44")
+  
+   dbObj=sqlDbhelper()
+   results=dbObj.getData("select * from quesBank")
+   
    user=Dbhelper.findOne('User',{"email":session['email']})
    uploadedFiles=user.get('permission').get('Assessment').get('uploadedCSV',None)
 
@@ -152,16 +159,20 @@ def upload():
         if '.' in filename and filename.split('.')[1]=='csv':
           fileId=filename.split('.')[0]+str(int(time.time()*1000))+'.'+filename.split('.')[1]
           f.save(os.path.join(app.config['UPLOAD_FOLDER'],fileId)) 
-          parseCsvFile.delay(fileId,filename)
-          Dbhelper.arrUpdate('User',{'email':session['email']},{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now()}},"$push")
+          parseCsvFile.delay(fileId,filename,session['email'])
+          #Dbhelper.arrUpdate('User',{'email':session['email']},{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now()}},"$push")
           #app.config['UPLOAD_FOLDER'] = 'uploadedCSV/'
           #f.save(filename)
           #f.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
           #parseCsvFile.delay(fileId,filename,session['email'])
           return render_template("assessmentIndex.html",questions=results,files=uploadedFiles,message="File parsing is on process")
+          #return redirect(url_for('assessment.listQuestions'))
         else:
-          return render_template("assessmentIndex.html",questions=results,files=uploadedFiles,message="File should have extension(.csv)")
+          #return redirect(url_for('assessment.listQuestions'))
+           return render_template("assessmentIndex.html",questions=results,files=uploadedFiles,message="File should have extension(.csv)")
       else:
-        return render_template("assessmentIndex.html",questions=results,files=uploadedFiles,message="Choose file to upload")
+        #return redirect(url_for('assessment.listQuestions'))
+         return render_template("assessmentIndex.html",questions=results,files=uploadedFiles,message="Choose file to upload")
    else:
-      return render_template("assessmentIndex.html",questions=results,files=uploadedFiles)
+      return redirect(url_for('assessment.listQuestions'))
+       # return render_template("assessmentIndex.html",questions=results,files=uploadedFiles)
