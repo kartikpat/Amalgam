@@ -1,5 +1,6 @@
 from celery import Celery
-import boto.ses
+# import boto.ses
+import boto3
 import MySQLdb
 import time
 import csv
@@ -17,7 +18,7 @@ def getMailConnection():
     AWS_ACCESS_KEY = 'AKIAIBKUBCW3L26UNWDA'  
     AWS_SECRET_KEY = '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'
 
-    mailConnection = boto.ses.connect_to_region(
+    mailConnection = boto3.client('ses',
                 'us-west-2',
                 aws_access_key_id=AWS_ACCESS_KEY, 
                 aws_secret_access_key=AWS_SECRET_KEY
@@ -91,7 +92,17 @@ def getSkillType(skillType):
 @cl.task(name="project.tasks.sendMail")
 def sendMail(to,subject,body):
     from_addr='crawler@iimjobs.com'
-    return mailConnection.send_email(from_addr,subject,None,to,format='text',text_body=body,html_body =None)
+    # return mailConnection.send_email(from_addr,subject,None,to,format='text',text_body=body,html_body =None)
+    return mailConnection.send_email(Source=from_addr,Destination={"ToAddresses":[to]},Message={'Subject':{'Data':subject,'Charset': 'UTF-8'},'Body':{'Text':{'Data':body,'Charset': 'UTF-8'},'Html': {'Data': body ,'Charset': 'UTF-8'}}})
+
+# Source='Cron Server-2<info@iimjobs.com>',
+# Destination={'ToAddresses': ['"Roshan"<roshan@iimjobs.com>','"Amit"<amit.verma@iimjobs.com>','"Yugal"<yugal@iimjobs.com>','"Jaspal Singh"<jaspal.singh@iimjobs.com>','"Triptee"<triptee@iimjobs.com>'],},
+# Message={'Subject': {'Data': 'JobFeed not running please check '+str(num),'Charset': 'UTF-8'},'Body': {'Text': {'Data': 'Cron jobfeed not working for list' ,'Charset': 'UTF-8'},'Html': {'Data': 'Cron jobfeed not working for list' ,'Charset': 'UTF-8'}}},
+# ReplyToAddresses=['info@iimjobs.com'],
+# ReturnPath='info@iimjobs.com'
+
+# {'Subject': {'Data': 'JobFeed not running please check '+str(num),'Charset': 'UTF-8'},'Body': {'Text': {'Data': 'Cron jobfeed not working for list' ,'Charset': 'UTF-8'},'Html': {'Data': 'Cron jobfeed not working for list' ,'Charset': 'UTF-8'}}}
+
 
 @cl.task(name="project.tasks.parseCsvFile")
 def parseCsvFile(fileId,filename,email):
