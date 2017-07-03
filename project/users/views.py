@@ -112,7 +112,7 @@ def registerSucess():
                     permissionData[per]=[]
             Dbhelper.insert('User' , { "name":name,"email":email,"products":product,"password":"","role":"user","permission":permissionData })
             token = getToken(mailId = email)
-            body="Set password using below link\n"+"http://crawler.iimjobs.com/setPassword?token="+token
+            body="Set password using below link\n"+"http://assessment.iimjobs.com/setPassword?token="+token
             sendMail.delay(email,"Set Password",body)
             return redirect(url_for('users.admin'))
         else:
