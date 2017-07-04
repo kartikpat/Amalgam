@@ -61,12 +61,15 @@
 
 .top_buttons {
 	text-align: right;
-	margin: 20px 0 20px 0;
+	display: inline-block;
+	float:right;
+	margin: 15px 15px 0 0;
 }
 
 .search{
-	padding: 10px;
-	margin: 50px;
+	padding: 0px;
+	margin: 0px;
+	display: block;
 }
 
 .page_content {
@@ -75,10 +78,10 @@
 }
 
 .question_container {
-    margin: 15px 0;
+    margin: 15px 0px 15px 0px;
     border: 3px solid #FFFFFF;
     padding: 20px 20px 60px 20px;
-    box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    box-shadow: 0 0 4px rgba(0,0,0,0.6);
 	position:relative;
     width: 100%;
     height: 100%;
@@ -169,9 +172,9 @@ button.btn.dropdown-toggle.btn-default {
 }
 
 .btn-default:hover,.btn-default:focus {
-background-color: #ffffff;
-border-color: #FFAF2D;
-outline: none;
+	background-color: #ffffff;
+	border-color: #FFAF2D;
+	outline: none;
 }
 
 .dropdown-menu>li>a:hover {
@@ -318,11 +321,9 @@ button.dropdown-toggle:focus {
     background-color: #3e8e41;
 }
 
-.fileContainer{
-	border: 1px solid;
-    border-radius: 5px;
-    margin: 20px 0 20px 0; 
-    box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+div#AllQuestions {
+	margin-top:0;
+	padding-top:15px;
 }
 
 .fileHeader span{
@@ -345,48 +346,104 @@ button.dropdown-toggle:focus {
     overflow: hidden;
 }
 
+.topHeader {
+    width: 1170px;
+    margin: 0 auto;
+}
 
 div.fileContainer >div.file-content:nth-of-type(even){
 	background:#f5f6f7;
 }
 
-</style>
+.logo {
+	font-family: "Comfortaa";	
+	color:white;
+}
 
+.logo h2 {
+	margin:10px;
+}
+
+.logo span#domain {
+    text-align: right;
+    display: block;
+    line-height: 1;
+    position: relative;
+    top: -15px;
+    right:10px;
+}
+
+.navbar-form.navbar-left {
+	margin:15px;
+	float:right !important;
+}
+
+.navbar-form.navbar-left input.form-control {
+    background-image: url(http://www.iimjobs.com/resources/img/search_icon.png);
+    background-color: white;
+    background-repeat: no-repeat;
+    background-position: 95% 45%;
+    background-size: 15px;
+}
+
+.submit-trigger {
+    width: 50px;
+    height: 34px;
+    float: right;
+    position: absolute;
+    right: 0;
+    top: 0px;
+    /*background: red;*/
+}
+
+.navbar-form.navbar-left .form-group {
+    position: relative;
+}
+
+.clearfix {
+	display:block;
+	clear:both;
+}
+
+.container {
+	margin:15px auto;
+}
+
+</style>
+<link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
 </head>
 <body>
+	<header style="background-color: #212121">
+			<div class="topHeader">	
+				<div class="logo pull-left">
+					<h2>iimjobs</h2>
+					<span id="domain">.com</span>
+				</div>
 
+				
 
-<div class="container">
-	<header>
-		<div class="logo pull-left">
-		<h2>iimjobs</h2>
-		<span id="domain">.com</span>
-		</div>
-	</header>
-
-	 <div class="top_buttons">
-
-		<div class="dropdow">
-					  <button class="btn btn-default dropbt">Actions</button>
-					  <div class="dropdow-content">
-					    <a data-toggle="modal" data-target="#modalUpload" class="upload" role="button"><i class="fa fa-upload fa-1x" aria-hidden="true"></i>&nbsp;Upload</a>
-					    <a href="/listQuestions" id="delete_multiple" role="button"><i class="fa fa-trash-o fa-1x" aria-hidden="true"></i>&nbsp;Multiple Delete</a>
-						<div class="second-level">
-							<a href="" id="mark_difficulty" role="button" class="dropdo">Mark Level</a>
-						  <div class="dropdo-content">
-						    <a href="/listQuestions" class='levelType' data=1 >Easy</a>
-						    <a href="/listQuestions" class='levelType' data=2 >Medium</a>
-						    <a href="/listQuestions" class='levelType' data=3 >Hard</a>
-						  </div>
+				<div class="top_buttons">
+					<div class="dropdow">
+						<button class="btn btn-default dropbt">Actions</button>
+						<div class="dropdow-content">
+							<a data-toggle="modal" data-target="#modalUpload" class="upload" role="button"><i class="fa fa-upload fa-1x" aria-hidden="true"></i>&nbsp;Upload</a>
+							<a href="/listQuestions" id="delete_multiple" role="button"><i class="fa fa-trash-o fa-1x" aria-hidden="true"></i>&nbsp;Multiple Delete</a>
+							<div class="second-level">
+								<a href="" id="mark_difficulty" role="button" class="dropdo">Mark Level</a>
+							<div class="dropdo-content">
+								<a href="/listQuestions" class='levelType' data=1 >Easy</a>
+								<a href="/listQuestions" class='levelType' data=2 >Medium</a>
+								<a href="/listQuestions" class='levelType' data=3 >Hard</a>
+							</div>
 						</div>
 						<div class="second-level">
 							<a href="" id="mark_type" role="button" class="dropdo">Mark Type</a>
-						  <div class="dropdo-content">
-						    <a href="/listQuestions" class='markQuesType' data=1 >Single Choice</a>
-						    <a href="/listQuestions" class='markQuesType' data=2 >Multiple Choice</a>
-						    <a href="/listQuestions" class='markQuesType' data=3 >Essay</a>
-						    <a href="/listQuestions" class='markQuesType' data=4 >Short Answer</a>
-						  </div>
+							<div class="dropdo-content">
+								<a href="/listQuestions" class='markQuesType' data=1 >Single Choice</a>
+								<a href="/listQuestions" class='markQuesType' data=2 >Multiple Choice</a>
+								<a href="/listQuestions" class='markQuesType' data=3 >Essay</a>
+								<a href="/listQuestions" class='markQuesType' data=4 >Short Answer</a>
+							</div>
 						</div>
 						<div class="second-level">
 							<a href="" id="mark_skill" role="button" class="dropdo">Mark Skill Type</a>
@@ -398,20 +455,26 @@ div.fileContainer >div.file-content:nth-of-type(even){
 						    <a href="/listQuestions" class='markSkillType' data=5 >Numerical</a>
 						  </div>
 						</div>
-					  </div>
-		</div>
-		<button class="btn btn-default" onclick="window.location='/logout';" type="submit">Log Out</button>
-	</div>
+		  </div>
+					</div>
+					<button class="btn btn-default" onclick="window.location='/logout';" type="submit">Log Out</button>
+				</div>
 
-	<div class="search">
-		<form action="/searchKeyword" method="POST" class="navbar-form navbar-left" role="search">
-		 <div class="form-group">
-		   <input type="text" class="form-control" placeholder="Search..." name="phrase">
-		 </div>
-		 <button type="submit" class="btn btn-default">Submit</button>
-		</form>
-	</div>
+				<div class="search">
+					<form action="/searchKeyword" method="POST" class="navbar-form navbar-left" role="search">
+					 <div class="form-group">
+					   <input type="text" class="form-control" placeholder="Search..." name="phrase">
+					   <div class="submit-trigger"></div>
+					 </div>
+					 <!-- <button type="submit" class="btn btn-default">Submit</button> -->
+					</form>
+				</div>
+				<div class="clearfix"></div>
+			</div>	
+		</header>
 
+<div class="container">
+	
 		 <div id="modalUpload" class="modal fade" tabindex = "-1" role="dialog">
 		  	<div class="modal-dialog" role="document">
 			 	<div class="modal-content" >
@@ -421,7 +484,7 @@ div.fileContainer >div.file-content:nth-of-type(even){
 			      </div>
 			      	<div class="modal-body">
 
-						<form action = "http://assessment.iimjobs.com/upload" method = "POST"
+						<form action = "http://localhost:5000/upload" method = "POST"
 									enctype = "multipart/form-data" class="right">
 								<div class="form-group">
 								   <input id="fileUpload" type = "file" name = "file"/>
@@ -445,7 +508,7 @@ div.fileContainer >div.file-content:nth-of-type(even){
     <li role="presentation"><a href="#uploadedCsv" aria-controls="profile" role="tab" data-toggle="tab">uploaded CSV</a></li>
 
 </ul>
-<div class="tab-content">
+<div class="tab-content" style="border:1px solid #e8e8e8; border-top:0;margin-top:0;padding-top:15px;">
     <div role="tabpanel" class="tab-pane active" id="AllQuestions">
     	<div class="page_content">
           {% for question in questions: %}
@@ -537,6 +600,10 @@ div.fileContainer >div.file-content:nth-of-type(even){
 	      $(this).prop('contenteditable', false);
 		  $(this).removeClass('editable');
 	   });
+
+		jQuery(".submit-trigger").on('click', function() {
+			jQuery(this).closest('form').submit();
+		});
 	});
 
 </script>
@@ -823,6 +890,8 @@ $('.save_changes').click(function(){
 			});
 		});
 	}
+
+
 
 </script>
 
