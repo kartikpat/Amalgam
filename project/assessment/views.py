@@ -22,7 +22,7 @@ def logout():
 def listQuestions():
     dbObj=sqlDbhelper()
     results=dbObj.getData("select * from quesBank;")
-    user=Dbhelper.findOne('User',{"email":session['email']})
+    user=Dbhelper.findOne('User',{"email":"mohit.mittal@iimjobs.com"})
     uploadedFiles=user.get('permission').get('Assessment').get('uploadedCSV',None)
     return render_template("assessmentIndex.html",questions=results,files=uploadedFiles)
 
@@ -116,6 +116,7 @@ def elasticSearch(uri, term):
 def searchKeyword():
    phrase = Utility.getPostParameter('phrase')
    # phrase=request.form.get('phrase', "None")
+   print(phrase)
    if phrase != None:
        li=[]
        
@@ -123,16 +124,17 @@ def searchKeyword():
        data =  results['hits']['hits']
        i = 0
        for doc in data:
+          print(doc)
           li.append([])
-          li[i].append(doc['_source']['quesId'])
+          li[i].append(doc['_source']['doc']['quesId'])
           li[i].append("hello")
-          li[i].append(doc['_source']['question'])
-          li[i].append(doc['_source']['options'])
-          li[i].append(doc['_source']['correctAnswer'])
-          li[i].append(doc['_source']['level'])
-          li[i].append(doc['_source']['questionType'])
-          li[i].append(doc['_source']['skillType'])
-          li[i].append(doc['_source']['tags'])
+          li[i].append(doc['_source']['doc']['question'])
+          li[i].append(doc['_source']['doc']['options'])
+          li[i].append(doc['_source']['doc']['correctAnswer'])
+          li[i].append(doc['_source']['doc']['level'])
+          li[i].append(doc['_source']['doc']['questionType'])
+          li[i].append(doc['_source']['doc']['skillType'])
+          li[i].append(doc['_source']['doc']['tags'])
 
           i=i+1
           
@@ -147,7 +149,7 @@ def upload():
    dbObj=sqlDbhelper()
    results=dbObj.getData("select * from quesBank")
    # session['email']
-   user=Dbhelper.findOne('User',{"email":session['email']})
+   user=Dbhelper.findOne('User',{"email":"mohit.mittal@iimjobs.com"})
    uploadedFiles=user.get('permission').get('Assessment').get('uploadedCSV',None)
 
    if request.method == 'POST':
@@ -157,7 +159,7 @@ def upload():
         if '.' in filename and filename.split('.')[1]=='csv':
           fileId=filename.split('.')[0]+str(int(time.time()*1000))+'.'+filename.split('.')[1]
           f.save(os.path.join(app.config['UPLOAD_FOLDER'],fileId)) 
-          parseCsvFile.delay(fileId,filename,session['email'])
+          parseCsvFile.delay(fileId,filename,"mohit.mittal@iimjobs.com")
           #Dbhelper.arrUpdate('User',{'email':session['email']},{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now()}},"$push")
           #app.config['UPLOAD_FOLDER'] = 'uploadedCSV/'
           #f.save(filename)
