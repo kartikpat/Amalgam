@@ -166,7 +166,7 @@ def parseCsvFile(fileId,filename,email):
               return 'success'    
             else:
                # db.close()
-               Dbhelper.arrUpdate('User',{'email':email},{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now(),"status":li}},"$push")
+               Dbhelper.arrUpdate('User',{'email':email},{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now(),"status":"Error: Line Number"+str(li)}},"$push")
 
                # mongoDb.userDetail.update({'email':email},{"$push":{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now(),"status":li}}})
                f.close()
