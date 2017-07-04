@@ -1,7 +1,7 @@
 from flask import Blueprint, Flask,request, render_template, redirect,url_for,session,current_app as app
 from ..DBHelper.dbhelper import sqlDbhelper
 from werkzeug import secure_filename
-from project.tasks import parseCsvFile
+from project.tasks import parseCsvFile ,updateDataElastic,deleteDataElastic
 from ..utilities.commonFunctions import Utility
 from ..DBHelper.dbhelper import Dbhelper
 import datetime
@@ -22,12 +22,8 @@ def logout():
 def listQuestions():
     dbObj=sqlDbhelper()
     results=dbObj.getData("select * from quesBank;")
-    # print('..............')
-    # print(results)
-    # print('..............')
     user=Dbhelper.findOne('User',{"email":session['email']})
     uploadedFiles=user.get('permission').get('Assessment').get('uploadedCSV',None)
-    # print(uploadedFiles)
     return render_template("assessmentIndex.html",questions=results,files=uploadedFiles)
 
 
@@ -45,17 +41,17 @@ def ajaxUpdate():
     # print(request.json)
     dbObj=sqlDbhelper()
     dbObj.updateQuery(quesId,ques,ans,lev,quesType,skill,tag,options)
-    # es.update(index='assessment',doc_type='questions',id=quesId,
-    #             body={"doc":temp} )
-    updateElastic(quesId,request.json)
+   
+    # updateDataElastic.delay(request.json)
     return json.dumps({'status':'OK'})
 
 @listingQues.route('/ajaxDelete',methods=['POST'])
 def ajaxDelete():
     quesId=request.json['quesId']
-    #print(quesId)
     dbObj=sqlDbhelper()
     dbObj.deleteQuery(quesId)
+
+    deleteDataElastic.delay([quesId])
     return json.dumps({'status':'OK'})
 
 @listingQues.route('/ajaxDeleteMultiple',methods=['POST'])
@@ -65,6 +61,8 @@ def ajaxDeleteMultiple():
     dbObj=sqlDbhelper()
     for id in quesIdArr:
          dbObj.deleteQuery(id)
+
+    deleteDataElastic.delay(quesIdArr)     
     return json.dumps({'status':'OK'})   
 
 @listingQues.route('/ajaxSetLevelMultiple',methods=['POST'])
@@ -148,7 +146,7 @@ def upload():
   
    dbObj=sqlDbhelper()
    results=dbObj.getData("select * from quesBank")
-   
+   # session['email']
    user=Dbhelper.findOne('User',{"email":session['email']})
    uploadedFiles=user.get('permission').get('Assessment').get('uploadedCSV',None)
 

@@ -25,6 +25,7 @@ class sqlDbhelper():
 	def insertData(self,sqlQuery,data):
 		self.cur.execute(sqlQuery,data)
 		self.sqlDb.commit()
+		return self.cur.lastrowid
 		
 	def updateQuery(self,quesId, ques,correctAns,lev,quesType,skillType,tag,options):
 		self.cur.execute("update quesBank SET question=%s ,correct_answer=%s,level=%s,question_type=%s,skill_type=%s ,tags=%s,options=%s WHERE ques_id=%s;",(ques,correctAns,lev,quesType,skillType,tag,options,quesId))

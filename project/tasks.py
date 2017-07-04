@@ -8,8 +8,7 @@ import os
 from pymongo import MongoClient
 import datetime
 from DBHelper.dbhelper import Dbhelper,sqlDbhelper
-
-
+from elasticsearch import Elasticsearch
 
 cl = Celery('tasks',backend='rpc://', broker='pyamqp://guest@localhost//')
 CELERY_IMPORTS=("tasks")
@@ -103,6 +102,21 @@ def sendMail(to,subject,body):
 
 # {'Subject': {'Data': 'JobFeed not running please check '+str(num),'Charset': 'UTF-8'},'Body': {'Text': {'Data': 'Cron jobfeed not working for list' ,'Charset': 'UTF-8'},'Html': {'Data': 'Cron jobfeed not working for list' ,'Charset': 'UTF-8'}}}
 
+@cl.task(name="project.tasks.deleteDataElastic") 
+def deleteDataElastic(quesIdToDelete):
+  es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+  for i in quesIdToDelete:
+    es.delete(index='assessment',doc_type='questions',id=i)
+
+@cl.task(name="project.tasks.insertDataElastic") 
+def insertDataElastic(data):
+  es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+  es.index(index='assessment', doc_type='questions', id=data['quesId'], body={"doc": data})
+
+@cl.task(name="project.tasks.updateDataElastic") 
+def updateDataElastic(data):
+  es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+  es.update(index='assessment',doc_type='questions',id=data['quesId'],body={"doc": data})
 
 @cl.task(name="project.tasks.parseCsvFile")
 def parseCsvFile(fileId,filename,email):
@@ -137,8 +151,9 @@ def parseCsvFile(fileId,filename,email):
                   if checkBlank(rowOpt):
                     if isAnsEnter(answer,":"):
                       option=option[:len(option)-1]+']'
-                      dbObj.insertData("INSERT INTO quesBank(created_on,question,options,correct_answer,level,question_type,skill_type,tags,created_by,created_by_id,active,answer_description,flag) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                      questionId=dbObj.insertData("INSERT INTO quesBank(created_on,question,options,correct_answer,level,question_type,skill_type,tags,created_by,created_by_id,active,answer_description,flag) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                         (str(time.strftime("%Y-%m-%d %H:%M:%S")),question,option,str(answer),level,questionType,skillType,str(tag),0,0,1,answerDescription,0))
+                      insertDataElastic.delay({"questionType":questionType,"quesId":questionId,'level':level,'tags':tag,'question':question,'skillType':skillType,'correctAnswer':answer,'options':option})   
                     break    
                   else:
                     option=option+'"'+rowOpt[1].strip()+'"'+','
