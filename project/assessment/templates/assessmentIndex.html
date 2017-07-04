@@ -469,8 +469,8 @@ div.fileContainer >div.file-content:nth-of-type(even){
 					<div class="dropdown actions">
 					  <i class="fa fa-cog dropbtn fa-2x" aria-hidden="true"></i>
 					  <div class="dropdown-content">
-					    <a id="save_changes" role="button"><i class="fa fa-pencil fa-1x" aria-hidden="true"></i>&nbsp;Edit</a>
-					    <a href="" id="delete" role="button"><i class="fa fa-trash-o fa-1x" aria-hidden="true"></i>&nbsp;Delete</a>
+					    <a class="save_changes" role="button"><i class="fa fa-pencil fa-1x" aria-hidden="true"></i>&nbsp;Edit</a>
+					    <a href="" class="delete" role="button"><i class="fa fa-trash-o fa-1x" aria-hidden="true"></i>&nbsp;Delete</a>
 					  </div>
 					</div>
 
@@ -544,7 +544,7 @@ div.fileContainer >div.file-content:nth-of-type(even){
 
 <script type="text/javascript">
 
-$('#save_changes').click(function(){
+$('.save_changes').click(function(){
 
 		var ob={};
 		var question =$(this).parent().parent().parent().children();
@@ -612,7 +612,7 @@ $('#save_changes').click(function(){
 		return dict[index];
 	}
 
-	$('#delete').click(function() {
+	$('.delete').click(function() {
 
 		 var ob = {};
      ob[getIndex(0)] = $(this).parent().parent().prev().children('span.question_id')[0].innerHTML;
