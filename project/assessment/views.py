@@ -124,7 +124,7 @@ def searchKeyword():
        data =  results['hits']['hits']
        i = 0
        for doc in data:
-          print(doc)
+          # print(doc)
           li.append([])
           li[i].append(doc['_source']['doc']['quesId'])
           li[i].append("hello")
