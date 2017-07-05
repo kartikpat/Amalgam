@@ -541,8 +541,8 @@ div.fileContainer >div.file-content:nth-of-type(even){
 				    <select backData="{{question[5]}}" class="level selectpicker show-tick" ></select>
 				    <select backData="{{question[6]}}" class="quesType selectpicker show-tick" ></select>
 				    <select backData="{{question[7]}}" class="skillType selectpicker show-tick" ></select>
-				    <select id="tags" backData="{{question[8]}}" class="tags selectpicker show-tick" multiple ></select>
-						<select id="correctAns" backData="{{question[4]}}" class="correctAns selectpicker show-tick" multiple ></select>
+				    <select id="tags-{{question[0]}}" backData="{{question[8]}}" class="tags selectpicker show-tick" multiple ></select>
+						<select id="correctAns-{{question[0]}}" backData="{{question[4]}}" class="correctAns selectpicker show-tick" multiple ></select>
 				  </div>
 
 			</div>
@@ -631,12 +631,14 @@ $('.save_changes').click(function(){
 		}
 
 		else if(index == 2) {
+				
+				var id=ob['quesId'];
         		var select = $(elem).children();
 				var i = 0;
 				$.each(select,function(index,elem){
          			if (index == 3  ) {
 						var tags=[];
-	 					 $('#tags :selected').each(function(){
+	 					 $('#tags-'+ id +' :selected').each(function(){
 	 							 tags.push($(this).text());
 	 							});
 	 							ob[getIndex(3 + i)] = tags.toString();
@@ -644,7 +646,7 @@ $('.save_changes').click(function(){
 	 				}
 					else if(index==4) {
 						var answer=[];
-	 					 $('#correctAns :selected').each(function(){
+	 					 $('#correctAns-' + id + ' :selected').each(function(){
 	 							 answer.push($(this).text());
 	 							});
 	 							ob[getIndex(2 )] = answer.toString();
