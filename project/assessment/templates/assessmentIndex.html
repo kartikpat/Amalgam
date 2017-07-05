@@ -409,6 +409,8 @@ div.fileContainer >div.file-content:nth-of-type(even){
 	margin:15px auto;
 }
 
+
+
 </style>
 <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
 </head>
@@ -524,6 +526,7 @@ div.fileContainer >div.file-content:nth-of-type(even){
 				    <span class="question_id" dataQuesId= "{{ question[0]}}"></span>
 				    <span class="question_title" contenteditable="false">{{ question[2] }}</span>
 
+				    
 				    <div class="options">
 					{% for option in question[3].split(','): %}
 							<p class="question_options" contenteditable="false" showData="{{option.strip('[]')}}">{{option.strip('[]" ')}}</p>
@@ -624,9 +627,11 @@ $('.save_changes').click(function(){
 				 ob[getIndex(0)] = $(elem).children('span.question_id')[0].getAttribute('dataQuesId');
 				 ob[getIndex(1)] = $(elem).children('span.question_title')[0].innerHTML;
 				 var li="[";
-				 var options = $(elem).children('p.question_options');
-				 $.each(options,function(index,elem){
-	                li = li + '"'+ $(elem)[0].innerHTML +'",'
+				 var options = $(elem).children('div').children('p.question_options');
+				 
+				 $.each(options,function(index,ele){
+				 	console.log(ele);
+	                li = li + '"'+ $(ele).attr('showData') +'",'
 				 });
 				 li = li.substring(0,li.length-1)+']';
          		ob['options']=li;
