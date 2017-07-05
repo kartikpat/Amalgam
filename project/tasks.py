@@ -81,11 +81,20 @@ def isAnsEnter(inp,delimiter):
 def getLevel(level):
   return{'e':1,'m':2,'h':3}.get(level.strip(),None);
 
+def getLevelReverse(lev):
+  return{1:"easy",2:"medium",3:"hard"}.get(lev,None);
+
 def getQuesType(quesType):
   return {'single choice':1,'multiple choice':2, 'essay':3,'short answer':4}.get(quesType,None)
 
+def getQuesTypeReverse(quesType):
+  return {1:'single choice',2:'multiple choice',3:'essay',4:'short answer'}.get(quesType,None)  
+
 def getSkillType(skillType):
   return {'logical':1,'gk':2,'reasoning':3,'theory':4,'numerical':5}.get(skillType,None)
+
+def getSkillTypeReverse(skillType):
+  return {1:'logical',2:'gk',3:'reasoning',4:'theory',5:'numerical'}.get(skillType,None) 
 
 
 @cl.task(name="project.tasks.sendMail")
@@ -153,7 +162,7 @@ def parseCsvFile(fileId,filename,email):
                       option=option[:len(option)-1]+']'
                       questionId=dbObj.insertData("INSERT INTO quesBank(created_on,question,options,correct_answer,level,question_type,skill_type,tags,created_by,created_by_id,active,answer_description,flag) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                         (str(time.strftime("%Y-%m-%d %H:%M:%S")),question,option,str(answer),level,questionType,skillType,str(tag),0,0,1,answerDescription,0))
-                      insertDataElastic.delay({"questionType":questionType,"quesId":questionId,'level':level,'tags':tag,'question':question,'skillType':skillType,'correctAnswer':answer,'options':option})   
+                      insertDataElastic.delay({"questionType":getQuesTypeReverse(questionType),"quesId":questionId,'level':getLevelReverse(level),'tags':tag,'question':question,'skillType':getSkillTypeReverse(skillType),'correctAnswer':answer,'options':option})   
                     break    
                   else:
                     option=option+'"'+rowOpt[1].strip()+'"'+','

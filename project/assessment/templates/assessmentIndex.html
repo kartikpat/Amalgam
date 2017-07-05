@@ -484,7 +484,7 @@ div.fileContainer >div.file-content:nth-of-type(even){
 			      </div>
 			      	<div class="modal-body">
 
-						<form action = "http://assessment.iimjobs.com/upload" method = "POST"
+						<form action = "http://localhost:5000/upload" method = "POST"
 									enctype = "multipart/form-data" class="right">
 								<div class="form-group">
 								   <input id="fileUpload" type = "file" name = "file"/>
@@ -521,13 +521,13 @@ div.fileContainer >div.file-content:nth-of-type(even){
 				  		<input class="checkbox" name="ids[]" type="checkbox" value="{{ question[0] }}"/>
 				  	</span>
 
-				   <span class="question_id">{{ question[0]}}</span>
-					 <span class="question_title" contenteditable="false">{{ question[2] }}</span>
+				    <span class="question_id" dataQuesId= "{{ question[0]}}"></span>
+				    <span class="question_title" contenteditable="false">{{ question[2] }}</span>
 
-						{% for option in question[3].split(','): %}
-								<p class="question_options" contenteditable="false" showData="{{option.strip('[]')}}">{{option.strip('[]" ')}}</p>
-				   	 	{% endfor %}
-					</div>
+					{% for option in question[3].split(','): %}
+							<p class="question_options" contenteditable="false" showData="{{option.strip('[]')}}">{{option.strip('[]" ')}}</p>
+			   	 	{% endfor %}
+				  </div>
 
 					<div class="dropdown actions">
 					  <i class="fa fa-cog dropbtn fa-2x" aria-hidden="true"></i>
@@ -547,7 +547,7 @@ div.fileContainer >div.file-content:nth-of-type(even){
 
 			</div>
 
-			{% endfor %}
+		   {% endfor %}
 		</div>
     </div>
     <div role="tabpanel" class="tab-pane" id="uploadedCsv">
@@ -619,7 +619,7 @@ $('.save_changes').click(function(){
 		$.each(question,function(index,elem){
 
 		if(index == 0){
-				 ob[getIndex(0)] = $(elem).children('span.question_id')[0].innerHTML;
+				 ob[getIndex(0)] = $(elem).children('span.question_id')[0].getAttribute('dataQuesId');
 				 ob[getIndex(1)] = $(elem).children('span.question_title')[0].innerHTML;
 				 var li="[";
 				 var options = $(elem).children('p.question_options');
@@ -682,7 +682,7 @@ $('.save_changes').click(function(){
 	$('.delete').click(function() {
 
 		 var ob = {};
-     ob[getIndex(0)] = $(this).parent().parent().prev().children('span.question_id')[0].innerHTML;
+     ob[getIndex(0)] = $(this).parent().parent().prev().children('span.question_id')[0].getAttribute('dataQuesId');
      // console.log(ob);
 
 		 $.ajax({
@@ -888,6 +888,14 @@ $('.save_changes').click(function(){
 					ele.setAttribute('selected',"selected");
 				}
 			});
+		});
+
+		var numbering=$('.question_id')
+		var i=1
+		$.each(numbering,function(index,elem){
+			elem.innerHTML=i;
+			i=i+1;
+			// console.log(elem.getAttribute('dataQuesId'))
 		});
 	}
 
