@@ -524,9 +524,11 @@ div.fileContainer >div.file-content:nth-of-type(even){
 				    <span class="question_id" dataQuesId= "{{ question[0]}}"></span>
 				    <span class="question_title" contenteditable="false">{{ question[2] }}</span>
 
+				    <div class="options">
 					{% for option in question[3].split(','): %}
 							<p class="question_options" contenteditable="false" showData="{{option.strip('[]')}}">{{option.strip('[]" ')}}</p>
 			   	 	{% endfor %}
+			   	 	</div>
 				  </div>
 
 					<div class="dropdown actions">
@@ -798,6 +800,24 @@ $('.save_changes').click(function(){
 
 	window.onload = function() {
 
+		var numbering=$('.question_id')
+		var i=1
+		$.each(numbering,function(index,elem){
+			elem.innerHTML=i;
+			i=i+1;
+			// console.log(elem.getAttribute('dataQuesId'))
+		});
+
+		var opt=$("div.options");
+		var i;
+		$.each(opt,function(index,elem){
+			i=65;
+			$.each($(elem).children(),function(index,ele){
+				ele.innerHTML = String.fromCharCode(i) +'.  '+ele.innerHTML;
+				i=i+1;
+			});
+		});
+
 		var tags = $("select.tags");
 		$.each(tags, function(index,sel) {
 
@@ -892,13 +912,7 @@ $('.save_changes').click(function(){
 			});
 		});
 
-		var numbering=$('.question_id')
-		var i=1
-		$.each(numbering,function(index,elem){
-			elem.innerHTML=i;
-			i=i+1;
-			// console.log(elem.getAttribute('dataQuesId'))
-		});
+		
 	}
 
 
