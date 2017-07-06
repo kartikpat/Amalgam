@@ -91,7 +91,7 @@
 .question_container input.checkbox {
 	visibility: hidden;
 	position:absolute;
-	top:5px;
+	top:23px;
 	left:5px;
 	margin-top:0;
 	cursor:pointer;
@@ -347,7 +347,8 @@ div#AllQuestions {
 }
 
 .topHeader {
-    width: 1170px;
+    /*width: 1170px;*/
+    width: auto;
     margin: 0 auto;
 }
 
@@ -386,6 +387,14 @@ div.fileContainer >div.file-content:nth-of-type(even){
     background-size: 15px;
 }
 
+.navbar-form.navbar-left input.form-control:hover,.navbar-form.navbar-left input.form-control:focus {
+	border-color: #FFAF2D;
+}
+
+.navbar-form.navbar-left input.form-control:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px white inset;
+}
+
 .submit-trigger {
     width: 50px;
     height: 34px;
@@ -407,8 +416,14 @@ div.fileContainer >div.file-content:nth-of-type(even){
 
 .container {
 	margin:15px auto;
+	width: auto;
 }
 
+.nav-tabs li a{
+	color: black;
+	font-family: 'Open Sans', sans-serif;
+	/*font-size: 16px;*/
+}
 
 
 </style>
@@ -464,10 +479,10 @@ div.fileContainer >div.file-content:nth-of-type(even){
 
 				<div class="search">
 					<form action="/searchKeyword" method="POST" class="navbar-form navbar-left" role="search">
-					 <div class="form-group">
-					   <input type="text" class="form-control" placeholder="Search..." name="phrase">
-					   <div class="submit-trigger"></div>
-					 </div>
+						 <div class="form-group">
+						   <input type="text" class="form-control" placeholder="Search keyword..." name="phrase">
+						   <div class="submit-trigger"></div>
+						 </div>
 					 <!-- <button type="submit" class="btn btn-default">Submit</button> -->
 					</form>
 				</div>
@@ -507,7 +522,7 @@ div.fileContainer >div.file-content:nth-of-type(even){
 
 <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#AllQuestions" aria-controls="home" role="tab" data-toggle="tab">AllQuestions</a></li>
-    <li role="presentation"><a href="#uploadedCsv" aria-controls="profile" role="tab" data-toggle="tab">uploaded CSV</a></li>
+    <li role="presentation"><a href="#uploadedCsv" aria-controls="profile" role="tab" data-toggle="tab">Uploaded CSV</a></li>
 
 </ul>
 <div class="tab-content" style="border:1px solid #e8e8e8; border-top:0;margin-top:0;padding-top:15px;">
