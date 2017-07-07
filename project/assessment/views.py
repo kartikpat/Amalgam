@@ -22,7 +22,7 @@ def logout():
 def listQuestions():
     dbObj=sqlDbhelper()
     results=dbObj.getData("select * from quesBank;")
-    user=Dbhelper.findOne('User',{"email":"mohit.mittal@iimjobs.com"})
+    user=Dbhelper.findOne('User',{"email":session['email']})
     uploadedFiles=user.get('permission').get('Assessment').get('uploadedCSV',None)
     return render_template("assessmentIndex.html",questions=results,files=uploadedFiles)
 
@@ -149,7 +149,7 @@ def upload():
    dbObj=sqlDbhelper()
    results=dbObj.getData("select * from quesBank")
    # session['email']
-   user=Dbhelper.findOne('User',{"email":"mohit.mittal@iimjobs.com"})
+   user=Dbhelper.findOne('User',{"email":session['email']})
    uploadedFiles=user.get('permission').get('Assessment').get('uploadedCSV',None)
 
    if request.method == 'POST':
@@ -158,8 +158,9 @@ def upload():
         filename = secure_filename(f.filename)
         if '.' in filename and filename.split('.')[1]=='csv':
           fileId=filename.split('.')[0]+str(int(time.time()*1000))+'.'+filename.split('.')[1]
-          f.save(os.path.join(app.config['UPLOAD_FOLDER'],fileId)) 
-          parseCsvFile.delay(fileId,filename,"mohit.mittal@iimjobs.com")
+          f.save(os.path.join(app.config['UPLOAD_FOLDER'],fileId))
+          # Dbhelper.arrUpdate('User',{'email':session['email']},{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now(),"status":"File in process"}},"$push") 
+          parseCsvFile.delay(fileId,filename,session['email'])
           #Dbhelper.arrUpdate('User',{'email':session['email']},{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now()}},"$push")
           #app.config['UPLOAD_FOLDER'] = 'uploadedCSV/'
           #f.save(filename)
@@ -169,7 +170,8 @@ def upload():
           #return redirect(url_for('assessment.listQuestions'))
         else:
           #return redirect(url_for('assessment.listQuestions'))
-           return render_template("assessmentIndex.html",questions=results,files=uploadedFiles,message="File should have extension(.csv)")
+          # Dbhelper.arrUpdate('User',{'email':session['email']},{"permission.Assessment.uploadedCSV":{"fileName":filename,"fileId":fileId,"date":datetime.datetime.now(),"status":"Upload CSV file"}},"$push")
+          return render_template("assessmentIndex.html",questions=results,files=uploadedFiles,message="File should have extension(.csv)")
       else:
         #return redirect(url_for('assessment.listQuestions'))
          return render_template("assessmentIndex.html",questions=results,files=uploadedFiles,message="Choose file to upload")
