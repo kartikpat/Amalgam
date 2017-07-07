@@ -553,7 +553,7 @@ div.fileContainer >div.file-content:nth-of-type(even){
 
 				    
 				    <div class="options">
-					{% for option in question[3].split(','): %}
+					{% for option in question[3].split('","'): %}
 							<p class="question_options" contenteditable="false" showData="{{option.strip('[]')}}">{{option.strip('[]" ')}}</p>
 			   	 	{% endfor %}
 			   	 	</div>
