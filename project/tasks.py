@@ -125,7 +125,9 @@ def insertDataElastic(data):
 @cl.task(name="project.tasks.updateDataElastic") 
 def updateDataElastic(data):
   es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
-  es.update(index='assessment',doc_type='questions',id=data['quesId'],body={"doc": data})
+  es.delete(index='assessment',doc_type='questions',id=data['quesId'])
+  es.index(index='assessment', doc_type='questions', id=data['quesId'], body={"doc": data})
+  # es.update(index='assessment',doc_type='questions',id=data['quesId'],body={"doc": data})
 
 @cl.task(name="project.tasks.parseCsvFile")
 def parseCsvFile(fileId,filename,email):

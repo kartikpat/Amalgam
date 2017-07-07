@@ -42,7 +42,7 @@ def ajaxUpdate():
     dbObj=sqlDbhelper()
     dbObj.updateQuery(quesId,ques,ans,lev,quesType,skill,tag,options)
    
-    # updateDataElastic.delay(request.json)
+    updateDataElastic.delay(request.json)
     return json.dumps({'status':'OK'})
 
 @listingQues.route('/ajaxDelete',methods=['POST'])
