@@ -8,6 +8,10 @@ import boto.ses
 from random import randint
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from project.tasks import sendMail
+import sys
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
 
 users = Blueprint('users', __name__, template_folder='templates')
 
