@@ -1,4 +1,4 @@
-from flask import  Flask,request, render_template, redirect,url_for,session, current_app
+from flask import  Flask,request, redirect,url_for,session, current_app
 from ..utilities import isLoggedIn
 from . import auth
 from itsdangerous import URLSafeTimedSerializer
