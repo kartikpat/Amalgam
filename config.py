@@ -13,6 +13,7 @@ class DevelopmentConfig(Config):
     """
 
     FLASK_DEBUG = True
+    
 
 class ProductionConfig(Config):
     """
