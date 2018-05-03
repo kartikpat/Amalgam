@@ -11,8 +11,10 @@ class DevelopmentConfig(Config):
     """
     Development configurations
     """
-
     FLASK_DEBUG = True
+    
+    SQLALCHEMY_ECHO = True
+
     
 
 class ProductionConfig(Config):

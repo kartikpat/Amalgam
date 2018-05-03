@@ -1,13 +1,18 @@
-from flask import  Flask,request, redirect,url_for,session, current_app, abort
+from flask import  Flask,request, redirect,url_for,session, current_app, abort, make_response, jsonify
 from ..utilities import isLoggedIn
 from . import auth
 from itsdangerous import URLSafeTimedSerializer
-from ..DBHelper.dbhelper import sqlDbhelper
+
+# from ..DBHelper.dbhelper import sqlDbhelper
 
 @auth.route('/')
 def index():
-    abort(404)
-    return "Hi!"
+    # return make_response(jsonify({'error': 'Not found'}), 200)
+    message = ''
+    abort(404, {
+    	'message': message,
+    	'status': 'fail'
+    })
 
 # @auth.route('/')
 # def index():

@@ -1,18 +1,27 @@
-from flask import Flask
+# third-party imports
+from flask import Flask,make_response,jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
+# local imports
 from config import app_config
 
-from errorHandlers import *
-from flask import make_response,jsonify
+# db variable initialization
+db = SQLAlchemy()
+
 def create_app(config_name):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
-    # print("Running in " + config_name + " mode!")
-    # print(app_config[config_name]["FLASK_DEBUG"])
-    # if() {
-    #     app.debug = True
-    # }
+    db.init_app(app)  
+    
+    print("Running in " + config_name + " mode!")  
+
+    migrate = Migrate(app, db)
+
+    from assessment.model import Employee
+    from assessment.model import Department
+    from assessment.model import Role
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
@@ -26,6 +35,28 @@ def create_app(config_name):
     from .assessment import assessment as assessment_blueprint
     app.register_blueprint(assessment_blueprint)
 
+    @app.errorhandler(404)
+    def not_found(error):
+        message = error.description['message']
+        if(message == ''): 
+            message = 'missing parameters'
+
+        return make_response(jsonify({
+        'error': message,
+        'status': error.description['status']
+        }), 404) 
+
+    @app.errorhandler(403)
+    def forbidden(error):
+        message = error.description['message']
+        if(message == ''): 
+            message = 'missing parameters'
+
+        return make_response(jsonify({
+        'error': message,
+        'status': error.description['status']
+        }), 404)    
+    
     return app
 
 #app.config['UPLOAD_FOLDER'] = 'project/assessment/uploadedCSV/'
